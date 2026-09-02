@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI English Coach</title>
+<meta name="application-name" content="AI English Coach">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI Coach">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d0f14">
+<link rel="manifest" id="pwa-manifest">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d0f14'/><text y='68' x='50' text-anchor='middle' font-size='55'>🎓</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',system-ui,sans-serif;}
+body{background:#0d0f14;color:#f0f2f8;min-height:100vh;}
+:root{--accent:#5b7fff;--green:#22d3a0;--red:#f87171;--amber:#fbbf24;--surface:#161920;--surface2:#1e2230;--border:rgba(255,255,255,0.07);}
+#setup{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:420px;max-width:100%;}
+h2{font-size:19px;font-weight:700;margin-bottom:4px;}
+.logo{display:flex;align-items:center;gap:9px;margin-bottom:5px;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+.sub{color:#8b93ad;font-size:13px;line-height:1.6;margin:6px 0 20px;}
+.sc-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--surface2);margin-bottom:9px;transition:all .15s;}
+.sc-btn:hover{border-color:rgba(91,127,255,0.3);}
+.sc-btn.active{border-color:var(--accent);background:rgba(91,127,255,0.1);}
+.sc-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.sc-title{font-size:13px;font-weight:600;margin-bottom:2px;}
+.sc-role{font-size:11px;color:#8b93ad;}
+.note{font-size:11px;color:#4b5268;margin:12px 0;display:flex;gap:6px;line-height:1.5;}
+.start{width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.start:hover{opacity:.9;}
+#app{display:none;flex-direction:column;height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:50px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.tl{display:flex;align-items:center;gap:9px;}
+.sdot{width:8px;height:8px;border-radius:50%;}
+.stitle{font-size:13px;font-weight:600;}
+.timer{font-size:12px;color:#8b93ad;font-variant-numeric:tabular-nums;}
+.end-btn{padding:6px 14px;border-radius:8px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:var(--red);cursor:pointer;font-size:12px;font-weight:600;}
+.main{display:grid;grid-template-columns:1fr 300px;flex:1;overflow:hidden;}
+.stage{display:flex;flex-direction:column;padding:13px;gap:11px;overflow:auto;}
+.avatar-box{flex:1;min-height:190px;background:var(--surface);border:1px solid var(--border);border-radius:13px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.av-glow{position:absolute;inset:0;border-radius:13px;}
+.av-inner{position:relative;z-index:1;text-align:center;}
+.av-circle{width:92px;height:92px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:32px;transition:border-color .3s,box-shadow .3s;}
+.av-circle.speaking{box-shadow:0 0 22px rgba(91,127,255,.45);}
+.av-name{font-weight:600;font-size:15px;margin-bottom:2px;}
+.av-role{font-size:11px;color:#8b93ad;margin-bottom:10px;}
+.waves{display:flex;align-items:center;justify-content:center;gap:3px;height:20px;}
+.wave{width:3px;border-radius:2px;background:var(--accent);height:4px;transition:height .12s;}
+.bubble{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(22,25,32,.92);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:11px;line-height:1.6;display:none;max-height:70px;overflow:hidden;}
+.cam-box{height:145px;background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;position:relative;flex-shrink:0;}
+video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
+.cam-off{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#4b5268;font-size:12px;}
+.cam-lbl{position:absolute;top:7px;right:9px;background:rgba(0,0,0,.7);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:10px;color:#8b93ad;}
+.ctrls{display:flex;align-items:center;justify-content:center;gap:9px;padding:11px;flex-shrink:0;}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 18px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);color:#8b93ad;cursor:pointer;font-size:11px;font-weight:500;transition:all .15s;}
+.ctrl:hover{border-color:rgba(91,127,255,.3);color:#f0f2f8;}
+.ctrl.rec{border-color:var(--red);background:rgba(248,113,113,.12);color:var(--red);}
+.ctrl i{font-size:19px;}
+.live{padding:8px 12px;background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);border-radius:8px;font-size:12px;color:#f0f2f8;font-style:italic;display:none;margin:0 13px 4px;flex-shrink:0;}
+.panel{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.tabs{display:flex;border-bottom:1px solid var(--border);}
+.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:#4b5268;transition:all .15s;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.pbody{flex:1;overflow-y:auto;padding:12px;}
+.empty{text-align:center;padding:28px 12px;color:#4b5268;}
+.empty-icon{font-size:26px;margin-bottom:8px;}
+.empty p{font-size:12px;line-height:1.6;}
+.msg{padding:9px 11px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:8px;}
+.msg.ai{background:var(--surface2);border:1px solid var(--border);border-radius:9px 9px 9px 2px;}
+.msg.user{background:rgba(91,127,255,.1);border:1px solid rgba(91,127,255,.2);border-radius:9px 9px 2px 9px;text-align:right;}
+.msg-lbl{font-size:10px;font-weight:600;margin-bottom:3px;}
+.msg.ai .msg-lbl{color:#a78bfa;}
+.msg.user .msg-lbl{color:var(--accent);}
+.typing-ind{display:flex;gap:4px;padding:9px 11px;background:var(--surface2);border-radius:9px 9px 9px 2px;width:fit-content;margin-bottom:8px;}
+.typing-ind span{width:6px;height:6px;border-radius:50%;background:#4b5268;animation:td 1.2s infinite;}
+.typing-ind span:nth-child(2){animation-delay:.2s;}
+.typing-ind span:nth-child(3){animation-delay:.4s;}
+@keyframes td{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.3);opacity:1}}
+.tip{padding:8px 11px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:8px;}
+.tip.ok{background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);color:var(--green);}
+.tip.warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:var(--amber);}
+.tip.blue{background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);color:var(--accent);}
+.metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.mv{font-weight:600;}
+.mv.g{color:var(--green);}.mv.w{color:var(--amber);}
+.sc-circle{width:72px;height:72px;border-radius:50%;border:3px solid var(--accent);background:rgba(91,127,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;}
+.sc-n{font-size:26px;font-weight:700;color:var(--accent);line-height:1;}
+.sc-of{font-size:10px;color:#8b93ad;}
+.rtitle{font-size:11px;font-weight:600;color:#4b5268;text-transform:uppercase;letter-spacing:.4px;margin:12px 0 8px;}
+.new-btn{width:100%;margin-top:14px;padding:11px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);color:#f0f2f8;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.err{margin:4px 13px;padding:7px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:7px;font-size:11px;color:var(--red);display:none;}
+@media(max-width:640px){.main{grid-template-columns:1fr;}.panel{display:none;}}
+</style>
+</head>
+<body>
+
+<div id="setup">
+  <div class="card">
+    <div class="logo"><div class="dot"></div><h2>AI English Coach</h2></div>
+    <p class="sub">اختار نوع الـ session — بيتكلم معاك بالإنجليزي ويصحح Grammar في real-time.</p>
+    <div id="sc-list">
+      <div class="sc-btn active" data-id="presentation" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(91,127,255,.15);color:#5b7fff">🎓</div>
+        <div><div class="sc-title">Presentation Practice</div><div class="sc-role">قدّم موضوع — هيصحح ويقيّم</div></div>
+      </div>
+      <div class="sc-btn" data-id="interview" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(167,139,250,.15);color:#a78bfa">💼</div>
+        <div><div class="sc-title">Job Interview</div><div class="sc-role">Mock interview لـ WFM / RTM</div></div>
+      </div>
+      <div class="sc-btn" data-id="meeting" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(34,211,160,.15);color:#22d3a0">👥</div>
+        <div><div class="sc-title">Team Meeting</div><div class="sc-role">ناقش خطة أو مشكلة</div></div>
+      </div>
+      <div class="sc-btn" data-id="free" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(251,191,36,.15);color:#fbbf24">💬</div>
+        <div><div class="sc-title">Free Conversation</div><div class="sc-role">تكلم عن أي حاجة</div></div>
+      </div>
+    </div>
+    <div class="note"><span>ℹ</span><span>محتاج Chrome أو Edge — هيطلب إذن ميكروفون وكاميرا</span></div>
+    <button class="start" onclick="startSession()">ابدأ الـ Session</button>
+  </div>
+</div>
+
+<div id="app" style="display:none;flex-direction:column;height:100vh;">
+  <div class="topbar">
+    <div class="tl">
+      <div class="sdot" id="sdot" style="background:#22d3a0;box-shadow:0 0 6px #22d3a0"></div>
+      <span class="stitle" id="stitle">Session</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="timer" id="timer-disp">00:00</span>
+      <button class="end-btn" onclick="endSession()">End Session</button>
+    </div>
+  </div>
+  <div class="main">
+    <div style="display:flex;flex-direction:column;overflow:hidden;">
+      <div class="stage" style="flex:1;">
+        <div class="avatar-box">
+          <div class="av-glow" id="av-glow"></div>
+          <div class="av-inner">
+            <div class="av-circle" id="av-circle"><span id="av-icon">🎓</span></div>
+            <div class="av-name" id="av-name">Alex</div>
+            <div class="av-role" id="av-role">Coach</div>
+            <div class="waves"><div class="wave" id="w1"></div><div class="wave" id="w2"></div><div class="wave" id="w3"></div><div class="wave" id="w4"></div><div class="wave" id="w5"></div></div>
+          </div>
+          <div class="bubble" id="bubble"></div>
+        </div>
+        <div class="cam-box">
+          <video id="vid" autoplay muted playsinline></video>
+          <div class="cam-off" id="cam-off"><i class="ti ti-video-off" style="font-size:28px"></i><span>Camera off</span></div>
+          <div class="cam-lbl">You</div>
+        </div>
+      </div>
+      <div class="live" id="live"></div>
+      <div class="err" id="err"></div>
+      <div class="ctrls">
+        <button class="ctrl" id="mic-btn" onclick="toggleMic()">
+          <i class="ti ti-microphone" id="mic-icon"></i>
+          <span id="mic-lbl">Speak</span>
+        </button>
+        <button class="ctrl" id="cam-btn" onclick="toggleCam()">
+          <i class="ti ti-video"></i><span>Camera</span>
+        </button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('chat',this)">Chat</div>
+        <div class="tab" onclick="switchTab('tips',this)">Tips</div>
+        <div class="tab" onclick="switchTab('report',this)">Report</div>
+      </div>
+      <div class="pbody" id="chat-panel">
+        <div class="empty" id="chat-empty"><div class="empty-icon">💬</div><p>Conversation هيظهر هنا</p></div>
+      </div>
+      <div class="pbody" id="tips-panel" style="display:none">
+        <div class="empty" id="tips-empty"><div class="empty-icon">💡</div><p>ملاحظات فورية هنا بعد كل رد</p></div>
+      </div>
+      <div class="pbody" id="report-panel" style="display:none">
+        <div class="empty" id="rep-empty"><div class="empty-icon">📊</div><p>التقرير هيظهر بعد End Session</p></div>
+        <div id="rep-content" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// SCENARIOS + SMART LOCAL AI
+// ══════════════════════════════════════
+var SCENARIOS={
+  presentation:{
+    name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
+    openers:[
+      "Hello! I'm Alex, your presentation coach. Please introduce the topic you'd like to present today — it could be about your RTM work or any subject you're confident about.",
+      "Welcome! I'm Alex. Let's practice your presentation skills. Go ahead — what topic would you like to present about?",
+      "Hi! I'm Alex, your coach. Start by telling me: what are you going to present about today?"
+    ],
+    followups:[
+      "That's a good point. Now, how would you structure that for an audience who doesn't know RTM?",
+      "Good. Can you give a concrete example from your actual work experience?",
+      "Interesting. What would your opening slide say?",
+      "Now try to summarize that in one sentence — like an elevator pitch.",
+      "What are the 3 main points your audience should remember?",
+      "How would you handle a question from the audience about that?",
+      "Good effort. Can you repeat that last point with more confidence?",
+      "What data or numbers would you use to support that point?"
+    ]
+  },
+  interview:{
+    name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
+    openers:[
+      "Good morning! I'm Sarah from HR. Thank you for coming in. Let's begin — please tell me about yourself and your experience in workforce management.",
+      "Hi, I'm Sarah. I'll be interviewing you for the RTM Analyst position today. First question: can you walk me through your background and current role?",
+      "Good morning! I'm Sarah. Let's start — tell me about yourself and why you're interested in this position."
+    ],
+    followups:[
+      "Interesting. Can you give me a specific example of how you handled a low-adherence situation?",
+      "What KPIs do you monitor daily and why?",
+      "Describe a time you had to make a real-time decision under pressure.",
+      "How do you communicate staffing issues to your team leader?",
+      "What's your biggest achievement in your current WFM role?",
+      "How do you stay calm when the queue is building up and agents are not adhering?",
+      "Where do you see yourself in 3 years within WFM?",
+      "What tools or systems have you worked with for real-time monitoring?"
+    ]
+  },
+  meeting:{
+    name:"Team Meeting",avatarName:"James",avatarRole:"Team Leader",icon:"👥",color:"#22d3a0",
+    openers:[
+      "Good morning team! I'm James, your team leader. Let's start — can you update me on last week's adherence numbers and what caused any dips?",
+      "Hi everyone. James here. We need to discuss the forecast for next week. What's your assessment of our current staffing levels?",
+      "Alright team, let's begin. I'm James. First item — adherence was below target yesterday. What happened and what's the plan?"
+    ],
+    followups:[
+      "What do you suggest we do differently to prevent that next week?",
+      "How do we communicate this to the agents without affecting morale?",
+      "What's the impact on SLA if this continues?",
+      "Who should own this action item and what's the deadline?",
+      "Can you walk me through the numbers in more detail?",
+      "What does the forecast say for peak hours tomorrow?",
+      "Good point. How does this compare to last month?",
+      "What resources do you need to fix this?"
+    ]
+  },
+  free:{
+    name:"Free Talk",avatarName:"Emma",avatarRole:"English Coach",icon:"💬",color:"#fbbf24",
+    openers:[
+      "Hi! I'm Emma, your English coach. What would you like to talk about today? Tell me something about your day or your work.",
+      "Hello! I'm Emma. Great to meet you! What's on your mind today — anything about work, life, or something you want to practice?",
+      "Hi there! I'm Emma. Let's have a conversation! What did you do today or what topic are you thinking about?"
+    ],
+    followups:[
+      "That's interesting! Tell me more about that.",
+      "How did that make you feel?",
+      "What would you do differently next time?",
+      "Can you give me more details about that?",
+      "What do you think is the main reason for that?",
+      "How does that compare to your previous experience?",
+      "What would you recommend to someone in that situation?",
+      "What's the most challenging part of that for you?"
+    ]
+  }
+};
+
+// Grammar patterns detector
+var GRAMMAR_RULES=[
+  {pattern:/\bare you hear\b/i,tip:"are you hear — correct: can you hear me?"},
+  {pattern:/\bi am hear\b/i,tip:"I am hear — correct: I can hear you"},
+  {pattern:/\bi am working in here\b/i,tip:"working in here — say: I work here"},
+  {pattern:/\bhe dont\b/i,tip:"he dont — correct: he doesnt"},
+  {pattern:/\bshe dont\b/i,tip:"she dont — correct: she doesnt"},
+  {pattern:/\bi am agree\b/i,tip:"I am agree — correct: I agree (no am)"},
+  {pattern:/\bi am understand\b/i,tip:"I am understand — correct: I understand"},
+  {pattern:/\bi am know\b/i,tip:"I am know — correct: I know"},
+  {pattern:/\bmore better\b/i,tip:"more better — just say better"},
+  {pattern:/\bvery much better\b/i,tip:"very much better — say: much better"},
+  {pattern:/\bi have (\d+) years\b/i,tip:"I have X years — say: I have been working for X years"},
+  {pattern:/\b(since|for) (\d+) year\b/i,tip:"use plural: years not year"},
+  {pattern:/\bi working\b/i,tip:"I working — correct: I am working (missing am)"},
+  {pattern:/\bwe was\b/i,tip:"we was — correct: we were"},
+  {pattern:/\bthey was\b/i,tip:"they was — correct: they were"},
+];
+
+function checkGrammar(text){
+  var errors=[];
+  GRAMMAR_RULES.forEach(function(rule){
+    if(rule.tip&&rule.pattern.test(text)){
+      errors.push(rule.tip);
+    }
+  });
+  return errors;
+}
+
+function scoreGrammar(text,errors){
+  var words=text.split(/\s+/).filter(Boolean).length;
+  var score=10;
+  score-=Math.min(4,errors.length*2);
+  // Check for very basic issues
+  if(/\bI [a-z]+ed\b/.test(text)&&!/\bI (worked|helped|tried|started|stopped|liked)\b/.test(text)) score-=0;
+  if(words<5) score-=1;
+  return Math.max(1,Math.min(10,score));
+}
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+var state={
+  scenario:'presentation',messages:[],stats:[],tips:[],
+  micOn:false,aiSpeak:false,camOn:false,
+  stream:null,recog:null,finalTxt:'',
+  timer:0,timerIv:null,waveIv:null,
+  turnCount:0,sessionActive:false
+};
+
+function pickSc(el){
+  document.querySelectorAll('.sc-btn').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  state.scenario=el.dataset.id;
+}
+
+async function startSession(){
+  var sc=SCENARIOS[state.scenario];
+  document.getElementById('stitle').textContent=sc.name;
+  document.getElementById('av-name').textContent=sc.avatarName;
+  document.getElementById('av-role').textContent=sc.avatarRole;
+  document.getElementById('av-icon').textContent=sc.icon;
+  var glow=document.getElementById('av-glow');
+  glow.style.background='radial-gradient(ellipse at 50% 30%,'+sc.color+'18 0%,transparent 70%)';
+  document.getElementById('av-circle').style.borderColor='rgba(255,255,255,0.1)';
+
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+    state.stream=stream;state.camOn=true;
+    document.getElementById('vid').srcObject=stream;
+    document.getElementById('cam-off').style.display='none';
+  }catch(e){}
+
+  document.getElementById('setup').style.display='none';
+  document.getElementById('app').style.display='flex';
+  state.sessionActive=true;
+
+  state.timerIv=setInterval(function(){
+    state.timer++;
+    var m=Math.floor(state.timer/60),s=state.timer%60;
+    document.getElementById('timer-disp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  },1000);
+
+  initRecog();
+  setTimeout(function(){aiSpeak_greet();},700);
+}
+
+// ══════════════════════════════════════
+// SPEECH RECOGNITION
+// ══════════════════════════════════════
+function initRecog(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showErr('Need Chrome or Edge for speech recognition.');return;}
+  var r=new SR();
+  r.lang='en-US';r.continuous=true;r.interimResults=true;
+  r.onresult=function(e){
+    var interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal)state.finalTxt+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
+    }
+    var show=(state.finalTxt+interim).trim();
+    var lt=document.getElementById('live');
+    lt.style.display=show?'block':'none';
+    lt.textContent='🎤 '+show;
+  };
+  r.onend=function(){if(r._active){try{r.start();}catch(e){}}};
+  r.onerror=function(e){if(e.error!=='no-speech')showErr('Mic error: '+e.error);};
+  state.recog=r;
+}
+
+function toggleMic(){if(state.micOn)stopMic();else startMic();}
+function startMic(){
+  if(state.aiSpeak){window.speechSynthesis&&window.speechSynthesis.cancel();setAiSpeak(false);}
+  state.finalTxt='';
+  var lt=document.getElementById('live');lt.style.display='none';lt.textContent='';
+  var r=state.recog;if(!r){showErr('Speech recognition not available.');return;}
+  r._active=true;try{r.start();}catch(e){}
+  state.micOn=true;
+  document.getElementById('mic-btn').classList.add('rec');
+  document.getElementById('mic-icon').className='ti ti-player-stop';
+  document.getElementById('mic-lbl').textContent='Stop';
+}
+function stopMic(){
+  var r=state.recog;
+  if(r){r._active=false;try{r.stop();}catch(e){}}
+  state.micOn=false;
+  document.getElementById('mic-btn').classList.remove('rec');
+  document.getElementById('mic-icon').className='ti ti-microphone';
+  document.getElementById('mic-lbl').textContent='Speak';
+  document.getElementById('live').style.display='none';
+  var txt=state.finalTxt.trim();
+  if(txt.length<2)return;
+  var analysis=analyzeAndRespond(txt);
+  state.stats.push(analysis);
+  addMsg('user',txt);
+  setTimeout(function(){buildAIReply(txt,analysis);},200);
+}
+
+// ══════════════════════════════════════
+// ANALYZE + BUILD REPLY (LOCAL - NO API)
+// ══════════════════════════════════════
+function analyzeAndRespond(text){
+  var words=text.trim().split(/\s+/).filter(Boolean);
+  var wc=words.length;
+  var fillers=(text.match(/\b(um|uh|like|you know|basically|literally|i mean|so so)\b/gi)||[]).length;
+  var unique=new Set(words.map(function(w){return w.toLowerCase().replace(/[^a-z]/g,'');}));
+  var richness=Math.round((unique.size/Math.max(wc,1))*100);
+  var grammarErrors=checkGrammar(text);
+  var grammarScore=scoreGrammar(text,grammarErrors);
+  // Tips
+  var tips=[];
+  if(wc<8)tips.push({t:'warn',m:'إجابتك قصيرة ('+wc+' كلمة). حاول تكمّل الفكرة بمثال.' });
+  if(fillers>1)tips.push({t:'warn',m:'استخدمت '+fillers+' filler words (um/uh). وقف بهدوء بدلهم.'});
+  if(grammarErrors.length>0)tips.push({t:'warn',m:'Grammar: '+grammarScore+'/10 — '+grammarErrors[0]});
+  else if(grammarScore>=8)tips.push({t:'ok',m:'Grammar كويس — '+grammarScore+'/10. جملتك صح!'});
+  if(richness<50&&wc>10)tips.push({t:'blue',m:'مفرداتك متكررة. جرب تستخدم كلمات مختلفة.'});
+  if(tips.length===0)tips.push({t:'ok',m:'الكلام واضح ومفهوم! كمّل.'});
+  // Update tips panel
+  state.tips=tips.concat(state.tips).slice(0,10);
+  renderTips();
+  return{wc,fillers,richness,grammarErrors,grammarScore,text};
+}
+
+function buildAIReply(userText,analysis){
+  var sc=SCENARIOS[state.scenario];
+  state.turnCount++;
+
+  // Build reply parts
+  var parts=[];
+
+  // 1. React to what they said (quote them)
+  var userWords=userText.trim().split(' ').slice(0,5).join(' ');
+  var reactions=[
+    "You mentioned "+userWords+"... — good start, let me give you feedback.",
+    "I heard you say "+userWords+"... — let me coach you on that.",
+    "So you said "+userWords+"... — here is my feedback:",
+    "Okay, you mentioned "+userWords+"... — I understood your point."
+  ];
+  parts.push(reactions[state.turnCount%reactions.length]);
+
+  // 2. Grammar feedback
+  if(analysis.grammarErrors.length>0){
+    parts.push('Grammar score: '+analysis.grammarScore+'/10. '+analysis.grammarErrors[0]);
+  } else {
+    parts.push('Grammar: '+analysis.grammarScore+'/10 — your sentence structure is correct.');
+  }
+
+  // 3. Speed/length feedback
+  if(analysis.wc<8){
+    parts.push('Your answer was very short — '+analysis.wc+' words. A typical native speaker would say at least 15-20 words for this. Try again with more detail.');
+  } else if(analysis.wc>40){
+    parts.push('Good length — '+analysis.wc+' words. Well done!');
+  }
+
+  // 4. Follow-up question
+  var followup=sc.followups[(state.turnCount-1)%sc.followups.length];
+  parts.push(followup);
+
+  var reply=parts.join(' ');
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    addMsg('ai',reply);
+    speakText(reply);
+  },800+Math.random()*400);
+}
+
+// ══════════════════════════════════════
+// TTS
+// ══════════════════════════════════════
+function speakText(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  setAiSpeak(true);
+  var chunks=text.match(/[^.!?]+[.!?]*/g)||[text];
+  var i=0;
+  function next(){
+    if(i>=chunks.length){setAiSpeak(false);return;}
+    var chunk=chunks[i].trim();
+    if(!chunk){i++;next();return;}
+    var u=new SpeechSynthesisUtterance(chunk);
+    u.lang='en-US';u.rate=0.92;u.pitch=1.0;
+    var voices=window.speechSynthesis.getVoices();
+    var en=voices.filter(function(v){return v.lang.startsWith('en');});
+    if(en.length)u.voice=en[0];
+    u.onend=function(){i++;setTimeout(next,70);};
+    u.onerror=function(){i++;setTimeout(next,70);};
+    window.speechSynthesis.speak(u);
+  }
+  next();
+  if(!window._ka){window._ka=setInterval(function(){
+    if(state.aiSpeak&&window.speechSynthesis.paused)window.speechSynthesis.resume();
+    if(!state.aiSpeak){clearInterval(window._ka);window._ka=null;}
+  },8000);}
+}
+
+var waveRef=null;
+function setAiSpeak(val){
+  state.aiSpeak=val;
+  var sc=SCENARIOS[state.scenario];
+  var circle=document.getElementById('av-circle');
+  if(val){
+    circle.style.borderColor=sc.color;
+    circle.style.boxShadow='0 0 20px '+sc.color+'50';
+    waveRef=setInterval(function(){
+      var h=[4,7,14,10,5,12,8,4,16,6];
+      document.querySelectorAll('.wave').forEach(function(w){
+        w.style.height=h[Math.floor(Math.random()*h.length)]+'px';
+      });
+    },110);
+  }else{
+    circle.style.borderColor='rgba(255,255,255,0.1)';
+    circle.style.boxShadow='none';
+    clearInterval(waveRef);
+    document.querySelectorAll('.wave').forEach(function(w){w.style.height='4px';});
+  }
+}
+
+function aiSpeak_greet(){
+  var sc=SCENARIOS[state.scenario];
+  var opener=sc.openers[Math.floor(Math.random()*sc.openers.length)];
+  showTyping();
+  setTimeout(function(){
+    hideTyping();addMsg('ai',opener);speakText(opener);
+  },600);
+}
+
+// ══════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════
+function addMsg(role,text){
+  state.messages.push({role,text,ts:Date.now()});
+  var sc=SCENARIOS[state.scenario];
+  var panel=document.getElementById('chat-panel');
+  document.getElementById('chat-empty').style.display='none';
+  var div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML='<div class="msg-lbl">'+( role==='ai'?sc.avatarName:'You')+'</div><div>'+escHtml(text)+'</div>';
+  panel.appendChild(div);
+  panel.scrollTop=panel.scrollHeight;
+  if(role==='ai'){showBubble(text);}
+}
+
+function showBubble(text){
+  var b=document.getElementById('bubble');
+  b.textContent=text.slice(0,140)+(text.length>140?'...':'');
+  b.style.display='block';
+  setTimeout(function(){b.style.display='none';},Math.max(4000,text.length*50));
+}
+
+function showTyping(){
+  var p=document.getElementById('chat-panel');
+  var t=document.createElement('div');t.id='typing';t.className='typing-ind';
+  t.innerHTML='<span></span><span></span><span></span>';
+  p.appendChild(t);p.scrollTop=p.scrollHeight;
+}
+function hideTyping(){var t=document.getElementById('typing');if(t)t.remove();}
+
+function renderTips(){
+  var tp=document.getElementById('tips-panel');
+  document.getElementById('tips-empty').style.display='none';
+  tp.querySelectorAll('.tip').forEach(function(e){e.remove();});
+  state.tips.forEach(function(tip){
+    var d=document.createElement('div');
+    d.className='tip '+tip.t;
+    d.textContent=(tip.t==='ok'?'✓':tip.t==='warn'?'⚠':'💡')+' '+tip.m;
+    tp.insertBefore(d,tp.firstChild);
+  });
+}
+
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('chat-panel').style.display=name==='chat'?'block':'none';
+  document.getElementById('tips-panel').style.display=name==='tips'?'block':'none';
+  document.getElementById('report-panel').style.display=name==='report'?'block':'none';
+}
+
+function toggleCam(){
+  if(!state.stream)return;
+  var vt=state.stream.getVideoTracks();if(!vt.length)return;
+  state.camOn=!state.camOn;
+  vt[0].enabled=state.camOn;
+  document.getElementById('cam-off').style.display=state.camOn?'none':'flex';
+}
+
+function endSession(){
+  clearInterval(state.timerIv);
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  if(state.recog){state.recog._active=false;try{state.recog.stop();}catch(e){}}
+  if(state.stream)state.stream.getTracks().forEach(function(t){t.stop();});
+  setAiSpeak(false);state.sessionActive=false;
+  document.getElementById('sdot').style.background='#4b5268';
+  document.getElementById('sdot').style.boxShadow='none';
+  generateReport();
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab')[2].classList.add('active');
+  switchTab('report',document.querySelectorAll('.tab')[2]);
+}
+
+function generateReport(){
+  var total=state.stats.reduce(function(s,d){return s+d.wc;},0);
+  var fillers=state.stats.reduce(function(s,d){return s+d.fillers;},0);
+  var turns=state.stats.length;
+  var avgRich=turns>0?Math.round(state.stats.reduce(function(s,d){return s+d.richness;},0)/turns):0;
+  var avgGrammar=turns>0?(state.stats.reduce(function(s,d){return s+d.grammarScore;},0)/turns).toFixed(1):'—';
+  var totalErrCount=state.stats.reduce(function(s,d){return s+d.grammarErrors.length;},0);
+  var m=Math.floor(state.timer/60),s=state.timer%60;
+  var dur=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  var sessScore=Math.min(10,Math.max(1,
+    (turns>0?parseFloat(avgGrammar):6)*0.55+
+    (fillers<3?2:fillers<6?1:0)+
+    (avgRich>60?1.5:avgRich>45?1:0)+
+    (turns>=5?1:turns>=3?0.5:0)
+  )).toFixed(1);
+  var gClass=parseFloat(avgGrammar)>=7?'g':'w';
+  var fClass=fillers>3?'w':'g';
+  var rClass=avgRich>=60?'g':'w';
+  // All grammar errors found
+  var allErrors=[];
+  state.stats.forEach(function(d){d.grammarErrors.forEach(function(e){if(allErrors.indexOf(e)===-1)allErrors.push(e);});});
+  var tips=[];
+  if(fillers>3)tips.push({t:'warn',m:'استخدمت '+fillers+' filler words. وقف بهدوء بدلهم.'});
+  else tips.push({t:'ok',m:'Filler words قليلة — ممتاز!'});
+  if(parseFloat(avgGrammar)<7)tips.push({t:'warn',m:'Grammar '+avgGrammar+'/10. راجع الأخطاء في الجدول.'});
+  else tips.push({t:'ok',m:'Grammar كويس — متوسط '+avgGrammar+'/10!'});
+  if(turns<4)tips.push({t:'blue',m:'تكلم أكتر في الـ session الجاية — هدفك 5+ ردود.'});
+  if(avgRich<55)tips.push({t:'blue',m:'نوع مفرداتك أكتر.'});
+  document.getElementById('rep-empty').style.display='none';
+  var rc=document.getElementById('rep-content');rc.style.display='block';
+  var errHtml=allErrors.length>0?
+    '<div class="rtitle">Grammar Errors Found</div>'+
+    allErrors.map(function(e){return '<div class="tip warn">⚠ '+escHtml(e)+'</div>';}).join(''):
+    '<div class="tip ok">✓ No grammar errors detected this session!</div>';
+  rc.innerHTML=
+    '<div class="sc-circle"><span class="sc-n">'+sessScore+'</span><span class="sc-of">/10</span></div>'+
+    '<div class="rtitle">Session Stats</div>'+
+    '<div class="metric"><span style="color:#8b93ad">Duration</span><span class="mv">'+dur+'</span></div>'+
+    '<div class="metric"><span style="color:#8b93ad">Your Turns</span><span class="mv">'+turns+'</span></div>'+
+    '<div class="metric"><span style="color:#8b93ad">Words Spoken</span><span class="mv">'+total+'</span></div>'+
+    '<div class="metric"><span style="color:#8b93ad">Filler Words</span><span class="mv '+fClass+'">'+fillers+'</span></div>'+
+    '<div class="metric"><span style="color:#8b93ad">Grammar Score</span><span class="mv '+gClass+'">'+avgGrammar+'/10</span></div>'+
+    '<div class="metric"><span style="color:#8b93ad">Grammar Errors</span><span class="mv '+( totalErrCount>0?'w':'g')+'">'+totalErrCount+'</span></div>'+
+    '<div class="metric"><span style="color:#8b93ad">Vocab Richness</span><span class="mv '+rClass+'">'+avgRich+'%</span></div>'+
+    '<div class="rtitle">Feedback</div>'+
+    tips.map(function(t){return '<div class="tip '+t.t+'">'+( t.t==='ok'?'✓':t.t==='warn'?'⚠':'💡')+' '+escHtml(t.m)+'</div>';}).join('')+
+    errHtml+
+    '<button class="new-btn" onclick="location.reload()">New Session</button>';
+}
+
+function showErr(msg){var e=document.getElementById('err');e.style.display='block';e.textContent='⚠ '+msg;}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+window.speechSynthesis&&window.speechSynthesis.getVoices();
+window.speechSynthesis&&(window.speechSynthesis.onvoiceschanged=function(){});
+
+// ══════════════════════════════════════
+// PWA SETUP
+// ══════════════════════════════════════
+(function(){
+  // Inline manifest
+  var manifest = {
+    name: "AI English Coach",
+    short_name: "AI Coach",
+    description: "Practice English speaking with AI feedback",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#0d0f14",
+    theme_color: "#0d0f14",
+    orientation: "landscape-primary",
+    icons: [
+      {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d0f14'/><text y='135' x='96' text-anchor='middle' font-size='110'>🎓</text></svg>",sizes:"192x192",type:"image/svg+xml"},
+      {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230d0f14'/><text y='360' x='256' text-anchor='middle' font-size='300'>🎓</text></svg>",sizes:"512x512",type:"image/svg+xml"}
+    ]
+  };
+  var blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  document.getElementById('pwa-manifest').href = url;
+
+  // Service Worker for offline
+  if('serviceWorker' in navigator){
+    var sw = `
+self.addEventListener('install', function(e){
+  e.waitUntil(
+    caches.open('ai-coach-v1').then(function(cache){
+      return cache.addAll([self.location.href]);
+    })
+  );
+  self.skipWaiting();
+});
+self.addEventListener('fetch', function(e){
+  e.respondWith(
+    caches.match(e.request).then(function(r){
+      return r || fetch(e.request).catch(function(){
+        return caches.match(e.request);
+      });
+    })
+  );
+});
+`;
+    var swBlob = new Blob([sw], {type:'application/javascript'});
+    var swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(function(){});
+  }
+
+  // Install prompt
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallBtn();
+  });
+
+  function showInstallBtn(){
+    var btn = document.createElement('button');
+    btn.id = 'install-btn';
+    btn.innerHTML = '📲 Install App';
+    btn.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:25px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;z-index:9999;box-shadow:0 4px 20px rgba(91,127,255,0.4);font-family:inherit;';
+    btn.onclick = function(){
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(){
+          deferredPrompt = null;
+          btn.remove();
+        });
+      }
+    };
+    document.body.appendChild(btn);
+    setTimeout(function(){if(btn.parentNode)btn.remove();}, 15000);
+  }
+
+  // Check if already installed
+  if(window.matchMedia('(display-mode: standalone)').matches){
+    console.log('Running as PWA');
+  }
+})();
+
+</script>
+</body>
+</html>
