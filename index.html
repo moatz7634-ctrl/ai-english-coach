@@ -6,7 +6,6 @@
 <title>AI English Coach</title>
 <meta name="application-name" content="AI English Coach">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AI Coach">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0d0f14">
@@ -18,7 +17,7 @@
 body{background:#0d0f14;color:#f0f2f8;min-height:100vh;}
 :root{--accent:#5b7fff;--green:#22d3a0;--red:#f87171;--amber:#fbbf24;--surface:#161920;--surface2:#1e2230;--border:rgba(255,255,255,0.07);}
 #setup{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:420px;max-width:100%;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:440px;max-width:100%;}
 h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .logo{display:flex;align-items:center;gap:9px;margin-bottom:5px;}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
@@ -26,7 +25,7 @@ h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .sc-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--surface2);margin-bottom:9px;transition:all .15s;}
 .sc-btn:hover{border-color:rgba(91,127,255,0.3);}
 .sc-btn.active{border-color:var(--accent);background:rgba(91,127,255,0.1);}
-.sc-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.sc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
 .sc-title{font-size:13px;font-weight:600;margin-bottom:2px;}
 .sc-role{font-size:11px;color:#8b93ad;}
 .note{font-size:11px;color:#4b5268;margin:12px 0;display:flex;gap:6px;line-height:1.5;}
@@ -37,37 +36,41 @@ h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .tl{display:flex;align-items:center;gap:9px;}
 .sdot{width:8px;height:8px;border-radius:50%;}
 .stitle{font-size:13px;font-weight:600;}
-.timer{font-size:12px;color:#8b93ad;font-variant-numeric:tabular-nums;}
+.timer-disp{font-size:12px;color:#8b93ad;font-variant-numeric:tabular-nums;}
 .end-btn{padding:6px 14px;border-radius:8px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:var(--red);cursor:pointer;font-size:12px;font-weight:600;}
-.main{display:grid;grid-template-columns:1fr 310px;flex:1;overflow:hidden;}
+.main{display:grid;grid-template-columns:1fr 320px;flex:1;overflow:hidden;}
 .stage{display:flex;flex-direction:column;padding:13px;gap:11px;overflow:auto;}
-.avatar-box{flex:1;min-height:190px;background:var(--surface);border:1px solid var(--border);border-radius:13px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.av-glow{position:absolute;inset:0;border-radius:13px;}
+.avatar-box{flex:1;min-height:180px;background:var(--surface);border:1px solid var(--border);border-radius:13px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.av-glow{position:absolute;inset:0;}
 .av-inner{position:relative;z-index:1;text-align:center;}
-.av-circle{width:92px;height:92px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:32px;transition:border-color .3s,box-shadow .3s;}
+.av-circle{width:88px;height:88px;border-radius:50%;background:var(--surface2);border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:30px;transition:border-color .3s,box-shadow .3s;}
 .av-name{font-weight:600;font-size:15px;margin-bottom:2px;}
 .av-role{font-size:11px;color:#8b93ad;margin-bottom:10px;}
 .waves{display:flex;align-items:center;justify-content:center;gap:3px;height:20px;}
 .wave{width:3px;border-radius:2px;background:var(--accent);height:4px;transition:height .12s;}
 .bubble{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(22,25,32,.92);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:11px;line-height:1.6;display:none;max-height:70px;overflow:hidden;}
-.cam-box{height:145px;background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;position:relative;flex-shrink:0;}
+/* Grammar challenge card */
+.gram-challenge{background:var(--surface);border:1px solid rgba(91,127,255,.3);border-radius:13px;padding:16px;flex-shrink:0;display:none;}
+.gram-challenge-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.gram-challenge-ar{font-size:16px;font-weight:600;color:#f0f2f8;margin-bottom:4px;direction:rtl;text-align:right;}
+.gram-challenge-hint{font-size:11px;color:#4b5268;direction:rtl;text-align:right;}
+.cam-box{height:140px;background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;position:relative;flex-shrink:0;}
 video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .cam-off{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#4b5268;font-size:12px;}
 .cam-lbl{position:absolute;top:7px;right:9px;background:rgba(0,0,0,.7);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:10px;color:#8b93ad;}
-.ctrls{display:flex;align-items:center;justify-content:center;gap:9px;padding:11px;flex-shrink:0;}
-.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 18px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);color:#8b93ad;cursor:pointer;font-size:11px;font-weight:500;transition:all .15s;}
+.ctrls{display:flex;align-items:center;justify-content:center;gap:9px;padding:10px;flex-shrink:0;}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 16px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);color:#8b93ad;cursor:pointer;font-size:11px;font-weight:500;transition:all .15s;}
 .ctrl:hover{border-color:rgba(91,127,255,.3);color:#f0f2f8;}
 .ctrl.rec{border-color:var(--red);background:rgba(248,113,113,.12);color:var(--red);}
 .ctrl i{font-size:19px;}
-.live{padding:8px 12px;background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);border-radius:8px;font-size:12px;color:#f0f2f8;font-style:italic;display:none;margin:0 13px 4px;flex-shrink:0;}
+.live{padding:7px 12px;background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);border-radius:8px;font-size:12px;color:#f0f2f8;font-style:italic;display:none;margin:0 13px 3px;flex-shrink:0;}
+/* Panel */
 .panel{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
 .tabs{display:flex;border-bottom:1px solid var(--border);}
 .tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:#4b5268;transition:all .15s;}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .pbody{flex:1;overflow-y:auto;padding:12px;}
-.empty{text-align:center;padding:28px 12px;color:#4b5268;}
-.empty-icon{font-size:26px;margin-bottom:8px;}
-.empty p{font-size:12px;line-height:1.6;}
+/* Chat */
 .msg{padding:9px 11px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:8px;}
 .msg.ai{background:var(--surface2);border:1px solid var(--border);border-radius:9px 9px 9px 2px;}
 .msg.user{background:rgba(91,127,255,.1);border:1px solid rgba(91,127,255,.2);border-radius:9px 9px 2px 9px;text-align:right;}
@@ -79,20 +82,29 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .typing-ind span:nth-child(2){animation-delay:.2s;}
 .typing-ind span:nth-child(3){animation-delay:.4s;}
 @keyframes td{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.3);opacity:1}}
-/* Tips - sentence cards */
-.tip-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:10px;}
-.tip-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.tip-card-label{font-size:10px;font-weight:600;color:#4b5268;text-transform:uppercase;letter-spacing:.4px;}
-.tip-score{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
-.tip-score.good{background:rgba(34,211,160,.15);color:var(--green);}
-.tip-score.mid{background:rgba(251,191,36,.15);color:var(--amber);}
-.tip-score.bad{background:rgba(248,113,113,.15);color:var(--red);}
-.tip-said{font-size:12px;color:#8b93ad;margin-bottom:4px;direction:ltr;text-align:left;}
-.tip-said span{color:#f0f2f8;font-style:italic;}
-.tip-err{font-size:12px;color:var(--red);margin-bottom:3px;}
-.tip-fix{font-size:12px;color:var(--green);font-weight:500;}
-.tip-note{font-size:11px;color:#4b5268;margin-top:4px;line-height:1.5;}
-.tip-ok{font-size:12px;color:var(--green);font-style:italic;}
+/* Analysis cards */
+.ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
+.ana-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.ana-turn{font-size:10px;font-weight:600;color:#4b5268;text-transform:uppercase;}
+.ana-score{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.ana-score.g{background:rgba(34,211,160,.15);color:var(--green);}
+.ana-score.w{background:rgba(251,191,36,.15);color:var(--amber);}
+.ana-score.r{background:rgba(248,113,113,.15);color:var(--red);}
+.ana-said{font-size:12px;color:#6b7280;margin-bottom:6px;direction:ltr;text-align:left;padding:6px 8px;background:rgba(255,255,255,.02);border-radius:6px;font-style:italic;}
+.err-row{margin-bottom:5px;padding:6px 8px;background:rgba(248,113,113,.06);border-radius:7px;border-left:2px solid var(--red);}
+.err-orig{font-size:12px;color:var(--red);}
+.err-fix{font-size:12px;color:var(--green);font-weight:600;}
+.err-why{font-size:11px;color:#6b7280;margin-top:2px;direction:rtl;text-align:right;}
+.weak-row{margin-bottom:5px;padding:6px 8px;background:rgba(251,191,36,.06);border-radius:7px;border-left:2px solid var(--amber);}
+.filler-row{font-size:12px;color:var(--amber);margin-top:5px;}
+.better-box{margin-top:7px;padding:7px 9px;background:rgba(34,211,160,.06);border-radius:7px;border-left:2px solid var(--green);}
+.better-label{font-size:10px;color:#4b5268;margin-bottom:3px;}
+.better-text{font-size:12px;color:var(--green);direction:ltr;text-align:left;}
+.ana-ok{font-size:12px;color:var(--green);}
+/* Grammar Challenge analysis */
+.gram-ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
+.gram-ana-ar{font-size:13px;color:#8b93ad;direction:rtl;text-align:right;margin-bottom:4px;}
+.gram-ana-said{font-size:12px;color:#f0f2f8;direction:ltr;text-align:left;margin-bottom:6px;font-style:italic;}
 /* Report */
 .metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
 .mv{font-weight:600;}
@@ -101,26 +113,33 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .sc-n{font-size:26px;font-weight:700;color:var(--accent);line-height:1;}
 .sc-of{font-size:10px;color:#8b93ad;}
 .rtitle{font-size:11px;font-weight:600;color:#4b5268;text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;}
-.rep-err{padding:9px 12px;border-radius:8px;margin-bottom:8px;font-size:12px;line-height:1.7;}
-.rep-err.bad{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);}
-.rep-err.ok{background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);color:var(--green);}
-.rep-err .orig{color:var(--red);text-decoration:line-through;}
-.rep-err .fix{color:var(--green);font-weight:600;}
-.rep-err .why{color:#8b93ad;font-size:11px;margin-top:2px;}
+.rep-item{padding:9px 12px;border-radius:8px;margin-bottom:8px;font-size:12px;line-height:1.6;}
+.rep-item.ok{background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);color:var(--green);}
+.rep-item.warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:var(--amber);}
+.rep-item.bad{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:var(--red);}
+.rep-err-block{padding:9px 12px;border-radius:8px;margin-bottom:8px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);}
+.rep-err-orig{font-size:12px;color:var(--red);text-decoration:line-through;}
+.rep-err-fix{font-size:12px;color:var(--green);font-weight:600;}
+.rep-err-why{font-size:11px;color:#6b7280;margin-top:3px;direction:rtl;text-align:right;}
 .new-btn{width:100%;margin-top:14px;padding:11px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);color:#f0f2f8;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
-.err{margin:4px 13px;padding:7px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:7px;font-size:11px;color:var(--red);display:none;}
+.empty{text-align:center;padding:28px 12px;color:#4b5268;}
+.empty-icon{font-size:26px;margin-bottom:8px;}
+.empty p{font-size:12px;line-height:1.6;}
+.err-bar{margin:4px 13px;padding:7px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:7px;font-size:11px;color:var(--red);display:none;}
 @media(max-width:640px){.main{grid-template-columns:1fr;}.panel{display:none;}}
 </style>
 </head>
 <body>
+
+<!-- SETUP -->
 <div id="setup">
   <div class="card">
     <div class="logo"><div class="dot"></div><h2>AI English Coach</h2></div>
-    <p class="sub">اختار نوع الـ session — بيتكلم معاك بالإنجليزي ويحلل كلامك بتفصيل.</p>
+    <p class="sub">اختار نوع الـ session — التحليل كله بيظهر في تابة منفصلة، مش في الكلام.</p>
     <div id="sc-list">
       <div class="sc-btn active" data-id="presentation" onclick="pickSc(this)">
         <div class="sc-icon" style="background:rgba(91,127,255,.15);color:#5b7fff">🎓</div>
-        <div><div class="sc-title">Presentation Practice</div><div class="sc-role">قدّم موضوع — هيتكلم معاك طبيعي</div></div>
+        <div><div class="sc-title">Presentation Practice</div><div class="sc-role">قدّم موضوع — محادثة طبيعية</div></div>
       </div>
       <div class="sc-btn" data-id="interview" onclick="pickSc(this)">
         <div class="sc-icon" style="background:rgba(167,139,250,.15);color:#a78bfa">💼</div>
@@ -134,12 +153,17 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
         <div class="sc-icon" style="background:rgba(251,191,36,.15);color:#fbbf24">💬</div>
         <div><div class="sc-title">Free Conversation</div><div class="sc-role">تكلم عن أي حاجة</div></div>
       </div>
+      <div class="sc-btn" data-id="grammar" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(248,113,113,.15);color:#f87171">📝</div>
+        <div><div class="sc-title">Grammar Trainer</div><div class="sc-role">جملة بالعربي — قولها بالإنجليزي الصح</div></div>
+      </div>
     </div>
     <div class="note"><span>ℹ</span><span>محتاج Chrome أو Edge — هيطلب إذن ميكروفون وكاميرا</span></div>
     <button class="start" onclick="startSession()">ابدأ الـ Session</button>
   </div>
 </div>
 
+<!-- APP -->
 <div id="app" style="display:none;flex-direction:column;height:100vh;">
   <div class="topbar">
     <div class="tl">
@@ -147,13 +171,16 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
       <span class="stitle" id="stitle">Session</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <span class="timer" id="timer-disp">00:00</span>
+      <span class="timer-disp" id="timer-disp">00:00</span>
       <button class="end-btn" onclick="endSession()">End Session</button>
     </div>
   </div>
+
   <div class="main">
+    <!-- LEFT: stage -->
     <div style="display:flex;flex-direction:column;overflow:hidden;">
       <div class="stage" style="flex:1;">
+        <!-- Avatar -->
         <div class="avatar-box">
           <div class="av-glow" id="av-glow"></div>
           <div class="av-inner">
@@ -164,14 +191,21 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
           </div>
           <div class="bubble" id="bubble"></div>
         </div>
+        <!-- Grammar challenge card (only in grammar mode) -->
+        <div class="gram-challenge" id="gram-challenge">
+          <div class="gram-challenge-label">📝 قول الجملة دي بالإنجليزي</div>
+          <div class="gram-challenge-ar" id="gram-ar">—</div>
+          <div class="gram-challenge-hint" id="gram-hint">—</div>
+        </div>
+        <!-- Camera -->
         <div class="cam-box">
           <video id="vid" autoplay muted playsinline></video>
-          <div class="cam-off" id="cam-off"><i class="ti ti-video-off" style="font-size:28px"></i><span>Camera off</span></div>
+          <div class="cam-off" id="cam-off"><i class="ti ti-video-off" style="font-size:26px"></i><span>Camera off</span></div>
           <div class="cam-lbl">You</div>
         </div>
       </div>
       <div class="live" id="live"></div>
-      <div class="err" id="err"></div>
+      <div class="err-bar" id="err-bar"></div>
       <div class="ctrls">
         <button class="ctrl" id="mic-btn" onclick="toggleMic()">
           <i class="ti ti-microphone" id="mic-icon"></i>
@@ -180,23 +214,28 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
         <button class="ctrl" onclick="toggleCam()">
           <i class="ti ti-video" id="cam-icon"></i><span>Camera</span>
         </button>
+        <button class="ctrl" id="next-btn" onclick="nextGramChallenge()" style="display:none;">
+          <i class="ti ti-arrow-left"></i><span>التالي</span>
+        </button>
       </div>
     </div>
+
+    <!-- RIGHT: panel -->
     <div class="panel">
       <div class="tabs">
         <div class="tab active" onclick="switchTab('chat',this)">Chat</div>
-        <div class="tab" onclick="switchTab('tips',this)">Analysis</div>
+        <div class="tab" onclick="switchTab('analysis',this)">Analysis</div>
         <div class="tab" onclick="switchTab('report',this)">Report</div>
       </div>
       <div class="pbody" id="chat-panel">
-        <div class="empty" id="chat-empty"><div class="empty-icon">💬</div><p>Conversation هيظهر هنا</p></div>
+        <div class="empty" id="chat-empty"><div class="empty-icon">💬</div><p>الـ conversation هيظهر هنا</p></div>
       </div>
-      <div class="pbody" id="tips-panel" style="display:none">
-        <div class="empty" id="tips-empty"><div class="empty-icon">🔍</div><p>تحليل كل جملة قلتها هيظهر هنا</p></div>
+      <div class="pbody" id="analysis-panel" style="display:none;">
+        <div class="empty" id="analysis-empty"><div class="empty-icon">🔍</div><p>تحليل كل جملة قلتها هيظهر هنا بعد ما تتكلم</p></div>
       </div>
-      <div class="pbody" id="report-panel" style="display:none">
-        <div class="empty" id="rep-empty"><div class="empty-icon">📊</div><p>التقرير الكامل هيظهر بعد End Session</p></div>
-        <div id="rep-content" style="display:none"></div>
+      <div class="pbody" id="report-panel" style="display:none;">
+        <div class="empty" id="rep-empty"><div class="empty-icon">📊</div><p>التقرير الكامل بعد End Session</p></div>
+        <div id="rep-content" style="display:none;"></div>
       </div>
     </div>
   </div>
@@ -204,152 +243,126 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 
 <script>
 // ══════════════════════════════════════
-// GRAMMAR RULES - detailed errors
+// GRAMMAR RULES
 // ══════════════════════════════════════
-var GRAMMAR_RULES = [
+var GRAM = [
   {p:/\bare you hear\b/i, orig:"are you hear", fix:"can you hear me", why:"استخدم 'can' مع 'hear' — مش 'are'"},
   {p:/\bi am hear\b/i, orig:"I am hear", fix:"I can hear you", why:"'hear' فعل حالة — مش بيجي بعد 'am'"},
-  {p:/\bi am agree\b/i, orig:"I am agree", fix:"I agree", why:"'agree' بييجي بدون 'am' — مش فعل مستمر"},
-  {p:/\bi am understand\b/i, orig:"I am understand", fix:"I understand", why:"'understand' فعل حالة — مش بيجي بعد 'am'"},
-  {p:/\bi am know\b/i, orig:"I am know", fix:"I know", why:"'know' فعل حالة — بييجي بدون 'am'"},
+  {p:/\bi am agree\b/i, orig:"I am agree", fix:"I agree", why:"'agree' بييجي بدون 'am'"},
+  {p:/\bi am understand\b/i, orig:"I am understand", fix:"I understand", why:"'understand' فعل حالة — بدون 'am'"},
+  {p:/\bi am know\b/i, orig:"I am know", fix:"I know", why:"'know' فعل حالة — بدون 'am'"},
   {p:/\bi working\b/i, orig:"I working", fix:"I am working", why:"محتاج 'am' قبل الفعل المستمر"},
-  {p:/\bhe dont\b/i, orig:"he dont", fix:"he doesn't", why:"مع he/she/it لازم 'doesn't' مش 'don't'"},
-  {p:/\bshe dont\b/i, orig:"she dont", fix:"she doesn't", why:"مع he/she/it لازم 'doesn't' مش 'don't'"},
-  {p:/\bwe was\b/i, orig:"we was", fix:"we were", why:"مع we/they الفعل الماضي 'were' مش 'was'"},
-  {p:/\bthey was\b/i, orig:"they was", fix:"they were", why:"مع we/they الفعل الماضي 'were' مش 'was'"},
+  {p:/\bhe dont\b/i, orig:"he dont", fix:"he doesn't", why:"مع he/she/it لازم 'doesn't'"},
+  {p:/\bshe dont\b/i, orig:"she dont", fix:"she doesn't", why:"مع he/she/it لازم 'doesn't'"},
+  {p:/\bwe was\b/i, orig:"we was", fix:"we were", why:"مع we/they الماضي 'were' مش 'was'"},
+  {p:/\bthey was\b/i, orig:"they was", fix:"they were", why:"مع we/they الماضي 'were' مش 'was'"},
   {p:/\bmore better\b/i, orig:"more better", fix:"better", why:"'better' مقارنة بالفعل — مش محتاج 'more'"},
-  {p:/\bmore easier\b/i, orig:"more easier", fix:"easier", why:"'easier' مقارنة بالفعل — مش محتاج 'more'"},
-  {p:/\bmore faster\b/i, orig:"more faster", fix:"faster", why:"'faster' مقارنة بالفعل — مش محتاج 'more'"},
-  {p:/\bvery much better\b/i, orig:"very much better", fix:"much better", why:"استخدم 'much better' بس"},
-  {p:/\bi have (\d+) years?\b/i, orig:"I have X years", fix:"I have been working for X years", why:"للخبرة في الشغل استخدم 'have been working for'"},
-  {p:/\b(\d+) year experience\b/i, orig:"X year experience", fix:"X years of experience", why:"استخدم 'years of experience' جمع مع حرف 'of'"},
-  {p:/\bi working in here\b/i, orig:"I working in here", fix:"I work here", why:"'work here' بدون 'in' وبدون 'ing'"},
-  {p:/\bmake me feel\b/i, orig:"it make me feel", fix:"it makes me feel", why:"مع 'it' لازم 'makes' مش 'make'"},
-  {p:/\bsince (\d+) years?\b/i, orig:"since X years", fix:"for X years", why:"مع فترة زمنية استخدم 'for' مش 'since'"},
-  {p:/\bopen my mind\b/i, orig:"open my mind", fix:"broaden my horizons / change my perspective", why:"التعبير الصح 'broaden my horizons' أو 'change my perspective'"},
-  {p:/\bmake me happy\b.*\bwork\b/i, orig:"make me happy to work", fix:"I enjoy working on", why:"استخدم 'I enjoy working on' للتعبير عن الاستمتاع بالشغل"},
+  {p:/\bmore easier\b/i, orig:"more easier", fix:"easier", why:"'easier' مقارنة — مش محتاج 'more'"},
+  {p:/\bmore faster\b/i, orig:"more faster", fix:"faster", why:"'faster' مقارنة — مش محتاج 'more'"},
+  {p:/\bi have (\d+) year/i, orig:"I have X years experience", fix:"I have X years of experience", why:"لازم 'of' بعد years"},
+  {p:/\bi working in here\b/i, orig:"I working in here", fix:"I work here", why:"'I work here' بدون 'in' وبدون 'ing'"},
+  {p:/\bsince (\d+) year/i, orig:"since X years", fix:"for X years", why:"مع فترة زمنية استخدم 'for' مش 'since'"},
+  {p:/\bopen my mind\b/i, orig:"open my mind", fix:"broaden my horizons", why:"التعبير الصح 'broaden my horizons'"},
+  {p:/\bit make me\b/i, orig:"it make me", fix:"it makes me", why:"مع 'it' لازم 'makes' مش 'make'"},
+  {p:/\bvery much better\b/i, orig:"very much better", fix:"much better", why:"'much better' بس — بدون 'very'"},
+  {p:/\byesterday i (go|come|see|do|eat|have)\b/i, orig:"yesterday I go/come/see", fix:"yesterday I went/came/saw", why:"بعد yesterday لازم الماضي البسيط"},
+  {p:/\bi buyed\b/i, orig:"I buyed", fix:"I bought", why:"'buy' ماضيها 'bought' مش 'buyed'"},
+  {p:/\bi goed\b/i, orig:"I goed", fix:"I went", why:"'go' ماضيها 'went' مش 'goed'"},
+  {p:/\bi taked\b/i, orig:"I taked", fix:"I took", why:"'take' ماضيها 'took' مش 'taked'"},
+  {p:/\bI am \d+ years\b/i, orig:"I am X years", fix:"I am X years old", why:"محتاج 'old' في الآخر"},
+  {p:/\bpeople is\b/i, orig:"people is", fix:"people are", why:"'people' جمع — استخدم 'are' مش 'is'"},
+  {p:/\binformations\b/i, orig:"informations", fix:"information", why:"'information' لا تجمع — مش بيجيها 's'"},
+  {p:/\badvices\b/i, orig:"advices", fix:"advice", why:"'advice' لا تجمع — مش بيجيها 's'"},
+  {p:/\bknowledges\b/i, orig:"knowledges", fix:"knowledge", why:"'knowledge' لا تجمع"},
+  {p:/\bfurnitures\b/i, orig:"furnitures", fix:"furniture", why:"'furniture' لا تجمع"},
+  {p:/\bhe have\b/i, orig:"he have", fix:"he has", why:"مع he/she/it استخدم 'has' مش 'have'"},
+  {p:/\bshe have\b/i, orig:"she have", fix:"she has", why:"مع he/she/it استخدم 'has' مش 'have'"},
+  {p:/\bit have\b/i, orig:"it have", fix:"it has", why:"مع he/she/it استخدم 'has' مش 'have'"},
 ];
 
-function checkGrammar(text) {
-  var found = [];
-  GRAMMAR_RULES.forEach(function(rule) {
-    if (rule.p.test(text)) {
-      found.push({orig: rule.orig, fix: rule.fix, why: rule.why});
-    }
-  });
-  return found;
+var WEAK = [
+  {p:/\bit is good\b/i, said:"it is good", better:"it is effective / beneficial"},
+  {p:/\bvery good\b/i, said:"very good", better:"excellent / outstanding"},
+  {p:/\bvery bad\b/i, said:"very bad", better:"terrible / critical / severe"},
+  {p:/\bbig problem\b/i, said:"big problem", better:"major issue / critical challenge"},
+  {p:/\ba lot of\b/i, said:"a lot of", better:"numerous / significant / substantial"},
+  {p:/\bnice\b/i, said:"nice", better:"impressive / remarkable / pleasant"},
+];
+
+function checkGram(text) {
+  var errs=[];
+  GRAM.forEach(function(r){ if(r.p.test(text)) errs.push({orig:r.orig,fix:r.fix,why:r.why}); });
+  return errs;
+}
+function checkWeak(text) {
+  var w=[];
+  WEAK.forEach(function(r){ if(r.p.test(text)) w.push({said:r.said,better:r.better}); });
+  return w;
+}
+function scoreIt(errs, wc, fillers) {
+  var s=10;
+  s -= Math.min(5, errs.length*2);
+  s -= fillers>3?2:fillers>1?1:0;
+  s -= wc<5?3:wc<10?1:0;
+  return Math.max(1,Math.min(10,s));
 }
 
 // ══════════════════════════════════════
-// DEEPER ANALYSIS
+// GRAMMAR CHALLENGES
 // ══════════════════════════════════════
-function deepAnalyze(text) {
-  var words = text.trim().split(/\s+/).filter(Boolean);
-  var wc = words.length;
-  var sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
-  var fillers = (text.match(/\b(um|uh|like|you know|basically|literally|i mean|so so|kind of|sort of)\b/gi) || []);
-  var errors = checkGrammar(text);
-
-  // Weak phrases
-  var weakPhrases = [];
-  if (/\bit is good\b/i.test(text)) weakPhrases.push({said:"it is good", better:"it is effective / beneficial / significant"});
-  if (/\bvery good\b/i.test(text)) weakPhrases.push({said:"very good", better:"excellent / outstanding / impressive"});
-  if (/\bvery bad\b/i.test(text)) weakPhrases.push({said:"very bad", better:"terrible / critical / severe"});
-  if (/\ba lot of\b/i.test(text) && wc < 15) weakPhrases.push({said:"a lot of", better:"numerous / significant / substantial"});
-  if (/\bbig\b/i.test(text) && /\bproblem\b/i.test(text)) weakPhrases.push({said:"big problem", better:"major issue / critical challenge"});
-
-  // Score
-  var score = 10;
-  score -= Math.min(5, errors.length * 2);
-  score -= fillers.length > 2 ? 2 : fillers.length > 0 ? 1 : 0;
-  score -= wc < 5 ? 3 : wc < 10 ? 1 : 0;
-  score -= weakPhrases.length > 1 ? 1 : 0;
-  score = Math.max(1, Math.min(10, score));
-
-  // Better version of the sentence
-  var betterVersion = text;
-  errors.forEach(function(e) {
-    betterVersion = betterVersion.replace(new RegExp(e.orig.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), e.fix);
-  });
-
-  return {wc, sentences: sentences.length, fillers, errors, weakPhrases, score, betterVersion, text};
-}
+var GRAM_CHALLENGES = [
+  {ar:"أنا بشتغل هنا من ٣ سنين.", hint:"زمن مستمر لفترة — Present Perfect", en:"I have been working here for 3 years."},
+  {ar:"هو مش عارف الجواب.", hint:"نفي مع he — مش 'he don't'", en:"He doesn't know the answer."},
+  {ar:"إحنا كنا في الاجتماع امبارح.", hint:"ماضي بسيط مع we", en:"We were in the meeting yesterday."},
+  {ar:"الداتا بتتحلل كل يوم.", hint:"Passive voice — present simple", en:"The data is analyzed every day."},
+  {ar:"أنا عندي خبرة ٥ سنين في WFM.", hint:"لازم 'of' و 'experience'", en:"I have 5 years of experience in WFM."},
+  {ar:"الأجنتس مش بيلتزموا بالجدول.", hint:"نفي مع they — present simple", en:"The agents don't follow the schedule."},
+  {ar:"لو الـ adherence وقع، إيه اللي هتعمله؟", hint:"Second conditional — If + past, would", en:"If the adherence dropped, what would you do?"},
+  {ar:"المدير طلب التقرير من أمبارح.", hint:"Passive + past simple", en:"The report was requested by the manager yesterday."},
+  {ar:"أنا بافهم الموضوع كويس.", hint:"فعل حالة — مش بيجي بعد 'am'", en:"I understand the topic well."},
+  {ar:"الفريق شغال على حل المشكلة.", hint:"Present continuous مع 'the team'", en:"The team is working on solving the issue."},
+  {ar:"محتاج أقرر الأولويات الأول.", hint:"Modal verb + infinitive", en:"I need to prioritize first."},
+  {ar:"الـ SLA اتحسن بعد التعديلات.", hint:"Passive + past simple", en:"The SLA improved after the adjustments."},
+  {ar:"هل تقدر تشرحلي إيه الـ shrinkage؟", hint:"سؤال بـ can — formal", en:"Could you explain what shrinkage means?"},
+  {ar:"أنا مش موافق على الخطة دي.", hint:"نفي مع 'I' — مش 'I am not agree'", en:"I don't agree with this plan."},
+  {ar:"الناس في الفريق شايفين نفس الرأي.", hint:"'people' جمع — استخدم 'are'", en:"The people in the team share the same opinion."},
+  {ar:"عندنا معلومات كتير عن الموضوع.", hint:"'information' لا تجمع", en:"We have a lot of information about this topic."},
+  {ar:"هو عنده خبرة أكبر مني.", hint:"مقارنة — comparative بدون 'more'", en:"He has more experience than me."},
+  {ar:"اشتغلنا أمس من ٨ لـ ٤.", hint:"ماضي بسيط مع worked", en:"We worked yesterday from 8 to 4."},
+  {ar:"الـ adherence rate وصل للـ target النهارده.", hint:"Past simple — reached", en:"The adherence rate reached the target today."},
+  {ar:"محتاج تبلغ المدير لو في مشكلة.", hint:"Modal — need to + infinitive", en:"You need to notify the manager if there is a problem."},
+];
+var gramIdx = 0;
+var gramUserAns = '';
 
 // ══════════════════════════════════════
 // SCENARIOS
 // ══════════════════════════════════════
 var SCENARIOS = {
-  presentation: {
-    name:"Presentation", avatarName:"Alex", avatarRole:"Presentation Coach", icon:"🎓", color:"#5b7fff",
-    openers:[
-      "Hello! I'm Alex, your presentation coach. What topic would you like to present about today?",
-      "Welcome! I'm Alex. Go ahead — introduce the topic you want to present.",
-      "Hi! I'm Alex. What are you presenting about today? Start whenever you're ready."
-    ],
-    replies:[
-      ["Interesting point. How would you explain that to someone who doesn't work in RTM?",
-       "Good. Can you give a real example from your own experience?",
-       "Okay. What would you say is the most important thing your audience should remember?",
-       "Now imagine you only have 30 seconds — how would you summarize that?",
-       "What data or numbers could you use to support that?",
-       "How would you open your presentation to grab attention from the start?",
-       "Good. What comes next in your presentation?",
-       "How would you handle a tough question from the audience about that?"]
-    ]
+  presentation:{
+    name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
+    openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?","Hi! I'm Alex. Start whenever you're ready — what's your topic?"],
+    replies:["Good. How would you explain that to someone who doesn't work in RTM?","Can you give a real example from your experience?","What's the most important point your audience should remember?","If you had 30 seconds — how would you summarize that?","What data or numbers would support that point?","How would you open your presentation to grab attention?","What comes next in your presentation?","How would you handle a tough question from the audience?"]
   },
-  interview: {
-    name:"Job Interview", avatarName:"Sarah", avatarRole:"HR Manager", icon:"💼", color:"#a78bfa",
-    openers:[
-      "Good morning! I'm Sarah from HR. Let's begin — please tell me about yourself and your experience in workforce management.",
-      "Hi, I'm Sarah. I'll be interviewing you for the RTM Analyst role. Walk me through your background and current responsibilities.",
-      "Good morning! I'm Sarah. Start by telling me about yourself and why you applied for this position."
-    ],
-    replies:[
-      ["Can you give me a specific example of how you handled a low-adherence situation?",
-       "What KPIs do you monitor on a daily basis and why are they important?",
-       "Describe a time you had to make a quick decision under pressure.",
-       "How do you communicate a staffing problem to your team leader?",
-       "What's the biggest challenge you've faced in your WFM role and how did you solve it?",
-       "Where do you see yourself in 3 years in this field?",
-       "What makes you different from other candidates applying for this role?",
-       "How do you stay updated with best practices in workforce management?"]
-    ]
+  interview:{
+    name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
+    openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience.","Hi, I'm Sarah. Walk me through your background and current role.","Good morning! I'm Sarah. Tell me about yourself and why you applied."],
+    replies:["Can you give a specific example of handling a low-adherence situation?","What KPIs do you monitor daily and why?","Describe a time you made a quick decision under pressure.","How do you communicate a staffing problem to your team leader?","What's the biggest challenge you've faced in WFM and how did you solve it?","Where do you see yourself in 3 years?","What makes you different from other candidates?","How do you stay updated with WFM best practices?"]
   },
-  meeting: {
-    name:"Team Meeting", avatarName:"James", avatarRole:"Team Leader", icon:"👥", color:"#22d3a0",
-    openers:[
-      "Good morning everyone! I'm James, your team leader. Can you update me on last week's adherence numbers?",
-      "Hi team, James here. Let's talk about the staffing plan for next week — what's your read on our current situation?",
-      "Morning! I'm James. Adherence was below target yesterday. What happened and what's your plan to fix it?"
-    ],
-    replies:[
-      ["What do you think we should do differently next week to avoid this?",
-       "How do we communicate this issue to agents without hurting their morale?",
-       "What's the impact on SLA if this pattern continues?",
-       "Who should take ownership of this action item and by when?",
-       "Can you walk me through the numbers in more detail?",
-       "What does the forecast look like for tomorrow's peak hours?",
-       "How does this compare to the same period last month?",
-       "What additional resources would help you fix this faster?"]
-    ]
+  meeting:{
+    name:"Team Meeting",avatarName:"James",avatarRole:"Team Leader",icon:"👥",color:"#22d3a0",
+    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?","Hi team, James here. What's your read on our current staffing situation?","Morning! Adherence was below target yesterday — what happened and what's the plan?"],
+    replies:["What should we do differently next week?","How do we communicate this without hurting agent morale?","What's the SLA impact if this continues?","Who owns this action item and by when?","Can you walk me through the numbers in detail?","What does the forecast say for tomorrow's peak hours?","How does this compare to last month?","What resources do you need to fix this faster?"]
   },
-  free: {
-    name:"Free Talk", avatarName:"Emma", avatarRole:"English Coach", icon:"💬", color:"#fbbf24",
-    openers:[
-      "Hi! I'm Emma. What would you like to talk about today?",
-      "Hello! I'm Emma. What's on your mind — work, life, anything you want to practice?",
-      "Hi there! I'm Emma. Tell me about your day or anything you've been thinking about."
-    ],
-    replies:[
-      ["Tell me more about that.",
-       "How did that make you feel?",
-       "What would you do differently if you could?",
-       "Can you give me more details?",
-       "What do you think is the main reason for that?",
-       "How does that compare to before?",
-       "What would you recommend to someone in the same situation?",
-       "What's the hardest part of that for you?"]
-    ]
+  free:{
+    name:"Free Talk",avatarName:"Emma",avatarRole:"English Coach",icon:"💬",color:"#fbbf24",
+    openers:["Hi! I'm Emma. What would you like to talk about today?","Hello! I'm Emma — what's on your mind?","Hi there! I'm Emma. Tell me about your day or anything you're thinking about."],
+    replies:["Tell me more about that.","How did that make you feel?","What would you do differently?","Can you give more details?","What do you think caused that?","How does that compare to before?","What would you recommend to someone in the same situation?","What's the hardest part of that for you?"]
+  },
+  grammar:{
+    name:"Grammar Trainer",avatarName:"Nour",avatarRole:"Grammar Coach",icon:"📝",color:"#f87171",
+    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟","مرحباً! أنا Nour. هنتدرب على الـ Grammar. هشوفلك الجملة بالعربي وإنت قولها بالإنجليزي. يلا!","Ahlan! I'm Nour. اشوف الجملة على الشاشة وقولها بالإنجليزي الصح!"],
+    replies:[]
   }
 };
 
@@ -357,7 +370,8 @@ var SCENARIOS = {
 // STATE
 // ══════════════════════════════════════
 var state = {
-  scenario:'presentation', messages:[], analyses:[], allErrors:[], allWeak:[],
+  scenario:'presentation', messages:[], analyses:[], gramResults:[],
+  allErrors:[], allWeak:[],
   micOn:false, aiSpeak:false, camOn:false,
   stream:null, recog:null, finalTxt:'',
   timer:0, timerIv:null, waveRef:null,
@@ -379,19 +393,26 @@ async function startSession() {
   document.getElementById('av-glow').style.background = 'radial-gradient(ellipse at 50% 30%,'+sc.color+'18 0%,transparent 70%)';
   document.getElementById('av-circle').style.borderColor = 'rgba(255,255,255,0.1)';
   try {
-    var stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false});
-    state.stream = stream; state.camOn = true;
-    document.getElementById('vid').srcObject = stream;
-    document.getElementById('cam-off').style.display = 'none';
+    var stream = await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+    state.stream=stream; state.camOn=true;
+    document.getElementById('vid').srcObject=stream;
+    document.getElementById('cam-off').style.display='none';
   } catch(e) {}
-  document.getElementById('setup').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  state.sessionActive = true;
-  state.timerIv = setInterval(function(){
+  document.getElementById('setup').style.display='none';
+  document.getElementById('app').style.display='flex';
+  state.sessionActive=true;
+  state.timerIv=setInterval(function(){
     state.timer++;
-    var m=Math.floor(state.timer/60), s=state.timer%60;
-    document.getElementById('timer-disp').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  }, 1000);
+    var m=Math.floor(state.timer/60),s=state.timer%60;
+    document.getElementById('timer-disp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  },1000);
+  // Grammar mode setup
+  if (state.scenario==='grammar') {
+    document.getElementById('gram-challenge').style.display='block';
+    document.getElementById('next-btn').style.display='flex';
+    gramIdx=0;
+    showGramChallenge();
+  }
   initRecog();
   setTimeout(function(){ aiGreet(); }, 700);
 }
@@ -400,374 +421,443 @@ async function startSession() {
 // SPEECH RECOGNITION
 // ══════════════════════════════════════
 function initRecog() {
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showErr('Need Chrome or Edge.'); return; }
-  var r = new SR();
-  r.lang = 'en-US'; r.continuous = true; r.interimResults = true;
-  r.onresult = function(e) {
-    var interim = '';
-    for (var i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) state.finalTxt += e.results[i][0].transcript + ' ';
-      else interim += e.results[i][0].transcript;
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showErr('Need Chrome or Edge.');return;}
+  var r=new SR();
+  r.lang='en-US';r.continuous=true;r.interimResults=true;
+  r.onresult=function(e){
+    var interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) state.finalTxt+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
     }
-    var show = (state.finalTxt + interim).trim();
-    var lt = document.getElementById('live');
-    lt.style.display = show ? 'block' : 'none';
-    lt.textContent = '🎤 ' + show;
+    var show=(state.finalTxt+interim).trim();
+    var lt=document.getElementById('live');
+    lt.style.display=show?'block':'none';
+    lt.textContent='🎤 '+show;
   };
-  r.onend = function() { if (r._active) { try { r.start(); } catch(e){} } };
-  r.onerror = function(e) { if (e.error !== 'no-speech') showErr('Mic: '+e.error); };
-  state.recog = r;
+  r.onend=function(){if(r._active){try{r.start();}catch(e){}}};
+  r.onerror=function(e){if(e.error!=='no-speech')showErr('Mic: '+e.error);};
+  state.recog=r;
 }
 
-function toggleMic() { if (state.micOn) stopMic(); else startMic(); }
-
-function startMic() {
-  if (state.aiSpeak) { window.speechSynthesis && window.speechSynthesis.cancel(); setAiSpeak(false); }
-  state.finalTxt = '';
-  var lt = document.getElementById('live'); lt.style.display='none'; lt.textContent='';
-  var r = state.recog; if (!r) { showErr('Speech not available.'); return; }
-  r._active = true; try { r.start(); } catch(e){}
-  state.micOn = true;
+function toggleMic(){if(state.micOn)stopMic();else startMic();}
+function startMic(){
+  if(state.aiSpeak){window.speechSynthesis&&window.speechSynthesis.cancel();setAiSpeak(false);}
+  state.finalTxt='';
+  var lt=document.getElementById('live');lt.style.display='none';lt.textContent='';
+  var r=state.recog;if(!r){showErr('Not available.');return;}
+  r._active=true;try{r.start();}catch(e){}
+  state.micOn=true;
   document.getElementById('mic-btn').classList.add('rec');
-  document.getElementById('mic-icon').className = 'ti ti-player-stop';
-  document.getElementById('mic-lbl').textContent = 'Stop';
+  document.getElementById('mic-icon').className='ti ti-player-stop';
+  document.getElementById('mic-lbl').textContent='Stop';
 }
-
-function stopMic() {
-  var r = state.recog;
-  if (r) { r._active = false; try { r.stop(); } catch(e){} }
-  state.micOn = false;
+function stopMic(){
+  var r=state.recog;
+  if(r){r._active=false;try{r.stop();}catch(e){}}
+  state.micOn=false;
   document.getElementById('mic-btn').classList.remove('rec');
-  document.getElementById('mic-icon').className = 'ti ti-microphone';
-  document.getElementById('mic-lbl').textContent = 'Speak';
-  document.getElementById('live').style.display = 'none';
-  var txt = state.finalTxt.trim();
-  if (txt.length < 2) return;
-  // Analyze
-  var analysis = deepAnalyze(txt);
-  state.analyses.push(analysis);
-  analysis.errors.forEach(function(e){ state.allErrors.push(e); });
-  analysis.weakPhrases.forEach(function(w){ state.allWeak.push(w); });
-  // Add sentence card to Analysis tab
-  addTipCard(analysis);
-  // Add user msg to chat
-  addMsg('user', txt);
-  setTimeout(function(){ buildReply(txt, analysis); }, 200);
+  document.getElementById('mic-icon').className='ti ti-microphone';
+  document.getElementById('mic-lbl').textContent='Speak';
+  document.getElementById('live').style.display='none';
+  var txt=state.finalTxt.trim();
+  if(txt.length<2)return;
+  if(state.scenario==='grammar'){
+    processGramAnswer(txt);
+  } else {
+    processConvAnswer(txt);
+  }
 }
 
 // ══════════════════════════════════════
-// ANALYSIS TAB - per sentence card
+// CONVERSATION MODE
 // ══════════════════════════════════════
-function addTipCard(a) {
-  var tp = document.getElementById('tips-panel');
-  document.getElementById('tips-empty').style.display = 'none';
-  var scoreClass = a.score >= 8 ? 'good' : a.score >= 5 ? 'mid' : 'bad';
-  var card = document.createElement('div');
-  card.className = 'tip-card';
-  var html = '<div class="tip-card-header">';
-  html += '<span class="tip-card-label">Turn '+(state.analyses.length)+'</span>';
-  html += '<span class="tip-score '+scoreClass+'">'+a.score+'/10</span></div>';
-  html += '<div class="tip-said">قلت: <span>'+escHtml(a.text)+'</span></div>';
+function processConvAnswer(txt){
+  var errs=checkGram(txt);
+  var weak=checkWeak(txt);
+  var words=txt.trim().split(/\s+/).filter(Boolean);
+  var wc=words.length;
+  var fillers=(txt.match(/\b(um|uh|like|you know|basically|literally|i mean|so so|kind of)\b/gi)||[]);
+  var score=scoreIt(errs,wc,fillers.length);
+  // Build better version
+  var better=txt;
+  errs.forEach(function(e){better=better.replace(new RegExp(e.orig.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),e.fix);});
+  var analysis={text:txt,errs:errs,weak:weak,wc:wc,fillers:fillers,score:score,better:better};
+  state.analyses.push(analysis);
+  errs.forEach(function(e){state.allErrors.push(e);});
+  weak.forEach(function(w){state.allWeak.push(w);});
+  addAnalysisCard(analysis);
+  addMsg('user',txt);
+  setTimeout(function(){buildConvReply(analysis);},200);
+}
 
-  if (a.errors.length === 0 && a.weakPhrases.length === 0 && a.fillers.length === 0) {
-    html += '<div class="tip-ok">✓ الجملة دي صح ومفيش أخطاء!</div>';
+function buildConvReply(analysis){
+  var sc=SCENARIOS[state.scenario];
+  state.turnCount++;
+  var reply=sc.replies[(state.turnCount-1)%sc.replies.length];
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    addMsg('ai',reply);
+    speakText(reply);
+  },500+Math.random()*300);
+}
+
+// ══════════════════════════════════════
+// GRAMMAR TRAINER MODE
+// ══════════════════════════════════════
+function showGramChallenge(){
+  if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
+  var ch=GRAM_CHALLENGES[gramIdx];
+  document.getElementById('gram-ar').textContent=ch.ar;
+  document.getElementById('gram-hint').textContent='💡 '+ch.hint;
+}
+
+function nextGramChallenge(){
+  gramIdx++;
+  if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
+  showGramChallenge();
+}
+
+function processGramAnswer(txt){
+  var ch=GRAM_CHALLENGES[gramIdx];
+  var errs=checkGram(txt);
+  var words=txt.trim().split(/\s+/).filter(Boolean);
+  var wc=words.length;
+  // Compare with expected answer
+  var expected=ch.en.toLowerCase().replace(/[^a-z\s]/g,'').trim();
+  var said=txt.toLowerCase().replace(/[^a-z\s]/g,'').trim();
+  var saidWords=said.split(/\s+/);
+  var expWords=expected.split(/\s+/);
+  var matched=0;
+  expWords.forEach(function(w){if(saidWords.indexOf(w)!==-1)matched++;});
+  var similarity=Math.round((matched/expWords.length)*100);
+  var correct=similarity>=70&&errs.length===0;
+  var result={
+    ar:ch.ar, hint:ch.hint,
+    said:txt, expected:ch.en,
+    errs:errs, similarity:similarity,
+    correct:correct
+  };
+  state.gramResults.push(result);
+  if(errs.length>0) errs.forEach(function(e){state.allErrors.push(e);});
+  addGramAnalysisCard(result);
+  addMsg('user',txt);
+  // AI response
+  var reply='';
+  if(correct&&errs.length===0){
+    var praise=["Perfect!", "Excellent!", "That's correct!", "Well done!","Spot on!"];
+    reply=praise[state.turnCount%praise.length]+' The correct answer is: "'+ch.en+'" — you got it right! Ready for the next one?';
   } else {
-    if (a.errors.length > 0) {
-      a.errors.forEach(function(e) {
-        html += '<div style="margin-top:6px;">';
-        html += '<div class="tip-err">✗ غلط: "'+escHtml(e.orig)+'"</div>';
-        html += '<div class="tip-fix">✓ الصح: "'+escHtml(e.fix)+'"</div>';
-        html += '<div class="tip-note">ليه: '+escHtml(e.why)+'</div>';
-        html += '</div>';
-      });
+    reply='Not quite. The correct sentence is: "'+ch.en+'"';
+    if(errs.length>0) reply+=' — '+errs[0].why;
+    reply+=' Try the next one!';
+  }
+  state.turnCount++;
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    addMsg('ai',reply);
+    speakText(reply);
+    // Auto advance after 2 sec
+    setTimeout(function(){
+      gramIdx++;
+      if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
+      showGramChallenge();
+    },2000);
+  },500);
+}
+
+// ══════════════════════════════════════
+// ANALYSIS CARDS
+// ══════════════════════════════════════
+function addAnalysisCard(a){
+  var panel=document.getElementById('analysis-panel');
+  document.getElementById('analysis-empty').style.display='none';
+  var sc=a.score>=8?'g':a.score>=5?'w':'r';
+  var card=document.createElement('div');card.className='ana-card';
+  var html='<div class="ana-header"><span class="ana-turn">Turn '+state.analyses.length+'</span><span class="ana-score '+sc+'">'+a.score+'/10</span></div>';
+  html+='<div class="ana-said">'+escHtml(a.text)+'</div>';
+  if(a.errs.length===0&&a.weak.length===0&&a.fillers.length<2){
+    html+='<div class="ana-ok">✓ الجملة صح — مفيش أخطاء!</div>';
+  } else {
+    a.errs.forEach(function(e){
+      html+='<div class="err-row">';
+      html+='<div class="err-orig">✗ "'+escHtml(e.orig)+'"</div>';
+      html+='<div class="err-fix">✓ "'+escHtml(e.fix)+'"</div>';
+      html+='<div class="err-why">'+escHtml(e.why)+'</div></div>';
+    });
+    a.weak.forEach(function(w){
+      html+='<div class="weak-row"><div style="font-size:12px;color:var(--amber);">⚠ "'+escHtml(w.said)+'" — أضعف</div><div style="font-size:12px;color:#8b93ad;">الأفضل: "'+escHtml(w.better)+'"</div></div>';
+    });
+    if(a.fillers.length>1){
+      html+='<div class="filler-row">⚠ استخدمت '+a.fillers.length+' filler words: '+a.fillers.join(', ')+'</div>';
     }
-    if (a.weakPhrases.length > 0) {
-      a.weakPhrases.forEach(function(w) {
-        html += '<div style="margin-top:6px;">';
-        html += '<div style="font-size:12px;color:var(--amber);">⚠ ضعيف: "'+escHtml(w.said)+'"</div>';
-        html += '<div style="font-size:12px;color:#8b93ad;">أقوى: "'+escHtml(w.better)+'"</div>';
-        html += '</div>';
-      });
+    if(a.wc<8){
+      html+='<div class="filler-row">⚠ الجملة قصيرة ('+a.wc+' كلمات) — حاول تكمل الفكرة.</div>';
     }
-    if (a.fillers.length > 1) {
-      html += '<div style="margin-top:6px;font-size:12px;color:var(--amber);">⚠ استخدمت '+a.fillers.length+' filler words: '+a.fillers.join(', ')+'. وقف بهدوء بدلهم.</div>';
-    }
-    if (a.wc < 8) {
-      html += '<div style="margin-top:6px;font-size:12px;color:var(--amber);">⚠ الجملة قصيرة جداً ('+a.wc+' كلمات). حاول تكمل الفكرة.</div>';
-    }
-    if (a.betterVersion !== a.text && a.errors.length > 0) {
-      html += '<div style="margin-top:8px;padding:7px 9px;background:rgba(34,211,160,.06);border-radius:6px;border:1px solid rgba(34,211,160,.15);">';
-      html += '<div style="font-size:10px;color:#4b5268;margin-bottom:3px;">الجملة صح:</div>';
-      html += '<div style="font-size:12px;color:var(--green);direction:ltr;text-align:left;">'+escHtml(a.betterVersion)+'</div></div>';
+    if(a.errs.length>0&&a.better!==a.text){
+      html+='<div class="better-box"><div class="better-label">الجملة الصح:</div><div class="better-text">'+escHtml(a.better)+'</div></div>';
     }
   }
-  card.innerHTML = html;
-  tp.insertBefore(card, tp.firstChild);
+  card.innerHTML=html;
+  panel.insertBefore(card,panel.firstChild);
+}
+
+function addGramAnalysisCard(r){
+  var panel=document.getElementById('analysis-panel');
+  document.getElementById('analysis-empty').style.display='none';
+  var card=document.createElement('div');card.className='gram-ana-card';
+  var html='<div class="gram-ana-ar">'+escHtml(r.ar)+'</div>';
+  html+='<div class="gram-ana-said">قلت: "'+escHtml(r.said)+'"</div>';
+  if(r.correct){
+    html+='<div style="color:var(--green);font-size:12px;font-weight:600;">✓ صح! الجواب: "'+escHtml(r.expected)+'"</div>';
+  } else {
+    html+='<div style="color:var(--red);font-size:12px;">✗ غلط — الجواب الصح:</div>';
+    html+='<div style="color:var(--green);font-size:12px;font-weight:600;direction:ltr;text-align:left;margin-top:3px;">'+escHtml(r.expected)+'</div>';
+    if(r.errs.length>0){
+      html+='<div class="err-row" style="margin-top:6px;"><div class="err-fix">'+escHtml(r.errs[0].why)+'</div></div>';
+    }
+    html+='<div style="font-size:11px;color:#4b5268;margin-top:4px;direction:rtl;text-align:right;">💡 '+escHtml(r.hint)+'</div>';
+  }
+  card.innerHTML=html;
+  panel.insertBefore(card,panel.firstChild);
 }
 
 // ══════════════════════════════════════
-// AI REPLY - natural conversation only
+// GREET
 // ══════════════════════════════════════
-function buildReply(userText, analysis) {
-  var sc = SCENARIOS[state.scenario];
-  state.turnCount++;
-  // Just the follow-up question — NO grammar feedback in chat
-  var followups = sc.replies[0];
-  var reply = followups[(state.turnCount - 1) % followups.length];
+function aiGreet(){
+  var sc=SCENARIOS[state.scenario];
+  var opener=sc.openers[Math.floor(Math.random()*sc.openers.length)];
   showTyping();
-  setTimeout(function(){
-    hideTyping();
-    addMsg('ai', reply);
-    speakText(reply);
-  }, 600 + Math.random()*300);
-}
-
-function aiGreet() {
-  var sc = SCENARIOS[state.scenario];
-  var opener = sc.openers[Math.floor(Math.random() * sc.openers.length)];
-  showTyping();
-  setTimeout(function(){
-    hideTyping();
-    addMsg('ai', opener);
-    speakText(opener);
-  }, 500);
+  setTimeout(function(){hideTyping();addMsg('ai',opener);speakText(opener);},500);
 }
 
 // ══════════════════════════════════════
 // TTS
 // ══════════════════════════════════════
-function speakText(text) {
-  if (!window.speechSynthesis) return;
+function speakText(text){
+  if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
   setAiSpeak(true);
-  var chunks = text.match(/[^.!?]+[.!?]*/g) || [text];
-  var i = 0;
-  function next() {
-    if (i >= chunks.length) { setAiSpeak(false); return; }
-    var chunk = chunks[i].trim();
-    if (!chunk) { i++; next(); return; }
-    var u = new SpeechSynthesisUtterance(chunk);
-    u.lang = 'en-US'; u.rate = 0.92; u.pitch = 1.0;
-    var voices = window.speechSynthesis.getVoices().filter(function(v){ return v.lang.startsWith('en'); });
-    if (voices.length) u.voice = voices[0];
-    u.onend = function(){ i++; setTimeout(next, 70); };
-    u.onerror = function(){ i++; setTimeout(next, 70); };
+  var chunks=text.match(/[^.!?]+[.!?]*/g)||[text];
+  var i=0;
+  function next(){
+    if(i>=chunks.length){setAiSpeak(false);return;}
+    var c=chunks[i].trim();if(!c){i++;next();return;}
+    var u=new SpeechSynthesisUtterance(c);
+    u.lang='en-US';u.rate=0.92;
+    var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang.startsWith('en');});
+    if(vs.length)u.voice=vs[0];
+    u.onend=function(){i++;setTimeout(next,70);};
+    u.onerror=function(){i++;setTimeout(next,70);};
     window.speechSynthesis.speak(u);
   }
   next();
-  if (!window._ka) {
-    window._ka = setInterval(function(){
-      if (state.aiSpeak && window.speechSynthesis.paused) window.speechSynthesis.resume();
-      if (!state.aiSpeak) { clearInterval(window._ka); window._ka = null; }
-    }, 8000);
-  }
+  if(!window._ka){window._ka=setInterval(function(){
+    if(state.aiSpeak&&window.speechSynthesis.paused)window.speechSynthesis.resume();
+    if(!state.aiSpeak){clearInterval(window._ka);window._ka=null;}
+  },8000);}
 }
 
-function setAiSpeak(val) {
-  state.aiSpeak = val;
-  var sc = SCENARIOS[state.scenario];
-  var circle = document.getElementById('av-circle');
-  if (val) {
-    circle.style.borderColor = sc.color;
-    circle.style.boxShadow = '0 0 20px '+sc.color+'50';
-    state.waveRef = setInterval(function(){
-      var h = [4,7,14,10,5,12,8,4,16,6];
-      document.querySelectorAll('.wave').forEach(function(w){
-        w.style.height = h[Math.floor(Math.random()*h.length)]+'px';
-      });
-    }, 110);
+function setAiSpeak(val){
+  state.aiSpeak=val;
+  var sc=SCENARIOS[state.scenario];
+  var circle=document.getElementById('av-circle');
+  if(val){
+    circle.style.borderColor=sc.color;
+    circle.style.boxShadow='0 0 20px '+sc.color+'50';
+    state.waveRef=setInterval(function(){
+      var h=[4,7,14,10,5,12,8,4,16,6];
+      document.querySelectorAll('.wave').forEach(function(w){w.style.height=h[Math.floor(Math.random()*h.length)]+'px';});
+    },110);
   } else {
-    circle.style.borderColor = 'rgba(255,255,255,0.1)';
-    circle.style.boxShadow = 'none';
+    circle.style.borderColor='rgba(255,255,255,0.1)';
+    circle.style.boxShadow='none';
     clearInterval(state.waveRef);
-    document.querySelectorAll('.wave').forEach(function(w){ w.style.height='4px'; });
+    document.querySelectorAll('.wave').forEach(function(w){w.style.height='4px';});
   }
 }
 
 // ══════════════════════════════════════
-// CHAT
+// CHAT HELPERS
 // ══════════════════════════════════════
-function addMsg(role, text) {
-  state.messages.push({role, text, ts:Date.now()});
-  var sc = SCENARIOS[state.scenario];
-  var panel = document.getElementById('chat-panel');
-  document.getElementById('chat-empty').style.display = 'none';
-  var div = document.createElement('div');
-  div.className = 'msg '+role;
-  div.innerHTML = '<div class="msg-lbl">'+(role==='ai' ? sc.avatarName : 'You')+'</div><div>'+escHtml(text)+'</div>';
-  panel.appendChild(div);
-  panel.scrollTop = panel.scrollHeight;
-  if (role === 'ai') showBubble(text);
+function addMsg(role,text){
+  state.messages.push({role,text,ts:Date.now()});
+  var sc=SCENARIOS[state.scenario];
+  var panel=document.getElementById('chat-panel');
+  document.getElementById('chat-empty').style.display='none';
+  var div=document.createElement('div');div.className='msg '+role;
+  div.innerHTML='<div class="msg-lbl">'+(role==='ai'?sc.avatarName:'You')+'</div><div>'+escHtml(text)+'</div>';
+  panel.appendChild(div);panel.scrollTop=panel.scrollHeight;
+  if(role==='ai')showBubble(text);
 }
-
-function showBubble(text) {
-  var b = document.getElementById('bubble');
-  b.textContent = text.slice(0,130)+(text.length>130?'...':'');
-  b.style.display = 'block';
-  setTimeout(function(){ b.style.display='none'; }, Math.max(4000, text.length*55));
+function showBubble(text){
+  var b=document.getElementById('bubble');
+  b.textContent=text.slice(0,130)+(text.length>130?'...':'');
+  b.style.display='block';
+  setTimeout(function(){b.style.display='none';},Math.max(4000,text.length*55));
 }
-
-function showTyping() {
-  var p = document.getElementById('chat-panel');
-  var t = document.createElement('div'); t.id='typing'; t.className='typing-ind';
-  t.innerHTML = '<span></span><span></span><span></span>';
-  p.appendChild(t); p.scrollTop = p.scrollHeight;
+function showTyping(){
+  var p=document.getElementById('chat-panel');
+  var t=document.createElement('div');t.id='typing';t.className='typing-ind';
+  t.innerHTML='<span></span><span></span><span></span>';
+  p.appendChild(t);p.scrollTop=p.scrollHeight;
 }
-
-function hideTyping() { var t=document.getElementById('typing'); if(t) t.remove(); }
+function hideTyping(){var t=document.getElementById('typing');if(t)t.remove();}
 
 // ══════════════════════════════════════
-// REPORT - detailed honest analysis
+// REPORT
 // ══════════════════════════════════════
-function endSession() {
+function endSession(){
   clearInterval(state.timerIv);
-  window.speechSynthesis && window.speechSynthesis.cancel();
-  if (state.recog) { state.recog._active=false; try{state.recog.stop();}catch(e){} }
-  if (state.stream) state.stream.getTracks().forEach(function(t){ t.stop(); });
-  setAiSpeak(false); state.sessionActive = false;
-  document.getElementById('sdot').style.background = '#4b5268';
-  document.getElementById('sdot').style.boxShadow = 'none';
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  if(state.recog){state.recog._active=false;try{state.recog.stop();}catch(e){}}
+  if(state.stream)state.stream.getTracks().forEach(function(t){t.stop();});
+  setAiSpeak(false);state.sessionActive=false;
+  document.getElementById('sdot').style.background='#4b5268';
+  document.getElementById('sdot').style.boxShadow='none';
   generateReport();
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   document.querySelectorAll('.tab')[2].classList.add('active');
-  switchTab('report', document.querySelectorAll('.tab')[2]);
+  switchTab('report',document.querySelectorAll('.tab')[2]);
 }
 
-function generateReport() {
-  var a = state.analyses;
-  if (!a.length) return;
-  var turns = a.length;
-  var totalWords = a.reduce(function(s,d){return s+d.wc;},0);
-  var totalFillers = a.reduce(function(s,d){return s+d.fillers.length;},0);
-  var avgScore = (a.reduce(function(s,d){return s+d.score;},0)/turns).toFixed(1);
-  var totalErrCount = state.allErrors.length;
-  var avgWords = Math.round(totalWords/turns);
-  var m=Math.floor(state.timer/60), s=state.timer%60;
-  var dur = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+function generateReport(){
+  var isGram=state.scenario==='grammar';
+  document.getElementById('rep-empty').style.display='none';
+  var rc=document.getElementById('rep-content');rc.style.display='block';
+  var m=Math.floor(state.timer/60),s=state.timer%60;
+  var dur=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
 
-  // Honest score
-  var sc = Math.min(10,Math.max(1,parseFloat(avgScore)));
-  var scClass = sc>=8?'g':sc>=5?'w':'r';
+  if(isGram){
+    var total=state.gramResults.length;
+    var correct=state.gramResults.filter(function(r){return r.correct;}).length;
+    var pct=total>0?Math.round((correct/total)*100):0;
+    var scoreCol=pct>=80?'g':pct>=50?'w':'r';
+    var html='<div class="sc-circle"><span class="sc-n">'+pct+'</span><span class="sc-of">%</span></div>';
+    html+='<div class="rtitle">Grammar Trainer Results</div>';
+    html+='<div class="metric"><span style="color:#8b93ad">Duration</span><span class="mv">'+dur+'</span></div>';
+    html+='<div class="metric"><span style="color:#8b93ad">Total Questions</span><span class="mv">'+total+'</span></div>';
+    html+='<div class="metric"><span style="color:#8b93ad">Correct</span><span class="mv g">'+correct+'</span></div>';
+    html+='<div class="metric"><span style="color:#8b93ad">Wrong</span><span class="mv r">'+(total-correct)+'</span></div>';
+    html+='<div class="metric"><span style="color:#8b93ad">Score</span><span class="mv '+scoreCol+'">'+pct+'%</span></div>';
+    // Wrong answers
+    var wrong=state.gramResults.filter(function(r){return !r.correct;});
+    if(wrong.length>0){
+      html+='<div class="rtitle">الجمل اللي غلطت فيها</div>';
+      wrong.forEach(function(r){
+        html+='<div class="rep-err-block">';
+        html+='<div style="font-size:12px;color:#8b93ad;direction:rtl;text-align:right;margin-bottom:4px;">'+escHtml(r.ar)+'</div>';
+        html+='<div class="rep-err-orig">قلت: "'+escHtml(r.said)+'"</div>';
+        html+='<div class="rep-err-fix">الصح: "'+escHtml(r.expected)+'"</div>';
+        if(r.errs.length>0)html+='<div class="rep-err-why">'+escHtml(r.errs[0].why)+'</div>';
+        html+='</div>';
+      });
+    }
+    if(pct<60){html+='<div class="rep-item bad">✗ محتاج تراجع القواعد الأساسية أكتر. ركز على الأخطاء اللي فوق.</div>';}
+    else if(pct<80){html+='<div class="rep-item warn">⚠ مستوى متوسط. راجع الجمل الغلط وجرب تاني.</div>';}
+    else{html+='<div class="rep-item ok">✓ ممتاز! Grammar بتاعك قوي.</div>';}
+    html+='<button class="new-btn" onclick="location.reload()">New Session</button>';
+    rc.innerHTML=html;
+    return;
+  }
+
+  // Conversation report
+  var a=state.analyses;
+  var turns=a.length;
+  if(!turns){rc.innerHTML='<div class="empty"><div class="empty-icon">💬</div><p>مفيش بيانات كافية.</p></div>';return;}
+  var totalWords=a.reduce(function(s,d){return s+d.wc;},0);
+  var totalFillers=a.reduce(function(s,d){return s+d.fillers.length;},0);
+  var avgScore=(a.reduce(function(s,d){return s+d.score;},0)/turns).toFixed(1);
+  var totalErrs=state.allErrors.length;
+  var avgWords=Math.round(totalWords/turns);
+  var sc=parseFloat(avgScore)>=8?'g':parseFloat(avgScore)>=5?'w':'r';
+
+  var html='<div class="sc-circle"><span class="sc-n">'+parseFloat(avgScore).toFixed(1)+'</span><span class="sc-of">/10</span></div>';
+  html+='<div class="rtitle">Session Stats</div>';
+  html+='<div class="metric"><span style="color:#8b93ad">Duration</span><span class="mv">'+dur+'</span></div>';
+  html+='<div class="metric"><span style="color:#8b93ad">Turns</span><span class="mv">'+turns+'</span></div>';
+  html+='<div class="metric"><span style="color:#8b93ad">Total Words</span><span class="mv">'+totalWords+'</span></div>';
+  html+='<div class="metric"><span style="color:#8b93ad">Avg Words/Turn</span><span class="mv '+(avgWords>=15?'g':avgWords>=10?'w':'r')+'">'+avgWords+'</span></div>';
+  html+='<div class="metric"><span style="color:#8b93ad">Grammar Errors</span><span class="mv '+(totalErrs===0?'g':totalErrs<=3?'w':'r')+'">'+totalErrs+'</span></div>';
+  html+='<div class="metric"><span style="color:#8b93ad">Filler Words</span><span class="mv '+(totalFillers<=2?'g':totalFillers<=5?'w':'r')+'">'+totalFillers+'</span></div>';
+
+  html+='<div class="rtitle">الحكم على أدائك</div>';
+  if(totalErrs===0){html+='<div class="rep-item ok">✓ ممتاز! مفيش أخطاء grammar.</div>';}
+  else if(totalErrs<=3){html+='<div class="rep-item warn">⚠ '+totalErrs+' أخطاء grammar — راجعهم تحت.</div>';}
+  else{html+='<div class="rep-item bad">✗ '+totalErrs+' أخطاء grammar — محتاج تتدرب أكتر على القواعد.</div>';}
+
+  if(avgWords<10){html+='<div class="rep-item bad">✗ متوسط كلامك قصير جداً ('+avgWords+' كلمة). الطبيعي 15-25 كلمة.</div>';}
+  else if(avgWords<15){html+='<div class="rep-item warn">⚠ متوسط كلامك '+avgWords+' كلمة — كويس بس ممكن تزود.</div>';}
+  else{html+='<div class="rep-item ok">✓ متوسط كلامك '+avgWords+' كلمة — ممتاز!</div>';}
+
+  if(totalFillers>5){html+='<div class="rep-item bad">✗ '+totalFillers+' filler words — بيضعف الانطباع. لما تحس بـ um، وقف بدلاً منها.</div>';}
+  else if(totalFillers>2){html+='<div class="rep-item warn">⚠ '+totalFillers+' filler words — حاول تقللهم.</div>';}
+  else{html+='<div class="rep-item ok">✓ Filler words قليلة — كويس!</div>';}
 
   // Unique errors
-  var uniqueErrors = [];
-  state.allErrors.forEach(function(e){
-    if (!uniqueErrors.find(function(u){return u.orig===e.orig;})) uniqueErrors.push(e);
-  });
-  var uniqueWeak = [];
-  state.allWeak.forEach(function(w){
-    if (!uniqueWeak.find(function(u){return u.said===w.said;})) uniqueWeak.push(w);
-  });
-
-  // Honest feedback messages
-  var feedbacks = [];
-  if (totalErrCount === 0) {
-    feedbacks.push({t:'ok', m:'ممتاز! مفيش أخطاء grammar واضحة في الـ session ده.'});
-  } else {
-    feedbacks.push({t:'bad', m:'عندك '+totalErrCount+' خطأ grammar في الـ session ده. راجع القائمة تحت.'});
-  }
-  if (avgWords < 10) {
-    feedbacks.push({t:'bad', m:'متوسط كلامك '+avgWords+' كلمة للرد. ده قصير جداً. الطبيعي 15-25 كلمة. محتاج تتكلم أكتر.'});
-  } else if (avgWords < 20) {
-    feedbacks.push({t:'mid', m:'متوسط كلامك '+avgWords+' كلمة للرد. كويس بس ممكن تزود.'});
-  } else {
-    feedbacks.push({t:'ok', m:'متوسط كلامك '+avgWords+' كلمة للرد — ممتاز!'});
-  }
-  if (totalFillers > 4) {
-    feedbacks.push({t:'bad', m:'استخدمت '+totalFillers+' filler words (um/uh/like). ده بيضعف الانطباع كتير. لما تحس بـ um، وقف بدلاً منها.'});
-  } else if (totalFillers > 1) {
-    feedbacks.push({t:'mid', m:'استخدمت '+totalFillers+' filler words. حاول تقللهم.'});
-  } else {
-    feedbacks.push({t:'ok', m:'Filler words قليلة — كويس!'});
-  }
-  if (turns < 4) {
-    feedbacks.push({t:'mid', m:'عملت '+turns+' ردود بس. هدفك 6+ ردود في الـ session الجاية.'});
-  }
-
-  document.getElementById('rep-empty').style.display='none';
-  var rc = document.getElementById('rep-content'); rc.style.display='block';
-
-  var html = '<div class="sc-circle"><span class="sc-n">'+parseFloat(avgScore).toFixed(1)+'</span><span class="sc-of">/10</span></div>';
-  html += '<div class="rtitle">Session Stats</div>';
-  html += '<div class="metric"><span style="color:#8b93ad">Duration</span><span class="mv">'+dur+'</span></div>';
-  html += '<div class="metric"><span style="color:#8b93ad">Turns</span><span class="mv">'+turns+'</span></div>';
-  html += '<div class="metric"><span style="color:#8b93ad">Total Words</span><span class="mv">'+totalWords+'</span></div>';
-  html += '<div class="metric"><span style="color:#8b93ad">Avg Words/Turn</span><span class="mv '+(avgWords>=15?'g':avgWords>=10?'w':'r')+'">'+avgWords+'</span></div>';
-  html += '<div class="metric"><span style="color:#8b93ad">Grammar Errors</span><span class="mv '+(totalErrCount===0?'g':totalErrCount<=2?'w':'r')+'">'+totalErrCount+'</span></div>';
-  html += '<div class="metric"><span style="color:#8b93ad">Filler Words</span><span class="mv '+(totalFillers<=2?'g':totalFillers<=4?'w':'r')+'">'+totalFillers+'</span></div>';
-
-  html += '<div class="rtitle">الحكم على أدائك</div>';
-  feedbacks.forEach(function(f){
-    var col = f.t==='ok'?'var(--green)':f.t==='mid'?'var(--amber)':'var(--red)';
-    var icon = f.t==='ok'?'✓':f.t==='mid'?'⚠':'✗';
-    html += '<div class="rep-err '+(f.t==='bad'?'bad':'ok')+'" style="color:'+col+';">'+icon+' '+escHtml(f.m)+'</div>';
-  });
-
-  if (uniqueErrors.length > 0) {
-    html += '<div class="rtitle">الأخطاء اللي لازم تتعلمها</div>';
-    uniqueErrors.forEach(function(e){
-      html += '<div class="rep-err bad">';
-      html += '<span class="orig">'+escHtml(e.orig)+'</span>';
-      html += ' → <span class="fix">'+escHtml(e.fix)+'</span>';
-      html += '<div class="why">'+escHtml(e.why)+'</div></div>';
-    });
-  } else {
-    html += '<div class="rep-err ok">✓ مفيش أخطاء grammar اتسجلت!</div>';
-  }
-
-  if (uniqueWeak.length > 0) {
-    html += '<div class="rtitle">كلمات أضعف منها</div>';
-    uniqueWeak.forEach(function(w){
-      html += '<div class="rep-err bad" style="border-color:rgba(251,191,36,.2)">';
-      html += '<span style="color:var(--amber)">'+escHtml(w.said)+'</span>';
-      html += ' → <span class="fix">'+escHtml(w.better)+'</span></div>';
+  var uniq=[];
+  state.allErrors.forEach(function(e){if(!uniq.find(function(u){return u.orig===e.orig;}))uniq.push(e);});
+  if(uniq.length>0){
+    html+='<div class="rtitle">الأخطاء اللي لازم تتعلمها</div>';
+    uniq.forEach(function(e){
+      html+='<div class="rep-err-block">';
+      html+='<div class="rep-err-orig">✗ "'+escHtml(e.orig)+'"</div>';
+      html+='<div class="rep-err-fix">✓ "'+escHtml(e.fix)+'"</div>';
+      html+='<div class="rep-err-why">'+escHtml(e.why)+'</div></div>';
     });
   }
 
-  html += '<button class="new-btn" onclick="location.reload()">New Session</button>';
-  rc.innerHTML = html;
+  // Unique weak phrases
+  var uniqW=[];
+  state.allWeak.forEach(function(w){if(!uniqW.find(function(u){return u.said===w.said;}))uniqW.push(w);});
+  if(uniqW.length>0){
+    html+='<div class="rtitle">كلمات ضعيفة — استبدلها</div>';
+    uniqW.forEach(function(w){
+      html+='<div class="rep-err-block" style="border-color:rgba(251,191,36,.2)">';
+      html+='<div style="color:var(--amber);">⚠ "'+escHtml(w.said)+'"</div>';
+      html+='<div class="rep-err-fix">→ "'+escHtml(w.better)+'"</div></div>';
+    });
+  }
+
+  html+='<button class="new-btn" onclick="location.reload()">New Session</button>';
+  rc.innerHTML=html;
 }
 
 // ══════════════════════════════════════
 // UI HELPERS
 // ══════════════════════════════════════
-function switchTab(name, el) {
+function switchTab(name,el){
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');
-  document.getElementById('chat-panel').style.display = name==='chat' ? 'block' : 'none';
-  document.getElementById('tips-panel').style.display = name==='tips' ? 'block' : 'none';
-  document.getElementById('report-panel').style.display = name==='report' ? 'block' : 'none';
+  document.getElementById('chat-panel').style.display=name==='chat'?'block':'none';
+  document.getElementById('analysis-panel').style.display=name==='analysis'?'block':'none';
+  document.getElementById('report-panel').style.display=name==='report'?'block':'none';
 }
-
-function toggleCam() {
-  if (!state.stream) return;
-  var vt = state.stream.getVideoTracks(); if (!vt.length) return;
-  state.camOn = !state.camOn;
-  vt[0].enabled = state.camOn;
-  document.getElementById('cam-off').style.display = state.camOn ? 'none' : 'flex';
-  document.getElementById('cam-icon').className = state.camOn ? 'ti ti-video' : 'ti ti-video-off';
+function toggleCam(){
+  if(!state.stream)return;
+  var vt=state.stream.getVideoTracks();if(!vt.length)return;
+  state.camOn=!state.camOn;vt[0].enabled=state.camOn;
+  document.getElementById('cam-off').style.display=state.camOn?'none':'flex';
+  document.getElementById('cam-icon').className=state.camOn?'ti ti-video':'ti ti-video-off';
 }
-
-function showErr(msg) { var e=document.getElementById('err'); e.style.display='block'; e.textContent='⚠ '+msg; }
-function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-window.speechSynthesis && window.speechSynthesis.getVoices();
-window.speechSynthesis && (window.speechSynthesis.onvoiceschanged = function(){});
-
+function showErr(msg){var e=document.getElementById('err-bar');e.style.display='block';e.textContent='⚠ '+msg;}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+window.speechSynthesis&&window.speechSynthesis.getVoices();
+window.speechSynthesis&&(window.speechSynthesis.onvoiceschanged=function(){});
 // PWA
 (function(){
-  var manifest={name:"AI English Coach",short_name:"AI Coach",start_url:"./",display:"standalone",background_color:"#0d0f14",theme_color:"#0d0f14",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d0f14'/><text y='135' x='96' text-anchor='middle' font-size='110'>🎓</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
-  var blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
-  document.getElementById('pwa-manifest').href=URL.createObjectURL(blob);
-  var deferredPrompt=null;
-  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;
-    var btn=document.createElement('button');
-    btn.innerHTML='📲 Install App';
-    btn.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:25px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;z-index:9999;box-shadow:0 4px 20px rgba(91,127,255,0.4);font-family:inherit;';
-    btn.onclick=function(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){deferredPrompt=null;btn.remove();});}};
-    document.body.appendChild(btn);
-    setTimeout(function(){if(btn.parentNode)btn.remove();},15000);
+  var m={name:"AI English Coach",short_name:"AI Coach",start_url:"./",display:"standalone",background_color:"#0d0f14",theme_color:"#0d0f14",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d0f14'/><text y='135' x='96' text-anchor='middle' font-size='110'>🎓</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
+  document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
+  var dp=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;
+    var b=document.createElement('button');b.innerHTML='📲 Install App';
+    b.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:25px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;z-index:9999;box-shadow:0 4px 20px rgba(91,127,255,0.4);font-family:inherit;';
+    b.onclick=function(){if(dp){dp.prompt();dp.userChoice.then(function(){dp=null;b.remove();});}};
+    document.body.appendChild(b);setTimeout(function(){if(b.parentNode)b.remove();},15000);
   });
 })();
 </script>
