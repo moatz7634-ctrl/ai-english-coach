@@ -242,11 +242,11 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 
 <script>
 // ══════════════════════════════════════
-// GEMINI API SAFE CONFIGURATION
+// GEMINI API CONFIGURATION
 // ══════════════════════════════════════
 function getApiKey() {
-  var stored = localStorage.getItem('user_gemini_key');
   var inputVal = document.getElementById('user-api-key').value.trim();
+  var stored = localStorage.getItem('user_gemini_key');
   if(inputVal) {
     localStorage.setItem('user_gemini_key', inputVal);
     return inputVal;
@@ -254,7 +254,6 @@ function getApiKey() {
   return stored || '';
 }
 
-// Auto fill if saved previously
 window.addEventListener('DOMContentLoaded', function() {
   var savedKey = localStorage.getItem('user_gemini_key');
   if(savedKey) {
@@ -264,7 +263,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
 async function callGemini(system, messages) {
   var key = getApiKey();
-  if(!key) return null;
+  if(!key) {
+    showErr("يرجى إدخال Gemini API Key أولاً للدردشة التفاعلية!");
+    return null;
+  }
   
   try {
     var contents = [];
@@ -277,7 +279,7 @@ async function callGemini(system, messages) {
       }
     });
 
-    var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+    var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -293,12 +295,17 @@ async function callGemini(system, messages) {
     });
 
     var data = await res.json();
+    if (data.error) {
+      showErr("خطأ في المفتاح: " + data.error.message);
+      return null;
+    }
     if (data.candidates && data.candidates[0].content.parts[0].text) {
       return data.candidates[0].content.parts[0].text.trim();
     }
     return null;
   } catch(e) {
     console.error('Gemini API Error:', e);
+    showErr("فشل الاتصال بالذكاء الاصطناعي، تحقق من الإنترنت والـ Key.");
     return null;
   }
 }
@@ -405,7 +412,7 @@ var GRAM_CHALLENGES = [
   {ar:"هو عنده خبرة أكبر مني.", hint:"مقارنة — comparative بدون 'more'", en:"He has more experience than me."},
   {ar:"اشتغلنا أمس من ٨ لـ ٤.", hint:"ماضي بسيط مع worked", en:"We worked yesterday from 8 to 4."},
   {ar:"الـ adherence rate وصل للـ target النهارده.", hint:"Past simple — reached", en:"The adherence rate reached the target today."},
-  {ar:"محتاج تبلغ المدير لو في مشكلة.", hint:"Modal — need to + infinitive", en:"You need to notify the manager if there is a problem."},
+  {ar:"محتاج تبلغ المدير لو في مشكلة.", hint:"Modal — need to + infinitive", en:"You need to notify the manager if there is a problem."}
 ];
 var gramIdx = 0;
 
@@ -415,28 +422,23 @@ var gramIdx = 0;
 var SCENARIOS = {
   presentation:{
     name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
-    openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?","Hi! I'm Alex. Start whenever you're ready — what's your topic?"],
-    replies:["Good. How would you explain that to someone who doesn't work in RTM?","Can you give a real example from your experience?","What's the most important point your audience should remember?","If you had 30 seconds — how would you summarize that?"]
+    openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?"]
   },
   interview:{
     name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
-    openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience.","Hi, I'm Sarah. Walk me through your background and current role.","Good morning! I'm Sarah. Tell me about yourself and why you applied."],
-    replies:["Can you give a specific example of handling a low-adherence situation?","What KPIs do you monitor daily and why?","Describe a time you made a quick decision under pressure."]
+    openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience."]
   },
   meeting:{
     name:"Team Meeting",avatarName:"James",avatarRole:"Team Leader",icon:"👥",color:"#22d3a0",
-    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?","Hi team, James here. What's your read on our current staffing situation?"],
-    replies:["What should we do differently next week?","How do we communicate this without hurting agent morale?"]
+    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?"]
   },
   free:{
     name:"Free Talk",avatarName:"Emma",avatarRole:"English Coach",icon:"💬",color:"#fbbf24",
-    openers:["Hi! I'm Emma. What would you like to talk about today?","Hello! I'm Emma — what's on your mind?"],
-    replies:["Tell me more about that.","How did that make you feel?"]
+    openers:["Hi! I'm Emma. What would you like to talk about today?"]
   },
   grammar:{
     name:"Grammar Trainer",avatarName:"Nour",avatarRole:"Grammar Coach",icon:"📝",color:"#f87171",
-    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟"],
-    replies:[]
+    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟"]
   }
 };
 
@@ -459,6 +461,11 @@ function pickSc(el) {
 }
 
 async function startSession() {
+  var key = getApiKey();
+  if(!key) {
+    alert("برجاء إدخال Gemini API Key أولاً في الشاشة الرئيسية!");
+    return;
+  }
   var sc = SCENARIOS[state.scenario];
   document.getElementById('stitle').textContent = sc.name;
   document.getElementById('av-name').textContent = sc.avatarName;
@@ -576,19 +583,16 @@ async function buildConvReply(analysis){
   });
   if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
   
-  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a natural English conversation with an Arabic speaker practicing English. '+
-    'RULES: 1) Respond naturally to what they ACTUALLY said — reference their words directly. 2) Keep response SHORT: 1-2 sentences max. 3) End with ONE follow-up question to keep them talking. 4) NEVER mention grammar, scores, or corrections in chat — that is shown separately. 5) Be warm and encouraging like a real person.';
+  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a realistic, intelligent English conversation with a student. '+
+    'STRICT INSTRUCTIONS: 1) Listen carefully to what the student just said and RESPOND DIRECTLY to their message content. 2) Never repeat scripted or generic questions. 3) Keep your response SHORT (1-2 clear sentences). 4) End with 1 relevant follow-up question based on their statement. 5) Be polite, smart, and interactive.';
   
   var aiText = await callGemini(sysPrompt, history);
   hideTyping();
   if(!aiText){
-    var reply=sc.replies[(state.turnCount-1)%sc.replies.length];
-    addMsg('ai',reply);
-    speakText(reply);
-  } else {
-    addMsg('ai',aiText);
-    speakText(aiText);
+    aiText = "That's interesting! Could you tell me more about what you mean by that?";
   }
+  addMsg('ai',aiText);
+  speakText(aiText);
 }
 
 // ══════════════════════════════════════
