@@ -1,10 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI English Coach</title>
+<meta name="application-name" content="AI English Coach">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AI Coach">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d0f14">
+<link rel="manifest" id="pwa-manifest">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',system-ui,sans-serif;}
+body{background:#0d0f14;color:#f0f2f8;min-height:100vh;}
+:root{--accent:#5b7fff;--green:#22d3a0;--red:#f87171;--amber:#fbbf24;--surface:#161920;--surface2:#1e2230;--border:rgba(255,255,255,0.07);}
+#setup{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:440px;max-width:100%;}
+h2{font-size:19px;font-weight:700;margin-bottom:4px;}
+.logo{display:flex;align-items:center;gap:9px;margin-bottom:5px;}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+.sub{color:#8b93ad;font-size:13px;line-height:1.6;margin:6px 0 20px;}
+.sc-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--surface2);margin-bottom:9px;transition:all .15s;}
+.sc-btn:hover{border-color:rgba(91,127,255,0.3);}
+.sc-btn.active{border-color:var(--accent);background:rgba(91,127,255,0.1);}
+.sc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.sc-title{font-size:13px;font-weight:600;margin-bottom:2px;}
+.sc-role{font-size:11px;color:#8b93ad;}
+.note{font-size:11px;color:#4b5268;margin:12px 0;display:flex;gap:6px;line-height:1.5;}
+.start{width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.start:hover{opacity:.9;}
+.key-input{width:100%;padding:10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:#fff;margin-bottom:12px;font-size:12px;}
+#app{display:none;flex-direction:column;height:100vh;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:50px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.tl{display:flex;align-items:center;gap:9px;}
+.sdot{width:8px;height:8px;border-radius:50%;}
+.stitle{font-size:13px;font-weight:600;}
+.timer-disp{font-size:12px;color:#8b93ad;font-variant-numeric:tabular-nums;}
+.end-btn{padding:6px 14px;border-radius:8px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:var(--red);cursor:pointer;font-size:12px;font-weight:600;}
+.main{display:grid;grid-template-columns:1fr 320px;flex:1;overflow:hidden;}
+.stage{display:flex;flex-direction:column;padding:13px;gap:11px;overflow:auto;}
+.avatar-box{flex:1;min-height:180px;background:var(--surface);border:1px solid var(--border);border-radius:13px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.av-glow{position:absolute;inset:0;}
+.av-inner{position:relative;z-index:1;text-align:center;}
+.av-circle{width:88px;height:88px;border-radius:50%;background:var(--surface2);border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:30px;transition:border-color .3s,box-shadow .3s;}
+.av-name{font-weight:600;font-size:15px;margin-bottom:2px;}
+.av-role{font-size:11px;color:#8b93ad;margin-bottom:10px;}
+.waves{display:flex;align-items:center;justify-content:center;gap:3px;height:20px;}
+.wave{width:3px;border-radius:2px;background:var(--accent);height:4px;transition:height .12s;}
+.bubble{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(22,25,32,.92);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:11px;line-height:1.6;display:none;max-height:70px;overflow:hidden;}
+
+.gram-challenge{background:var(--surface);border:1px solid rgba(91,127,255,.3);border-radius:13px;padding:16px;flex-shrink:0;display:none;}
+.gram-challenge-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.gram-challenge-ar{font-size:16px;font-weight:600;color:#f0f2f8;margin-bottom:4px;direction:rtl;text-align:right;}
+.gram-challenge-hint{font-size:11px;color:#4b5268;direction:rtl;text-align:right;}
+.cam-box{height:140px;background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;position:relative;flex-shrink:0;}
+video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
+.cam-off{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#4b5268;font-size:12px;}
+.cam-lbl{position:absolute;top:7px;right:9px;background:rgba(0,0,0,.7);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:10px;color:#8b93ad;}
+.ctrls{display:flex;align-items:center;justify-content:center;gap:9px;padding:10px;flex-shrink:0;}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 16px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);color:#8b93ad;cursor:pointer;font-size:11px;font-weight:500;transition:all .15s;}
+.ctrl:hover{border-color:rgba(91,127,255,.3);color:#f0f2f8;}
+.ctrl.rec{border-color:var(--red);background:rgba(248,113,113,.12);color:var(--red);}
+.ctrl i{font-size:19px;}
+.live{padding:7px 12px;background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);border-radius:8px;font-size:12px;color:#f0f2f8;font-style:italic;display:none;margin:0 13px 3px;flex-shrink:0;}
+
+.panel{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.tabs{display:flex;border-bottom:1px solid var(--border);}
+.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:#4b5268;transition:all .15s;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.pbody{flex:1;overflow-y:auto;padding:12px;}
+
+.msg{padding:9px 11px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:8px;}
+.msg.ai{background:var(--surface2);border:1px solid var(--border);border-radius:9px 9px 9px 2px;}
+.msg.user{background:rgba(91,127,255,.1);border:1px solid rgba(91,127,255,.2);border-radius:9px 9px 2px 9px;text-align:right;}
+.msg-lbl{font-size:10px;font-weight:600;margin-bottom:3px;}
+.msg.ai .msg-lbl{color:#a78bfa;}
+.msg.user .msg-lbl{color:var(--accent);}
+.typing-ind{display:flex;gap:4px;padding:9px 11px;background:var(--surface2);border-radius:9px 9px 9px 2px;width:fit-content;margin-bottom:8px;}
+.typing-ind span{width:6px;height:6px;border-radius:50%;background:#4b5268;animation:td 1.2s infinite;}
+.typing-ind span:nth-child(2){animation-delay:.2s;}
+.typing-ind span:nth-child(3){animation-delay:.4s;}
+@keyframes td{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.3);opacity:1}}
+
+.ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
+.ana-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.ana-turn{font-size:10px;font-weight:600;color:#4b5268;text-transform:uppercase;}
+.ana-score{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.ana-score.g{background:rgba(34,211,160,.15);color:var(--green);}
+.ana-score.w{background:rgba(251,191,36,.15);color:var(--amber);}
+.ana-score.r{background:rgba(248,113,113,.15);color:var(--red);}
+.ana-said{font-size:12px;color:#6b7280;margin-bottom:6px;direction:ltr;text-align:left;padding:6px 8px;background:rgba(255,255,255,.02);border-radius:6px;font-style:italic;}
+.err-row{margin-bottom:5px;padding:6px 8px;background:rgba(248,113,113,.06);border-radius:7px;border-left:2px solid var(--red);}
+.err-orig{font-size:12px;color:var(--red);}
+.err-fix{font-size:12px;color:var(--green);font-weight:600;}
+.err-why{font-size:11px;color:#6b7280;margin-top:2px;direction:rtl;text-align:right;}
+.weak-row{margin-bottom:5px;padding:6px 8px;background:rgba(251,191,36,.06);border-radius:7px;border-left:2px solid var(--amber);}
+.filler-row{font-size:12px;color:var(--amber);margin-top:5px;}
+.better-box{margin-top:7px;padding:7px 9px;background:rgba(34,211,160,.06);border-radius:7px;border-left:2px solid var(--green);}
+.better-label{font-size:10px;color:#4b5268;margin-bottom:3px;}
+.better-text{font-size:12px;color:var(--green);direction:ltr;text-align:left;}
+.ana-ok{font-size:12px;color:var(--green);}
+
+.gram-ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
+.gram-ana-ar{font-size:13px;color:#8b93ad;direction:rtl;text-align:right;margin-bottom:4px;}
+.gram-ana-said{font-size:12px;color:#f0f2f8;direction:ltr;text-align:left;margin-bottom:6px;font-style:italic;}
+
+.metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.mv{font-weight:600;}
+.mv.g{color:var(--green);}.mv.w{color:var(--amber);}.mv.r{color:var(--red);}
+.sc-circle{width:72px;height:72px;border-radius:50%;border:3px solid var(--accent);background:rgba(91,127,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;}
+.sc-n{font-size:26px;font-weight:700;color:var(--accent);line-height:1;}
+.sc-of{font-size:10px;color:#8b93ad;}
+.rtitle{font-size:11px;font-weight:600;color:#4b5268;text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;}
+.rep-item{padding:9px 12px;border-radius:8px;margin-bottom:8px;font-size:12px;line-height:1.6;}
+.rep-item.ok{background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);color:var(--green);}
+.rep-item.warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:var(--amber);}
+.rep-item.bad{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:var(--red);}
+.rep-err-block{padding:9px 12px;border-radius:8px;margin-bottom:8px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);}
+.rep-err-orig{font-size:12px;color:var(--red);text-decoration:line-through;}
+.rep-err-fix{font-size:12px;color:var(--green);font-weight:600;}
+.rep-err-why{font-size:11px;color:#6b7280;margin-top:3px;direction:rtl;text-align:right;}
+.new-btn{width:100%;margin-top:14px;padding:11px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);color:#f0f2f8;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.empty{text-align:center;padding:28px 12px;color:#4b5268;}
+.empty-icon{font-size:26px;margin-bottom:8px;}
+.empty p{font-size:12px;line-height:1.6;}
+.err-bar{margin:4px 13px;padding:7px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:7px;font-size:11px;color:var(--red);display:none;}
+@media(max-width:640px){.main{grid-template-columns:1fr;}.panel{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="setup">
+  <div class="card">
+    <div class="logo"><div class="dot"></div><h2>AI English Coach</h2></div>
+    <p class="sub">اختار نوع الـ session — التحليل كله بيظهر في تابة منفصلة، مش في الكلام.</p>
+    
+    <input type="password" id="user-api-key" class="key-input" placeholder="ادخل Gemini API Key بتاعك هنا..." />
+    
+    <div id="sc-list">
+      <div class="sc-btn active" data-id="presentation" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(91,127,255,.15);color:#5b7fff">🎓</div>
+        <div><div class="sc-title">Presentation Practice</div><div class="sc-role">قدّم موضوع — محادثة طبيعية</div></div>
+      </div>
+      <div class="sc-btn" data-id="interview" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(167,139,250,.15);color:#a78bfa">💼</div>
+        <div><div class="sc-title">Job Interview</div><div class="sc-role">Mock interview لـ WFM / RTM</div></div>
+      </div>
+      <div class="sc-btn" data-id="meeting" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(34,211,160,.15);color:#22d3a0">👥</div>
+        <div><div class="sc-title">Team Meeting</div><div class="sc-role">ناقش خطة أو مشكلة</div></div>
+      </div>
+      <div class="sc-btn" data-id="free" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(251,191,36,.15);color:#fbbf24">💬</div>
+        <div><div class="sc-title">Free Conversation</div><div class="sc-role">تكلم عن أي حاجة</div></div>
+      </div>
+      <div class="sc-btn" data-id="grammar" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(248,113,113,.15);color:#f87171">📝</div>
+        <div><div class="sc-title">Grammar Trainer</div><div class="sc-role">جملة بالعربي — قولها بالإنجليزي الصح</div></div>
+      </div>
+    </div>
+    <div class="note"><span>ℹ</span><span>محتاج Chrome أو Edge — هيطلب إذن ميكروفون وكاميرا</span></div>
+    <button class="start" onclick="startSession()">ابدأ الـ Session</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;flex-direction:column;height:100vh;">
+  <div class="topbar">
+    <div class="tl">
+      <div class="sdot" id="sdot" style="background:#22d3a0;box-shadow:0 0 6px #22d3a0"></div>
+      <span class="stitle" id="stitle">Session</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="timer-disp" id="timer-disp">00:00</span>
+      <button class="end-btn" onclick="endSession()">End Session</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div style="display:flex;flex-direction:column;overflow:hidden;">
+      <div class="stage" style="flex:1;">
+        <div class="avatar-box">
+          <div class="av-glow" id="av-glow"></div>
+          <div class="av-inner">
+            <div class="av-circle" id="av-circle"><span id="av-icon">🎓</span></div>
+            <div class="av-name" id="av-name">Alex</div>
+            <div class="av-role" id="av-role">Coach</div>
+            <div class="waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+          </div>
+          <div class="bubble" id="bubble"></div>
+        </div>
+        <div class="gram-challenge" id="gram-challenge">
+          <div class="gram-challenge-label">📝 قول الجملة دي بالإنجليزي</div>
+          <div class="gram-challenge-ar" id="gram-ar">—</div>
+          <div class="gram-challenge-hint" id="gram-hint">—</div>
+        </div>
+        <div class="cam-box">
+          <video id="vid" autoplay muted playsinline></video>
+          <div class="cam-off" id="cam-off"><i class="ti ti-video-off" style="font-size:26px"></i><span>Camera off</span></div>
+          <div class="cam-lbl">You</div>
+        </div>
+      </div>
+      <div class="live" id="live"></div>
+      <div class="err-bar" id="err-bar"></div>
+      <div class="ctrls">
+        <button class="ctrl" id="mic-btn" onclick="toggleMic()">
+          <i class="ti ti-microphone" id="mic-icon"></i>
+          <span id="mic-lbl">Speak</span>
+        </button>
+        <button class="ctrl" onclick="toggleCam()">
+          <i class="ti ti-video" id="cam-icon"></i><span>Camera</span>
+        </button>
+        <button class="ctrl" id="next-btn" onclick="nextGramChallenge()" style="display:none;">
+          <i class="ti ti-arrow-left"></i><span>التالي</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('chat',this)">Chat</div>
+        <div class="tab" onclick="switchTab('analysis',this)">Analysis</div>
+        <div class="tab" onclick="switchTab('report',this)">Report</div>
+      </div>
+      <div class="pbody" id="chat-panel">
+        <div class="empty" id="chat-empty"><div class="empty-icon">💬</div><p>الـ conversation هيظهر هنا</p></div>
+      </div>
+      <div class="pbody" id="analysis-panel" style="display:none;">
+        <div class="empty" id="analysis-empty"><div class="empty-icon">🔍</div><p>تحليل كل جملة قلتها هيظهر هنا بعد ما تتكلم</p></div>
+      </div>
+      <div class="pbody" id="report-panel" style="display:none;">
+        <div class="empty" id="rep-empty"><div class="empty-icon">📊</div><p>التقرير الكامل بعد End Session</p></div>
+        <div id="rep-content" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════
-// GEMINI API CONFIGURATION (DIRECT & DYNAMIC)
+// GEMINI API SAFE CONFIGURATION
 // ══════════════════════════════════════
 function getApiKey() {
-  var inputVal = document.getElementById('user-api-key').value.trim();
   var stored = localStorage.getItem('user_gemini_key');
+  var inputVal = document.getElementById('user-api-key').value.trim();
   if(inputVal) {
     localStorage.setItem('user_gemini_key', inputVal);
     return inputVal;
@@ -12,6 +254,7 @@ function getApiKey() {
   return stored || '';
 }
 
+// Auto fill if saved previously
 window.addEventListener('DOMContentLoaded', function() {
   var savedKey = localStorage.getItem('user_gemini_key');
   if(savedKey) {
@@ -21,10 +264,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 async function callGemini(system, messages) {
   var key = getApiKey();
-  if(!key) {
-    showErr("يرجى إدخال Gemini API Key أولاً للدردشة التفاعلية!");
-    return null;
-  }
+  if(!key) return null;
   
   try {
     var contents = [];
@@ -53,17 +293,12 @@ async function callGemini(system, messages) {
     });
 
     var data = await res.json();
-    if (data.error) {
-      showErr("خطأ في المفتاح: " + data.error.message);
-      return null;
-    }
     if (data.candidates && data.candidates[0].content.parts[0].text) {
       return data.candidates[0].content.parts[0].text.trim();
     }
     return null;
   } catch(e) {
     console.error('Gemini API Error:', e);
-    showErr("فشل الاتصال بالذكاء الاصطناعي، تحقق من الإنترنت والـ Key.");
     return null;
   }
 }
@@ -180,23 +415,28 @@ var gramIdx = 0;
 var SCENARIOS = {
   presentation:{
     name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
-    openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?"]
+    openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?","Hi! I'm Alex. Start whenever you're ready — what's your topic?"],
+    replies:["Good. How would you explain that to someone who doesn't work in RTM?","Can you give a real example from your experience?","What's the most important point your audience should remember?","If you had 30 seconds — how would you summarize that?"]
   },
   interview:{
     name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
-    openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience."]
+    openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience.","Hi, I'm Sarah. Walk me through your background and current role.","Good morning! I'm Sarah. Tell me about yourself and why you applied."],
+    replies:["Can you give a specific example of handling a low-adherence situation?","What KPIs do you monitor daily and why?","Describe a time you made a quick decision under pressure."]
   },
   meeting:{
     name:"Team Meeting",avatarName:"James",avatarRole:"Team Leader",icon:"👥",color:"#22d3a0",
-    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?"]
+    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?","Hi team, James here. What's your read on our current staffing situation?"],
+    replies:["What should we do differently next week?","How do we communicate this without hurting agent morale?"]
   },
   free:{
     name:"Free Talk",avatarName:"Emma",avatarRole:"English Coach",icon:"💬",color:"#fbbf24",
-    openers:["Hi! I'm Emma. What would you like to talk about today?"]
+    openers:["Hi! I'm Emma. What would you like to talk about today?","Hello! I'm Emma — what's on your mind?"],
+    replies:["Tell me more about that.","How did that make you feel?"]
   },
   grammar:{
     name:"Grammar Trainer",avatarName:"Nour",avatarRole:"Grammar Coach",icon:"📝",color:"#f87171",
-    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟"]
+    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟"],
+    replies:[]
   }
 };
 
@@ -219,11 +459,6 @@ function pickSc(el) {
 }
 
 async function startSession() {
-  var key = getApiKey();
-  if(!key) {
-    alert("برجاء إدخال Gemini API Key أولاً في الشاشة الرئيسية!");
-    return;
-  }
   var sc = SCENARIOS[state.scenario];
   document.getElementById('stitle').textContent = sc.name;
   document.getElementById('av-name').textContent = sc.avatarName;
@@ -341,16 +576,19 @@ async function buildConvReply(analysis){
   });
   if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
   
-  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a realistic, intelligent English conversation with a student. '+
-    'STRICT INSTRUCTIONS: 1) Listen carefully to what the student just said and RESPOND DIRECTLY to their message content. 2) Never repeat scripted or generic questions. 3) Keep your response SHORT (1-2 clear sentences). 4) End with 1 relevant follow-up question based on their statement. 5) Be polite, smart, and interactive.';
+  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a natural English conversation with an Arabic speaker practicing English. '+
+    'RULES: 1) Respond naturally to what they ACTUALLY said — reference their words directly. 2) Keep response SHORT: 1-2 sentences max. 3) End with ONE follow-up question to keep them talking. 4) NEVER mention grammar, scores, or corrections in chat — that is shown separately. 5) Be warm and encouraging like a real person.';
   
   var aiText = await callGemini(sysPrompt, history);
   hideTyping();
   if(!aiText){
-    aiText = "That's interesting! Could you tell me more about what you mean by that?";
+    var reply=sc.replies[(state.turnCount-1)%sc.replies.length];
+    addMsg('ai',reply);
+    speakText(reply);
+  } else {
+    addMsg('ai',aiText);
+    speakText(aiText);
   }
-  addMsg('ai',aiText);
-  speakText(aiText);
 }
 
 // ══════════════════════════════════════
@@ -721,3 +959,5 @@ window.speechSynthesis&&(window.speechSynthesis.onvoiceschanged=function(){});
   });
 })();
 </script>
+</body>
+</html>
