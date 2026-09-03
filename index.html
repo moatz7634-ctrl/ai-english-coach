@@ -31,6 +31,7 @@ h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .note{font-size:11px;color:#4b5268;margin:12px 0;display:flex;gap:6px;line-height:1.5;}
 .start{width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
 .start:hover{opacity:.9;}
+.key-input{width:100%;padding:10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:#fff;margin-bottom:12px;font-size:12px;}
 #app{display:none;flex-direction:column;height:100vh;}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:50px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
 .tl{display:flex;align-items:center;gap:9px;}
@@ -136,6 +137,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   <div class="card">
     <div class="logo"><div class="dot"></div><h2>AI English Coach</h2></div>
     <p class="sub">اختار نوع الـ session — التحليل كله بيظهر في تابة منفصلة، مش في الكلام.</p>
+    
+    <input type="password" id="user-api-key" class="key-input" placeholder="ادخل Gemini API Key بتاعك هنا..." />
+    
     <div id="sc-list">
       <div class="sc-btn active" data-id="presentation" onclick="pickSc(this)">
         <div class="sc-icon" style="background:rgba(91,127,255,.15);color:#5b7fff">🎓</div>
@@ -177,10 +181,8 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   </div>
 
   <div class="main">
-    <!-- LEFT: stage -->
     <div style="display:flex;flex-direction:column;overflow:hidden;">
       <div class="stage" style="flex:1;">
-        <!-- Avatar -->
         <div class="avatar-box">
           <div class="av-glow" id="av-glow"></div>
           <div class="av-inner">
@@ -191,13 +193,11 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
           </div>
           <div class="bubble" id="bubble"></div>
         </div>
-        <!-- Grammar challenge card -->
         <div class="gram-challenge" id="gram-challenge">
           <div class="gram-challenge-label">📝 قول الجملة دي بالإنجليزي</div>
           <div class="gram-challenge-ar" id="gram-ar">—</div>
           <div class="gram-challenge-hint" id="gram-hint">—</div>
         </div>
-        <!-- Camera -->
         <div class="cam-box">
           <video id="vid" autoplay muted playsinline></video>
           <div class="cam-off" id="cam-off"><i class="ti ti-video-off" style="font-size:26px"></i><span>Camera off</span></div>
@@ -220,7 +220,6 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
       </div>
     </div>
 
-    <!-- RIGHT: panel -->
     <div class="panel">
       <div class="tabs">
         <div class="tab active" onclick="switchTab('chat',this)">Chat</div>
@@ -243,20 +242,34 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 
 <script>
 // ══════════════════════════════════════
-// GEMINI API CONFIGURATION (FREE)
+// GEMINI API SAFE CONFIGURATION
 // ══════════════════════════════════════
-var GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // <--- ضع مفتاح Google Gemini المجاني هنا
+function getApiKey() {
+  var stored = localStorage.getItem('user_gemini_key');
+  var inputVal = document.getElementById('user-api-key').value.trim();
+  if(inputVal) {
+    localStorage.setItem('user_gemini_key', inputVal);
+    return inputVal;
+  }
+  return stored || '';
+}
+
+// Auto fill if saved previously
+window.addEventListener('DOMContentLoaded', function() {
+  var savedKey = localStorage.getItem('user_gemini_key');
+  if(savedKey) {
+    document.getElementById('user-api-key').value = savedKey;
+  }
+});
 
 async function callGemini(system, messages) {
-  if(!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
-    console.warn("Please insert a valid Gemini API Key.");
-    return null;
-  }
+  var key = getApiKey();
+  if(!key) return null;
   
   try {
     var contents = [];
     messages.forEach(function(m){
-      if(m.content !== '[start]') {
+      if(m.content && m.content !== '[start]') {
         contents.push({
           role: m.role === 'assistant' ? 'model' : 'user',
           parts: [{ text: m.content }]
@@ -264,7 +277,7 @@ async function callGemini(system, messages) {
       }
     });
 
-    var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -395,7 +408,6 @@ var GRAM_CHALLENGES = [
   {ar:"محتاج تبلغ المدير لو في مشكلة.", hint:"Modal — need to + infinitive", en:"You need to notify the manager if there is a problem."},
 ];
 var gramIdx = 0;
-var gramUserAns = '';
 
 // ══════════════════════════════════════
 // SCENARIOS
@@ -404,26 +416,26 @@ var SCENARIOS = {
   presentation:{
     name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
     openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?","Hi! I'm Alex. Start whenever you're ready — what's your topic?"],
-    replies:["Good. How would you explain that to someone who doesn't work in RTM?","Can you give a real example from your experience?","What's the most important point your audience should remember?","If you had 30 seconds — how would you summarize that?","What data or numbers would support that point?","How would you open your presentation to grab attention?","What comes next in your presentation?","How would you handle a tough question from the audience?"]
+    replies:["Good. How would you explain that to someone who doesn't work in RTM?","Can you give a real example from your experience?","What's the most important point your audience should remember?","If you had 30 seconds — how would you summarize that?"]
   },
   interview:{
     name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
     openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience.","Hi, I'm Sarah. Walk me through your background and current role.","Good morning! I'm Sarah. Tell me about yourself and why you applied."],
-    replies:["Can you give a specific example of handling a low-adherence situation?","What KPIs do you monitor daily and why?","Describe a time you made a quick decision under pressure.","How do you communicate a staffing problem to your team leader?","What's the biggest challenge you've faced in WFM and how did you solve it?","Where do you see yourself in 3 years?","What makes you different from other candidates?","How do you stay updated with WFM best practices?"]
+    replies:["Can you give a specific example of handling a low-adherence situation?","What KPIs do you monitor daily and why?","Describe a time you made a quick decision under pressure."]
   },
   meeting:{
     name:"Team Meeting",avatarName:"James",avatarRole:"Team Leader",icon:"👥",color:"#22d3a0",
-    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?","Hi team, James here. What's your read on our current staffing situation?","Morning! Adherence was below target yesterday — what happened and what's the plan?"],
-    replies:["What should we do differently next week?","How do we communicate this without hurting agent morale?","What's the SLA impact if this continues?","Who owns this action item and by when?","Can you walk me through the numbers in detail?","What does the forecast say for tomorrow's peak hours?","How does this compare to last month?","What resources do you need to fix this faster?"]
+    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?","Hi team, James here. What's your read on our current staffing situation?"],
+    replies:["What should we do differently next week?","How do we communicate this without hurting agent morale?"]
   },
   free:{
     name:"Free Talk",avatarName:"Emma",avatarRole:"English Coach",icon:"💬",color:"#fbbf24",
-    openers:["Hi! I'm Emma. What would you like to talk about today?","Hello! I'm Emma — what's on your mind?","Hi there! I'm Emma. Tell me about your day or anything you're thinking about."],
-    replies:["Tell me more about that.","How did that make you feel?","What would you do differently?","Can you give more details?","What do you think caused that?","How does that compare to before?","What would you recommend to someone in the same situation?","What's the hardest part of that for you?"]
+    openers:["Hi! I'm Emma. What would you like to talk about today?","Hello! I'm Emma — what's on your mind?"],
+    replies:["Tell me more about that.","How did that make you feel?"]
   },
   grammar:{
     name:"Grammar Trainer",avatarName:"Nour",avatarRole:"Grammar Coach",icon:"📝",color:"#f87171",
-    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟","مرحباً! أنا Nour. هنتدرب على الـ Grammar. هشوفلك الجملة بالعربي وإنت قولها بالإنجليزي. يلا!","Ahlan! I'm Nour. اشوف الجملة على الشاشة وقولها بالإنجليزي الصح!"],
+    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟"],
     replies:[]
   }
 };
@@ -565,7 +577,7 @@ async function buildConvReply(analysis){
   if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
   
   var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a natural English conversation with an Arabic speaker practicing English. '+
-    'RULES: 1) Respond naturally to what they ACTUALLY said — reference their words. 2) Keep response SHORT: 1-2 sentences max. 3) End with ONE follow-up question to keep them talking. 4) NEVER mention grammar, scores, or corrections in chat — that is shown separately. 5) Be warm and encouraging like a real person.';
+    'RULES: 1) Respond naturally to what they ACTUALLY said — reference their words directly. 2) Keep response SHORT: 1-2 sentences max. 3) End with ONE follow-up question to keep them talking. 4) NEVER mention grammar, scores, or corrections in chat — that is shown separately. 5) Be warm and encouraging like a real person.';
   
   var aiText = await callGemini(sysPrompt, history);
   hideTyping();
