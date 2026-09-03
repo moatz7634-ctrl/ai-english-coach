@@ -242,7 +242,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 
 <script>
 // ══════════════════════════════════════
-// GEMINI API CONFIGURATION (GEMINI 3.6 FLASH)
+// MULTI-MODEL FALLBACK ENGINE (GEMINI)
 // ══════════════════════════════════════
 function getApiKey() {
   var inputVal = document.getElementById('user-api-key').value.trim();
@@ -261,6 +261,14 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// مصفوفة بالموديلات المتاحة لتجربتها بالترتيب لضمان العمل
+var CANDIDATE_MODELS = [
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
+  'gemini-1.0-pro',
+  'gemini-2.0-flash'
+];
+
 async function callGemini(system, messages) {
   var key = getApiKey();
   if(!key) {
@@ -268,45 +276,46 @@ async function callGemini(system, messages) {
     return null;
   }
   
-  try {
-    var contents = [];
-    messages.forEach(function(m){
-      if(m.content && m.content !== '[start]') {
-        contents.push({
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: m.content }]
-        });
+  var contents = [];
+  messages.forEach(function(m){
+    if(m.content && m.content !== '[start]') {
+      contents.push({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      });
+    }
+  });
+
+  // تجربة الموديلات بالترتيب تلقائياً
+  for(var i = 0; i < CANDIDATE_MODELS.length; i++) {
+    var modelName = CANDIDATE_MODELS[i];
+    try {
+      var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent?key=' + key, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: {
+            parts: [{ text: system }]
+          },
+          contents: contents,
+          generationConfig: {
+            maxOutputTokens: 150
+          }
+        })
+      });
+
+      var data = await res.json();
+      if (!data.error && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+        document.getElementById('err-bar').style.display = 'none';
+        return data.candidates[0].content.parts[0].text.trim();
       }
-    });
-
-    var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + key, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: {
-          parts: [{ text: system }]
-        },
-        contents: contents,
-        generationConfig: {
-          maxOutputTokens: 150
-        }
-      })
-    });
-
-    var data = await res.json();
-    if (data.error) {
-      showErr("API Error: " + data.error.message);
-      return null;
+    } catch(e) {
+      console.warn('Failed with model ' + modelName, e);
     }
-    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
-      return data.candidates[0].content.parts[0].text.trim();
-    }
-    return null;
-  } catch(e) {
-    console.error('Gemini API Error:', e);
-    showErr("فشل الاتصال: تحقق من الـ Key والإنترنت");
-    return null;
   }
+
+  showErr("فشل الاتصال بجميع الموديلات. تأكد من إن الـ Key صحيح ومن حساب شخصي.");
+  return null;
 }
 
 // ══════════════════════════════════════
@@ -573,7 +582,7 @@ async function buildConvReply(analysis){
   if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
   
   var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a realistic, dynamic conversation with a student practicing English. '+
-    'STRICT INSTRUCTIONS: 1) Read the user\'s last answer carefully and respond directly to what they said. 2) NEVER fall back to generic or repeated questions. 3) Keep your response concise (1 to 2 short sentences). 4) End with ONE natural follow-up question related to their input.';
+    'STRICT INSTRUCTIONS: 1) Read the user\'s last answer carefully and respond directly to what they said. 2) Keep your response concise (1 to 2 short sentences). 3) End with ONE natural follow-up question related to their input.';
   
   var aiText = await callGemini(sysPrompt, history);
   hideTyping();
