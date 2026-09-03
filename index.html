@@ -242,7 +242,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 
 <script>
 // ══════════════════════════════════════
-// GEMINI API CONFIGURATION
+// GEMINI API CONFIGURATION (GEMINI 2.0 FLASH)
 // ══════════════════════════════════════
 function getApiKey() {
   var inputVal = document.getElementById('user-api-key').value.trim();
@@ -264,7 +264,7 @@ window.addEventListener('DOMContentLoaded', function() {
 async function callGemini(system, messages) {
   var key = getApiKey();
   if(!key) {
-    showErr("يرجى إدخال Gemini API Key أولاً للدردشة التفاعلية!");
+    showErr("يرجى إدخال Gemini API Key أولاً!");
     return null;
   }
   
@@ -279,7 +279,7 @@ async function callGemini(system, messages) {
       }
     });
 
-    var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + key, {
+    var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -296,16 +296,16 @@ async function callGemini(system, messages) {
 
     var data = await res.json();
     if (data.error) {
-      showErr("خطأ في المفتاح: " + data.error.message);
+      showErr("API Error: " + data.error.message);
       return null;
     }
-    if (data.candidates && data.candidates[0].content.parts[0].text) {
+    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
       return data.candidates[0].content.parts[0].text.trim();
     }
     return null;
   } catch(e) {
     console.error('Gemini API Error:', e);
-    showErr("فشل الاتصال بالذكاء الاصطناعي، تحقق من الإنترنت والـ Key.");
+    showErr("فشل الاتصال: تحقق من الـ Key والإنترنت");
     return null;
   }
 }
@@ -345,7 +345,7 @@ var GRAM = [
   {p:/\bfurnitures\b/i, orig:"furnitures", fix:"furniture", why:"'furniture' لا تجمع"},
   {p:/\bhe have\b/i, orig:"he have", fix:"he has", why:"مع he/she/it استخدم 'has' مش 'have'"},
   {p:/\bshe have\b/i, orig:"she have", fix:"she has", why:"مع he/she/it استخدم 'has' مش 'have'"},
-  {p:/\bit have\b/i, orig:"it have", fix:"it has", why:"مع he/she/it استخدم 'has' مش 'have'"},
+  {p:/\bit have\b/i, orig:"it have", fix:"it has", why:"مع he/she/it استخدم 'has' مش 'have'"}
 ];
 
 var WEAK = [
@@ -354,7 +354,7 @@ var WEAK = [
   {p:/\bvery bad\b/i, said:"very bad", better:"terrible / critical / severe"},
   {p:/\bbig problem\b/i, said:"big problem", better:"major issue / critical challenge"},
   {p:/\ba lot of\b/i, said:"a lot of", better:"numerous / significant / substantial"},
-  {p:/\bnice\b/i, said:"nice", better:"impressive / remarkable / pleasant"},
+  {p:/\bnice\b/i, said:"nice", better:"impressive / remarkable / pleasant"}
 ];
 
 function checkGram(text) {
@@ -402,17 +402,7 @@ var GRAM_CHALLENGES = [
   {ar:"لو الـ adherence وقع، إيه اللي هتعمله؟", hint:"Second conditional — If + past, would", en:"If the adherence dropped, what would you do?"},
   {ar:"المدير طلب التقرير من أمبارح.", hint:"Passive + past simple", en:"The report was requested by the manager yesterday."},
   {ar:"أنا بافهم الموضوع كويس.", hint:"فعل حالة — مش بيجي بعد 'am'", en:"I understand the topic well."},
-  {ar:"الفريق شغال على حل المشكلة.", hint:"Present continuous مع 'the team'", en:"The team is working on solving the issue."},
-  {ar:"محتاج أقرر الأولويات الأول.", hint:"Modal verb + infinitive", en:"I need to prioritize first."},
-  {ar:"الـ SLA اتحسن بعد التعديلات.", hint:"Passive + past simple", en:"The SLA improved after the adjustments."},
-  {ar:"هل تقدر تشرحلي إيه الـ shrinkage؟", hint:"سؤال بـ can — formal", en:"Could you explain what shrinkage means?"},
-  {ar:"أنا مش موافق على الخطة دي.", hint:"نفي مع 'I' — مش 'I am not agree'", en:"I don't agree with this plan."},
-  {ar:"الناس في الفريق شايفين نفس الرأي.", hint:"'people' جمع — استخدم 'are'", en:"The people in the team share the same opinion."},
-  {ar:"عندنا معلومات كتير عن الموضوع.", hint:"'information' لا تجمع", en:"We have a lot of information about this topic."},
-  {ar:"هو عنده خبرة أكبر مني.", hint:"مقارنة — comparative بدون 'more'", en:"He has more experience than me."},
-  {ar:"اشتغلنا أمس من ٨ لـ ٤.", hint:"ماضي بسيط مع worked", en:"We worked yesterday from 8 to 4."},
-  {ar:"الـ adherence rate وصل للـ target النهارده.", hint:"Past simple — reached", en:"The adherence rate reached the target today."},
-  {ar:"محتاج تبلغ المدير لو في مشكلة.", hint:"Modal — need to + infinitive", en:"You need to notify the manager if there is a problem."}
+  {ar:"الفريق شغال على حل المشكلة.", hint:"Present continuous مع 'the team'", en:"The team is working on solving the issue."}
 ];
 var gramIdx = 0;
 
@@ -422,7 +412,7 @@ var gramIdx = 0;
 var SCENARIOS = {
   presentation:{
     name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
-    openers:["Hello! I'm Alex. What topic would you like to present about today?","Welcome! I'm Alex — go ahead, what are you presenting about?"]
+    openers:["Hello! I'm Alex. What topic would you like to present about today?"]
   },
   interview:{
     name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
@@ -583,14 +573,16 @@ async function buildConvReply(analysis){
   });
   if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
   
-  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a realistic, intelligent English conversation with a student. '+
-    'STRICT INSTRUCTIONS: 1) Listen carefully to what the student just said and RESPOND DIRECTLY to their message content. 2) Never repeat scripted or generic questions. 3) Keep your response SHORT (1-2 clear sentences). 4) End with 1 relevant follow-up question based on their statement. 5) Be polite, smart, and interactive.';
+  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a realistic, dynamic conversation with a student practicing English. '+
+    'STRICT INSTRUCTIONS: 1) Read the user\'s last answer carefully and respond directly to what they said. 2) NEVER fall back to generic or repeated questions. 3) Keep your response concise (1 to 2 short sentences). 4) End with ONE natural follow-up question related to their input.';
   
   var aiText = await callGemini(sysPrompt, history);
   hideTyping();
+  
   if(!aiText){
-    aiText = "That's interesting! Could you tell me more about what you mean by that?";
+    return;
   }
+  
   addMsg('ai',aiText);
   speakText(aiText);
 }
