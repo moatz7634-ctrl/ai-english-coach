@@ -49,7 +49,7 @@ h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .waves{display:flex;align-items:center;justify-content:center;gap:3px;height:20px;}
 .wave{width:3px;border-radius:2px;background:var(--accent);height:4px;transition:height .12s;}
 .bubble{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(22,25,32,.92);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:11px;line-height:1.6;display:none;max-height:70px;overflow:hidden;}
-/* Grammar challenge card */
+
 .gram-challenge{background:var(--surface);border:1px solid rgba(91,127,255,.3);border-radius:13px;padding:16px;flex-shrink:0;display:none;}
 .gram-challenge-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
 .gram-challenge-ar{font-size:16px;font-weight:600;color:#f0f2f8;margin-bottom:4px;direction:rtl;text-align:right;}
@@ -64,13 +64,13 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .ctrl.rec{border-color:var(--red);background:rgba(248,113,113,.12);color:var(--red);}
 .ctrl i{font-size:19px;}
 .live{padding:7px 12px;background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);border-radius:8px;font-size:12px;color:#f0f2f8;font-style:italic;display:none;margin:0 13px 3px;flex-shrink:0;}
-/* Panel */
+
 .panel{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
 .tabs{display:flex;border-bottom:1px solid var(--border);}
 .tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:#4b5268;transition:all .15s;}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .pbody{flex:1;overflow-y:auto;padding:12px;}
-/* Chat */
+
 .msg{padding:9px 11px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:8px;}
 .msg.ai{background:var(--surface2);border:1px solid var(--border);border-radius:9px 9px 9px 2px;}
 .msg.user{background:rgba(91,127,255,.1);border:1px solid rgba(91,127,255,.2);border-radius:9px 9px 2px 9px;text-align:right;}
@@ -82,7 +82,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .typing-ind span:nth-child(2){animation-delay:.2s;}
 .typing-ind span:nth-child(3){animation-delay:.4s;}
 @keyframes td{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.3);opacity:1}}
-/* Analysis cards */
+
 .ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
 .ana-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .ana-turn{font-size:10px;font-weight:600;color:#4b5268;text-transform:uppercase;}
@@ -101,11 +101,11 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .better-label{font-size:10px;color:#4b5268;margin-bottom:3px;}
 .better-text{font-size:12px;color:var(--green);direction:ltr;text-align:left;}
 .ana-ok{font-size:12px;color:var(--green);}
-/* Grammar Challenge analysis */
+
 .gram-ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
 .gram-ana-ar{font-size:13px;color:#8b93ad;direction:rtl;text-align:right;margin-bottom:4px;}
 .gram-ana-said{font-size:12px;color:#f0f2f8;direction:ltr;text-align:left;margin-bottom:6px;font-style:italic;}
-/* Report */
+
 .metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
 .mv{font-weight:600;}
 .mv.g{color:var(--green);}.mv.w{color:var(--amber);}.mv.r{color:var(--red);}
@@ -191,7 +191,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
           </div>
           <div class="bubble" id="bubble"></div>
         </div>
-        <!-- Grammar challenge card (only in grammar mode) -->
+        <!-- Grammar challenge card -->
         <div class="gram-challenge" id="gram-challenge">
           <div class="gram-challenge-label">📝 قول الجملة دي بالإنجليزي</div>
           <div class="gram-challenge-ar" id="gram-ar">—</div>
@@ -242,6 +242,54 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 </div>
 
 <script>
+// ══════════════════════════════════════
+// GEMINI API CONFIGURATION (FREE)
+// ══════════════════════════════════════
+var GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // <--- ضع مفتاح Google Gemini المجاني هنا
+
+async function callGemini(system, messages) {
+  if(!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+    console.warn("Please insert a valid Gemini API Key.");
+    return null;
+  }
+  
+  try {
+    var contents = [];
+    messages.forEach(function(m){
+      if(m.content !== '[start]') {
+        contents.push({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }]
+        });
+      }
+    });
+
+    var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: {
+          parts: [{ text: system }]
+        },
+        contents: contents,
+        generationConfig: {
+          maxOutputTokens: 150,
+          temperature: 0.7
+        }
+      })
+    });
+
+    var data = await res.json();
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      return data.candidates[0].content.parts[0].text.trim();
+    }
+    return null;
+  } catch(e) {
+    console.error('Gemini API Error:', e);
+    return null;
+  }
+}
+
 // ══════════════════════════════════════
 // GRAMMAR RULES
 // ══════════════════════════════════════
@@ -301,32 +349,21 @@ function checkWeak(text) {
 }
 function scoreIt(errs, wc, fillers, text) {
   var s = 10;
-  // Known grammar errors
   s -= Math.min(6, errs.length * 2);
-  // Filler words
   s -= fillers > 3 ? 2 : fillers > 1 ? 1 : 0;
-  // Too short
   s -= wc < 5 ? 3 : wc < 8 ? 1 : 0;
-  // Extra checks on the text itself
   if (text) {
     var t = text.toLowerCase();
-    // Missing verb — sentence with no verb indicators
     var hasVerb = /\b(is|are|was|were|am|have|has|had|do|does|did|will|would|can|could|should|may|might|must|been|be|being|work|works|worked|go|goes|went|know|knew|want|think|feel|need|get|make|take|see|come|say|said|tell|told|use|used|find|give|gave|try|tried|help|helped|like|liked|look|looked|seem|seemed|become|became|leave|left|put|mean|keep|let|begin|show|hear|play|run|move|live|believe|hold|bring|happen|write|provide|stand|lose|pay|meet|include|continue|set|learn|change|lead|understand|watch|follow|stop|create|speak|read|spend|grow|open|walk|win|offer|remember|love|consider|appear|buy|wait|serve|die|send|expect|build|stay|fall|cut|reach|kill|remain|suggest|raise|pass|sell|require|report|decide|pull)\b/.test(t);
     if (!hasVerb && wc > 3) s -= 2;
-    // Two subjects no conjunction (common Arab mistake: "I my team...")
     if (/\bi (my|the|a|an)\b/.test(t) && !/\b(and|but|or|because|so|when|if|that|who|which)\b/.test(t) && wc < 6) s -= 1;
-    // Repeated words (stuttering/uncertainty)
     var words = t.split(/\s+/);
     for (var i = 0; i < words.length - 1; i++) {
       if (words[i] === words[i+1] && words[i].length > 2) { s -= 1; break; }
     }
-    // No capital start (informal/rushed)
     if (text[0] && text[0] === text[0].toLowerCase() && wc > 5) s -= 0.5;
-    // Very long run-on sentence without punctuation
     if (wc > 25 && !/[.!?,;]/.test(text)) s -= 1;
-    // Missing articles before nouns (common: "I am RTM agent" instead of "an RTM agent")
     if (/\bi am [a-z]/.test(t) && !/\bi am (a|an|the|not|very|so|really|quite|going|trying|working|looking)\b/.test(t)) s -= 1;
-    // Wrong tense markers
     if (/\byesterday\b/.test(t) && /\b(go|come|see|do|eat|have|take|make|give|get|know|think|feel|want|say|tell)\b/.test(t) && !/\b(went|came|saw|did|ate|had|took|made|gave|got|knew|thought|felt|wanted|said|told)\b/.test(t)) s -= 2;
   }
   return Math.max(1, Math.min(10, Math.round(s * 10) / 10));
@@ -392,37 +429,6 @@ var SCENARIOS = {
 };
 
 // ══════════════════════════════════════
-// API
-// ══════════════════════════════════════
-var API_KEY = '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';
-
-async function callClaude(system, messages, maxTokens) {
-  try {
-    var res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: maxTokens || 200,
-        system: system,
-        messages: messages
-      })
-    });
-    var data = await res.json();
-    if (data.error) throw new Error(data.error.message);
-    return data.content && data.content[0] ? data.content[0].text : null;
-  } catch(e) {
-    console.error('API error:', e);
-    return null;
-  }
-}
-
-// ══════════════════════════════════════
 // STATE
 // ══════════════════════════════════════
 var state = {
@@ -462,7 +468,7 @@ async function startSession() {
     var m=Math.floor(state.timer/60),s=state.timer%60;
     document.getElementById('timer-disp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   },1000);
-  // Grammar mode setup
+
   if (state.scenario==='grammar') {
     document.getElementById('gram-challenge').style.display='block';
     document.getElementById('next-btn').style.display='flex';
@@ -536,7 +542,6 @@ function processConvAnswer(txt){
   var wc=words.length;
   var fillers=(txt.match(/\b(um|uh|like|you know|basically|literally|i mean|so so|kind of)\b/gi)||[]);
   var score=scoreIt(errs,wc,fillers.length,txt);
-  // Build better version
   var better=txt;
   errs.forEach(function(e){better=better.replace(new RegExp(e.orig.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),e.fix);});
   var analysis={text:txt,errs:errs,weak:weak,wc:wc,fillers:fillers,score:score,better:better};
@@ -552,19 +557,19 @@ async function buildConvReply(analysis){
   var sc=SCENARIOS[state.scenario];
   state.turnCount++;
   showTyping();
-  // Build conversation history for Claude
+  
   var history=[];
   state.messages.forEach(function(m){
     history.push({role:m.role==='ai'?'assistant':'user',content:m.text});
   });
   if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
-  // System prompt for natural conversation
+  
   var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a natural English conversation with an Arabic speaker practicing English. '+
     'RULES: 1) Respond naturally to what they ACTUALLY said — reference their words. 2) Keep response SHORT: 1-2 sentences max. 3) End with ONE follow-up question to keep them talking. 4) NEVER mention grammar, scores, or corrections in chat — that is shown separately. 5) Be warm and encouraging like a real person.';
-  var aiText = await callClaude(sysPrompt, history, 150);
+  
+  var aiText = await callGemini(sysPrompt, history);
   hideTyping();
   if(!aiText){
-    // Fallback to scripted replies
     var reply=sc.replies[(state.turnCount-1)%sc.replies.length];
     addMsg('ai',reply);
     speakText(reply);
@@ -595,7 +600,6 @@ function processGramAnswer(txt){
   var errs=checkGram(txt);
   var words=txt.trim().split(/\s+/).filter(Boolean);
   var wc=words.length;
-  // Compare with expected answer
   var expected=ch.en.toLowerCase().replace(/[^a-z\s]/g,'').trim();
   var said=txt.toLowerCase().replace(/[^a-z\s]/g,'').trim();
   var saidWords=said.split(/\s+/);
@@ -614,7 +618,6 @@ function processGramAnswer(txt){
   if(errs.length>0) errs.forEach(function(e){state.allErrors.push(e);});
   addGramAnalysisCard(result);
   addMsg('user',txt);
-  // AI response
   var reply='';
   if(correct&&errs.length===0){
     var praise=["Perfect!", "Excellent!", "That's correct!", "Well done!","Spot on!"];
@@ -630,7 +633,6 @@ function processGramAnswer(txt){
     hideTyping();
     addMsg('ai',reply);
     speakText(reply);
-    // Auto advance after 2 sec
     setTimeout(function(){
       gramIdx++;
       if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
@@ -654,7 +656,6 @@ function addAnalysisCard(a){
     if(a.wc<8) html+='<div class="filler-row">⚠ الجملة قصيرة ('+a.wc+' كلمات). حاول تكمّل الفكرة.</div>';
   } else if(a.errs.length===0&&a.score<8){
     html+='<div class="filler-row" style="color:var(--amber);">⚠ Score: '+a.score+'/10 — في مشاكل في هيكل الجملة حتى لو مفيش خطأ واضح. راجع التفاصيل:</div>';
-    // Explain why score is low
     var t=a.text.toLowerCase();
     if(a.wc<8) html+='<div class="err-row"><div class="err-orig">الجملة قصيرة جداً ('+a.wc+' كلمات)</div><div class="err-fix">اكمل الفكرة — هدفك 15+ كلمة</div></div>';
     if(a.fillers.length>1) html+='<div class="err-row"><div class="err-orig">Filler words: '+a.fillers.join(", ")+'</div><div class="err-fix">وقف بهدوء بدلهم</div></div>';
@@ -717,7 +718,7 @@ async function aiGreet(){
     return;
   }
   var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. Give a warm, natural opening greeting and your first question to start the session. Keep it to 2 sentences max. Be direct and friendly.';
-  var text = await callClaude(sysPrompt,[{role:'user',content:'Start the session now.'}],120);
+  var text = await callGemini(sysPrompt,[{role:'user',content:'Start the session now.'}]);
   hideTyping();
   if(!text) text=sc.openers[Math.floor(Math.random()*sc.openers.length)];
   addMsg('ai',text);speakText(text);
@@ -832,7 +833,7 @@ function generateReport(){
     html+='<div class="metric"><span style="color:#8b93ad">Correct</span><span class="mv g">'+correct+'</span></div>';
     html+='<div class="metric"><span style="color:#8b93ad">Wrong</span><span class="mv r">'+(total-correct)+'</span></div>';
     html+='<div class="metric"><span style="color:#8b93ad">Score</span><span class="mv '+scoreCol+'">'+pct+'%</span></div>';
-    // Wrong answers
+
     var wrong=state.gramResults.filter(function(r){return !r.correct;});
     if(wrong.length>0){
       html+='<div class="rtitle">الجمل اللي غلطت فيها</div>';
@@ -853,7 +854,6 @@ function generateReport(){
     return;
   }
 
-  // Conversation report
   var a=state.analyses;
   var turns=a.length;
   if(!turns){rc.innerHTML='<div class="empty"><div class="empty-icon">💬</div><p>مفيش بيانات كافية.</p></div>';return;}
@@ -886,7 +886,6 @@ function generateReport(){
   else if(totalFillers>2){html+='<div class="rep-item warn">⚠ '+totalFillers+' filler words — حاول تقللهم.</div>';}
   else{html+='<div class="rep-item ok">✓ Filler words قليلة — كويس!</div>';}
 
-  // Unique errors
   var uniq=[];
   state.allErrors.forEach(function(e){if(!uniq.find(function(u){return u.orig===e.orig;}))uniq.push(e);});
   if(uniq.length>0){
@@ -899,7 +898,6 @@ function generateReport(){
     });
   }
 
-  // Unique weak phrases
   var uniqW=[];
   state.allWeak.forEach(function(w){if(!uniqW.find(function(u){return u.said===w.said;}))uniqW.push(w);});
   if(uniqW.length>0){
@@ -936,7 +934,7 @@ function showErr(msg){var e=document.getElementById('err-bar');e.style.display='
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 window.speechSynthesis&&window.speechSynthesis.getVoices();
 window.speechSynthesis&&(window.speechSynthesis.onvoiceschanged=function(){});
-// PWA
+
 (function(){
   var m={name:"AI English Coach",short_name:"AI Coach",start_url:"./",display:"standalone",background_color:"#0d0f14",theme_color:"#0d0f14",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d0f14'/><text y='135' x='96' text-anchor='middle' font-size='110'>🎓</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
   document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
