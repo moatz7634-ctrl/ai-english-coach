@@ -299,12 +299,37 @@ function checkWeak(text) {
   WEAK.forEach(function(r){ if(r.p.test(text)) w.push({said:r.said,better:r.better}); });
   return w;
 }
-function scoreIt(errs, wc, fillers) {
-  var s=10;
-  s -= Math.min(5, errs.length*2);
-  s -= fillers>3?2:fillers>1?1:0;
-  s -= wc<5?3:wc<10?1:0;
-  return Math.max(1,Math.min(10,s));
+function scoreIt(errs, wc, fillers, text) {
+  var s = 10;
+  // Known grammar errors
+  s -= Math.min(6, errs.length * 2);
+  // Filler words
+  s -= fillers > 3 ? 2 : fillers > 1 ? 1 : 0;
+  // Too short
+  s -= wc < 5 ? 3 : wc < 8 ? 1 : 0;
+  // Extra checks on the text itself
+  if (text) {
+    var t = text.toLowerCase();
+    // Missing verb — sentence with no verb indicators
+    var hasVerb = /\b(is|are|was|were|am|have|has|had|do|does|did|will|would|can|could|should|may|might|must|been|be|being|work|works|worked|go|goes|went|know|knew|want|think|feel|need|get|make|take|see|come|say|said|tell|told|use|used|find|give|gave|try|tried|help|helped|like|liked|look|looked|seem|seemed|become|became|leave|left|put|mean|keep|let|begin|show|hear|play|run|move|live|believe|hold|bring|happen|write|provide|stand|lose|pay|meet|include|continue|set|learn|change|lead|understand|watch|follow|stop|create|speak|read|spend|grow|open|walk|win|offer|remember|love|consider|appear|buy|wait|serve|die|send|expect|build|stay|fall|cut|reach|kill|remain|suggest|raise|pass|sell|require|report|decide|pull)\b/.test(t);
+    if (!hasVerb && wc > 3) s -= 2;
+    // Two subjects no conjunction (common Arab mistake: "I my team...")
+    if (/\bi (my|the|a|an)\b/.test(t) && !/\b(and|but|or|because|so|when|if|that|who|which)\b/.test(t) && wc < 6) s -= 1;
+    // Repeated words (stuttering/uncertainty)
+    var words = t.split(/\s+/);
+    for (var i = 0; i < words.length - 1; i++) {
+      if (words[i] === words[i+1] && words[i].length > 2) { s -= 1; break; }
+    }
+    // No capital start (informal/rushed)
+    if (text[0] && text[0] === text[0].toLowerCase() && wc > 5) s -= 0.5;
+    // Very long run-on sentence without punctuation
+    if (wc > 25 && !/[.!?,;]/.test(text)) s -= 1;
+    // Missing articles before nouns (common: "I am RTM agent" instead of "an RTM agent")
+    if (/\bi am [a-z]/.test(t) && !/\bi am (a|an|the|not|very|so|really|quite|going|trying|working|looking)\b/.test(t)) s -= 1;
+    // Wrong tense markers
+    if (/\byesterday\b/.test(t) && /\b(go|come|see|do|eat|have|take|make|give|get|know|think|feel|want|say|tell)\b/.test(t) && !/\b(went|came|saw|did|ate|had|took|made|gave|got|knew|thought|felt|wanted|said|told)\b/.test(t)) s -= 2;
+  }
+  return Math.max(1, Math.min(10, Math.round(s * 10) / 10));
 }
 
 // ══════════════════════════════════════
@@ -365,6 +390,37 @@ var SCENARIOS = {
     replies:[]
   }
 };
+
+// ══════════════════════════════════════
+// API
+// ══════════════════════════════════════
+var API_KEY = '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';
+
+async function callClaude(system, messages, maxTokens) {
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: maxTokens || 200,
+        system: system,
+        messages: messages
+      })
+    });
+    var data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.content && data.content[0] ? data.content[0].text : null;
+  } catch(e) {
+    console.error('API error:', e);
+    return null;
+  }
+}
 
 // ══════════════════════════════════════
 // STATE
@@ -479,7 +535,7 @@ function processConvAnswer(txt){
   var words=txt.trim().split(/\s+/).filter(Boolean);
   var wc=words.length;
   var fillers=(txt.match(/\b(um|uh|like|you know|basically|literally|i mean|so so|kind of)\b/gi)||[]);
-  var score=scoreIt(errs,wc,fillers.length);
+  var score=scoreIt(errs,wc,fillers.length,txt);
   // Build better version
   var better=txt;
   errs.forEach(function(e){better=better.replace(new RegExp(e.orig.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),e.fix);});
@@ -492,16 +548,30 @@ function processConvAnswer(txt){
   setTimeout(function(){buildConvReply(analysis);},200);
 }
 
-function buildConvReply(analysis){
+async function buildConvReply(analysis){
   var sc=SCENARIOS[state.scenario];
   state.turnCount++;
-  var reply=sc.replies[(state.turnCount-1)%sc.replies.length];
   showTyping();
-  setTimeout(function(){
-    hideTyping();
+  // Build conversation history for Claude
+  var history=[];
+  state.messages.forEach(function(m){
+    history.push({role:m.role==='ai'?'assistant':'user',content:m.text});
+  });
+  if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
+  // System prompt for natural conversation
+  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a natural English conversation with an Arabic speaker practicing English. '+
+    'RULES: 1) Respond naturally to what they ACTUALLY said — reference their words. 2) Keep response SHORT: 1-2 sentences max. 3) End with ONE follow-up question to keep them talking. 4) NEVER mention grammar, scores, or corrections in chat — that is shown separately. 5) Be warm and encouraging like a real person.';
+  var aiText = await callClaude(sysPrompt, history, 150);
+  hideTyping();
+  if(!aiText){
+    // Fallback to scripted replies
+    var reply=sc.replies[(state.turnCount-1)%sc.replies.length];
     addMsg('ai',reply);
     speakText(reply);
-  },500+Math.random()*300);
+  } else {
+    addMsg('ai',aiText);
+    speakText(aiText);
+  }
 }
 
 // ══════════════════════════════════════
@@ -579,8 +649,17 @@ function addAnalysisCard(a){
   var card=document.createElement('div');card.className='ana-card';
   var html='<div class="ana-header"><span class="ana-turn">Turn '+state.analyses.length+'</span><span class="ana-score '+sc+'">'+a.score+'/10</span></div>';
   html+='<div class="ana-said">'+escHtml(a.text)+'</div>';
-  if(a.errs.length===0&&a.weak.length===0&&a.fillers.length<2){
-    html+='<div class="ana-ok">✓ الجملة صح — مفيش أخطاء!</div>';
+  if(a.errs.length===0&&a.weak.length===0&&a.fillers.length<2&&a.score>=8){
+    html+='<div class="ana-ok">✓ الجملة صح — مفيش أخطاء واضحة!</div>';
+    if(a.wc<8) html+='<div class="filler-row">⚠ الجملة قصيرة ('+a.wc+' كلمات). حاول تكمّل الفكرة.</div>';
+  } else if(a.errs.length===0&&a.score<8){
+    html+='<div class="filler-row" style="color:var(--amber);">⚠ Score: '+a.score+'/10 — في مشاكل في هيكل الجملة حتى لو مفيش خطأ واضح. راجع التفاصيل:</div>';
+    // Explain why score is low
+    var t=a.text.toLowerCase();
+    if(a.wc<8) html+='<div class="err-row"><div class="err-orig">الجملة قصيرة جداً ('+a.wc+' كلمات)</div><div class="err-fix">اكمل الفكرة — هدفك 15+ كلمة</div></div>';
+    if(a.fillers.length>1) html+='<div class="err-row"><div class="err-orig">Filler words: '+a.fillers.join(", ")+'</div><div class="err-fix">وقف بهدوء بدلهم</div></div>';
+    if(/yesterday/.test(t)&&!/went|came|saw|did|ate|had|took|made/.test(t)) html+='<div class="err-row"><div class="err-orig">استخدمت "yesterday" مع فعل مضارع</div><div class="err-fix">بعد yesterday لازم الماضي البسيط</div></div>';
+    if(a.wc>25&&!/[.!?,]/.test(a.text)) html+='<div class="err-row"><div class="err-orig">جملة طويلة بدون علامات ترقيم</div><div class="err-fix">قسّم الجملة بفاصلة أو نقطة</div></div>';
   } else {
     a.errs.forEach(function(e){
       html+='<div class="err-row">';
@@ -628,11 +707,20 @@ function addGramAnalysisCard(r){
 // ══════════════════════════════════════
 // GREET
 // ══════════════════════════════════════
-function aiGreet(){
+async function aiGreet(){
   var sc=SCENARIOS[state.scenario];
-  var opener=sc.openers[Math.floor(Math.random()*sc.openers.length)];
   showTyping();
-  setTimeout(function(){hideTyping();addMsg('ai',opener);speakText(opener);},500);
+  if(state.scenario==='grammar'){
+    hideTyping();
+    var opener=sc.openers[Math.floor(Math.random()*sc.openers.length)];
+    addMsg('ai',opener);speakText(opener);
+    return;
+  }
+  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. Give a warm, natural opening greeting and your first question to start the session. Keep it to 2 sentences max. Be direct and friendly.';
+  var text = await callClaude(sysPrompt,[{role:'user',content:'Start the session now.'}],120);
+  hideTyping();
+  if(!text) text=sc.openers[Math.floor(Math.random()*sc.openers.length)];
+  addMsg('ai',text);speakText(text);
 }
 
 // ══════════════════════════════════════
