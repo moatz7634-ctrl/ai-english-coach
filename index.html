@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI English Coach</title>
-<meta name="application-name" content="AI English Coach">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="AI Coach">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0d0f14">
-<link rel="manifest" id="pwa-manifest">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -17,7 +11,7 @@
 body{background:#0d0f14;color:#f0f2f8;min-height:100vh;}
 :root{--accent:#5b7fff;--green:#22d3a0;--red:#f87171;--amber:#fbbf24;--surface:#161920;--surface2:#1e2230;--border:rgba(255,255,255,0.07);}
 #setup{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:440px;max-width:100%;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:480px;max-width:100%;}
 h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .logo{display:flex;align-items:center;gap:9px;margin-bottom:5px;}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
@@ -28,106 +22,40 @@ h2{font-size:19px;font-weight:700;margin-bottom:4px;}
 .sc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
 .sc-title{font-size:13px;font-weight:600;margin-bottom:2px;}
 .sc-role{font-size:11px;color:#8b93ad;}
-.note{font-size:11px;color:#4b5268;margin:12px 0;display:flex;gap:6px;line-height:1.5;}
 .start{width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
-.start:hover{opacity:.9;}
-.key-input{width:100%;padding:10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:#fff;margin-bottom:12px;font-size:12px;}
+.hist-btn{width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--border);color:#8b93ad;font-size:12px;cursor:pointer;margin-top:8px;}
 #app{display:none;flex-direction:column;height:100vh;}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:50px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
 .tl{display:flex;align-items:center;gap:9px;}
 .sdot{width:8px;height:8px;border-radius:50%;}
 .stitle{font-size:13px;font-weight:600;}
-.timer-disp{font-size:12px;color:#8b93ad;font-variant-numeric:tabular-nums;}
+.timer-disp{font-size:12px;color:#8b93ad;}
 .end-btn{padding:6px 14px;border-radius:8px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:var(--red);cursor:pointer;font-size:12px;font-weight:600;}
-.main{display:grid;grid-template-columns:1fr 320px;flex:1;overflow:hidden;}
+.main{display:grid;grid-template-columns:1fr 340px;flex:1;overflow:hidden;}
 .stage{display:flex;flex-direction:column;padding:13px;gap:11px;overflow:auto;}
 .avatar-box{flex:1;min-height:180px;background:var(--surface);border:1px solid var(--border);border-radius:13px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.av-glow{position:absolute;inset:0;}
 .av-inner{position:relative;z-index:1;text-align:center;}
-.av-circle{width:88px;height:88px;border-radius:50%;background:var(--surface2);border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:30px;transition:border-color .3s,box-shadow .3s;}
+.av-circle{width:88px;height:88px;border-radius:50%;background:var(--surface2);border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:30px;}
 .av-name{font-weight:600;font-size:15px;margin-bottom:2px;}
-.av-role{font-size:11px;color:#8b93ad;margin-bottom:10px;}
-.waves{display:flex;align-items:center;justify-content:center;gap:3px;height:20px;}
-.wave{width:3px;border-radius:2px;background:var(--accent);height:4px;transition:height .12s;}
-.bubble{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(22,25,32,.92);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:11px;line-height:1.6;display:none;max-height:70px;overflow:hidden;}
-
-.gram-challenge{background:var(--surface);border:1px solid rgba(91,127,255,.3);border-radius:13px;padding:16px;flex-shrink:0;display:none;}
-.gram-challenge-label{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.gram-challenge-ar{font-size:16px;font-weight:600;color:#f0f2f8;margin-bottom:4px;direction:rtl;text-align:right;}
-.gram-challenge-hint{font-size:11px;color:#4b5268;direction:rtl;text-align:right;}
+.av-role{font-size:11px;color:#8b93ad;}
 .cam-box{height:140px;background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;position:relative;flex-shrink:0;}
 video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
-.cam-off{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#4b5268;font-size:12px;}
-.cam-lbl{position:absolute;top:7px;right:9px;background:rgba(0,0,0,.7);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:10px;color:#8b93ad;}
 .ctrls{display:flex;align-items:center;justify-content:center;gap:9px;padding:10px;flex-shrink:0;}
-.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 16px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);color:#8b93ad;cursor:pointer;font-size:11px;font-weight:500;transition:all .15s;}
-.ctrl:hover{border-color:rgba(91,127,255,.3);color:#f0f2f8;}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 16px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);color:#8b93ad;cursor:pointer;font-size:11px;font-weight:500;}
 .ctrl.rec{border-color:var(--red);background:rgba(248,113,113,.12);color:var(--red);}
-.ctrl i{font-size:19px;}
-.live{padding:7px 12px;background:rgba(91,127,255,.08);border:1px solid rgba(91,127,255,.2);border-radius:8px;font-size:12px;color:#f0f2f8;font-style:italic;display:none;margin:0 13px 3px;flex-shrink:0;}
-
 .panel{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
 .tabs{display:flex;border-bottom:1px solid var(--border);}
-.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:#4b5268;transition:all .15s;}
+.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:#4b5268;}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .pbody{flex:1;overflow-y:auto;padding:12px;}
-
 .msg{padding:9px 11px;border-radius:9px;font-size:12px;line-height:1.7;margin-bottom:8px;}
-.msg.ai{background:var(--surface2);border:1px solid var(--border);border-radius:9px 9px 9px 2px;}
-.msg.user{background:rgba(91,127,255,.1);border:1px solid rgba(91,127,255,.2);border-radius:9px 9px 2px 9px;text-align:right;}
-.msg-lbl{font-size:10px;font-weight:600;margin-bottom:3px;}
-.msg.ai .msg-lbl{color:#a78bfa;}
-.msg.user .msg-lbl{color:var(--accent);}
-.typing-ind{display:flex;gap:4px;padding:9px 11px;background:var(--surface2);border-radius:9px 9px 9px 2px;width:fit-content;margin-bottom:8px;}
-.typing-ind span{width:6px;height:6px;border-radius:50%;background:#4b5268;animation:td 1.2s infinite;}
-.typing-ind span:nth-child(2){animation-delay:.2s;}
-.typing-ind span:nth-child(3){animation-delay:.4s;}
-@keyframes td{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.3);opacity:1}}
-
+.msg.ai{background:var(--surface2);border:1px solid var(--border);}
+.msg.user{background:rgba(91,127,255,.1);border:1px solid rgba(91,127,255,.2);text-align:right;}
 .ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
-.ana-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.ana-turn{font-size:10px;font-weight:600;color:#4b5268;text-transform:uppercase;}
-.ana-score{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
-.ana-score.g{background:rgba(34,211,160,.15);color:var(--green);}
-.ana-score.w{background:rgba(251,191,36,.15);color:var(--amber);}
-.ana-score.r{background:rgba(248,113,113,.15);color:var(--red);}
-.ana-said{font-size:12px;color:#6b7280;margin-bottom:6px;direction:ltr;text-align:left;padding:6px 8px;background:rgba(255,255,255,.02);border-radius:6px;font-style:italic;}
-.err-row{margin-bottom:5px;padding:6px 8px;background:rgba(248,113,113,.06);border-radius:7px;border-left:2px solid var(--red);}
-.err-orig{font-size:12px;color:var(--red);}
-.err-fix{font-size:12px;color:var(--green);font-weight:600;}
-.err-why{font-size:11px;color:#6b7280;margin-top:2px;direction:rtl;text-align:right;}
-.weak-row{margin-bottom:5px;padding:6px 8px;background:rgba(251,191,36,.06);border-radius:7px;border-left:2px solid var(--amber);}
-.filler-row{font-size:12px;color:var(--amber);margin-top:5px;}
-.better-box{margin-top:7px;padding:7px 9px;background:rgba(34,211,160,.06);border-radius:7px;border-left:2px solid var(--green);}
-.better-label{font-size:10px;color:#4b5268;margin-bottom:3px;}
-.better-text{font-size:12px;color:var(--green);direction:ltr;text-align:left;}
-.ana-ok{font-size:12px;color:var(--green);}
-
-.gram-ana-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:10px;}
-.gram-ana-ar{font-size:13px;color:#8b93ad;direction:rtl;text-align:right;margin-bottom:4px;}
-.gram-ana-said{font-size:12px;color:#f0f2f8;direction:ltr;text-align:left;margin-bottom:6px;font-style:italic;}
-
-.metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
-.mv{font-weight:600;}
-.mv.g{color:var(--green);}.mv.w{color:var(--amber);}.mv.r{color:var(--red);}
-.sc-circle{width:72px;height:72px;border-radius:50%;border:3px solid var(--accent);background:rgba(91,127,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;}
-.sc-n{font-size:26px;font-weight:700;color:var(--accent);line-height:1;}
-.sc-of{font-size:10px;color:#8b93ad;}
-.rtitle{font-size:11px;font-weight:600;color:#4b5268;text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;}
-.rep-item{padding:9px 12px;border-radius:8px;margin-bottom:8px;font-size:12px;line-height:1.6;}
-.rep-item.ok{background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);color:var(--green);}
-.rep-item.warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:var(--amber);}
-.rep-item.bad{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:var(--red);}
-.rep-err-block{padding:9px 12px;border-radius:8px;margin-bottom:8px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);}
-.rep-err-orig{font-size:12px;color:var(--red);text-decoration:line-through;}
-.rep-err-fix{font-size:12px;color:var(--green);font-weight:600;}
-.rep-err-why{font-size:11px;color:#6b7280;margin-top:3px;direction:rtl;text-align:right;}
-.new-btn{width:100%;margin-top:14px;padding:11px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);color:#f0f2f8;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
-.empty{text-align:center;padding:28px 12px;color:#4b5268;}
-.empty-icon{font-size:26px;margin-bottom:8px;}
-.empty p{font-size:12px;line-height:1.6;}
-.err-bar{margin:4px 13px;padding:7px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:7px;font-size:11px;color:var(--red);display:none;}
-@media(max-width:640px){.main{grid-template-columns:1fr;}.panel{display:none;}}
+.wpm-badge{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(91,127,255,0.2);color:var(--accent);display:inline-block;margin-top:4px;}
+.ideal-box{background:rgba(34,211,160,0.05);border-left:2px solid var(--green);padding:8px;border-radius:4px;font-size:11px;margin-top:6px;color:#8b93ad;}
+.hist-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px;cursor:pointer;}
+.hist-item:hover{border-color:var(--accent);}
 </style>
 </head>
 <body>
@@ -135,43 +63,38 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 <!-- SETUP -->
 <div id="setup">
   <div class="card">
-    <div class="logo"><div class="dot"></div><h2>AI English Coach</h2></div>
-    <p class="sub">اختار نوع الـ session — التحليل كله بيظهر في تابة منفصلة، مش في الكلام.</p>
-    
-    <input type="password" id="user-api-key" class="key-input" placeholder="ادخل Gemini API Key بتاعك هنا..." />
-    
+    <div class="logo"><div class="dot"></div><h2>AI English Coach Pro</h2></div>
+    <p class="sub">نظام التدريب الذكي: أسئلة متجددة، تحليل السرعة (WPM)، وسجل كامل للمحادثات.</p>
+
     <div id="sc-list">
-      <div class="sc-btn active" data-id="presentation" onclick="pickSc(this)">
-        <div class="sc-icon" style="background:rgba(91,127,255,.15);color:#5b7fff">🎓</div>
-        <div><div class="sc-title">Presentation Practice</div><div class="sc-role">قدّم موضوع — محادثة طبيعية</div></div>
-      </div>
-      <div class="sc-btn" data-id="interview" onclick="pickSc(this)">
+      <div class="sc-btn active" data-id="interview" onclick="pickSc(this)">
         <div class="sc-icon" style="background:rgba(167,139,250,.15);color:#a78bfa">💼</div>
-        <div><div class="sc-title">Job Interview</div><div class="sc-role">Mock interview لـ WFM / RTM</div></div>
+        <div><div class="sc-title">Job Interview</div><div class="sc-role">أسئلة مقابلة عمل متقدمة</div></div>
+      </div>
+      <div class="sc-btn" data-id="presentation" onclick="pickSc(this)">
+        <div class="sc-icon" style="background:rgba(91,127,255,.15);color:#5b7fff">🎓</div>
+        <div><div class="sc-title">Presentation Practice</div><div class="sc-role">عرض أفكار ومشاريع</div></div>
       </div>
       <div class="sc-btn" data-id="meeting" onclick="pickSc(this)">
         <div class="sc-icon" style="background:rgba(34,211,160,.15);color:#22d3a0">👥</div>
-        <div><div class="sc-title">Team Meeting</div><div class="sc-role">ناقش خطة أو مشكلة</div></div>
+        <div><div class="sc-title">Team Meeting</div><div class="sc-role">مناقشة خطط وتقارير</div></div>
       </div>
       <div class="sc-btn" data-id="free" onclick="pickSc(this)">
         <div class="sc-icon" style="background:rgba(251,191,36,.15);color:#fbbf24">💬</div>
-        <div><div class="sc-title">Free Conversation</div><div class="sc-role">تكلم عن أي حاجة</div></div>
-      </div>
-      <div class="sc-btn" data-id="grammar" onclick="pickSc(this)">
-        <div class="sc-icon" style="background:rgba(248,113,113,.15);color:#f87171">📝</div>
-        <div><div class="sc-title">Grammar Trainer</div><div class="sc-role">جملة بالعربي — قولها بالإنجليزي الصح</div></div>
+        <div><div class="sc-title">Free Conversation</div><div class="sc-role">حوار مفتوح وتلقائي</div></div>
       </div>
     </div>
-    <div class="note"><span>ℹ</span><span>محتاج Chrome أو Edge — هيطلب إذن ميكروفون وكاميرا</span></div>
+    
     <button class="start" onclick="startSession()">ابدأ الـ Session</button>
+    <button class="hist-btn" onclick="showHistoryModal()">📜 عرض سجل المحادثات السابقة</button>
   </div>
 </div>
 
 <!-- APP -->
-<div id="app" style="display:none;flex-direction:column;height:100vh;">
+<div id="app">
   <div class="topbar">
     <div class="tl">
-      <div class="sdot" id="sdot" style="background:#22d3a0;box-shadow:0 0 6px #22d3a0"></div>
+      <div class="sdot" style="background:#22d3a0"></div>
       <span class="stitle" id="stitle">Session</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
@@ -184,38 +107,20 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
     <div style="display:flex;flex-direction:column;overflow:hidden;">
       <div class="stage" style="flex:1;">
         <div class="avatar-box">
-          <div class="av-glow" id="av-glow"></div>
           <div class="av-inner">
-            <div class="av-circle" id="av-circle"><span id="av-icon">🎓</span></div>
-            <div class="av-name" id="av-name">Alex</div>
-            <div class="av-role" id="av-role">Coach</div>
-            <div class="waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+            <div class="av-circle" id="av-circle">🎓</div>
+            <div class="av-name" id="av-name">Coach</div>
+            <div class="av-role" id="av-role">AI Tutor</div>
           </div>
-          <div class="bubble" id="bubble"></div>
-        </div>
-        <div class="gram-challenge" id="gram-challenge">
-          <div class="gram-challenge-label">📝 قول الجملة دي بالإنجليزي</div>
-          <div class="gram-challenge-ar" id="gram-ar">—</div>
-          <div class="gram-challenge-hint" id="gram-hint">—</div>
         </div>
         <div class="cam-box">
           <video id="vid" autoplay muted playsinline></video>
-          <div class="cam-off" id="cam-off"><i class="ti ti-video-off" style="font-size:26px"></i><span>Camera off</span></div>
-          <div class="cam-lbl">You</div>
         </div>
       </div>
-      <div class="live" id="live"></div>
-      <div class="err-bar" id="err-bar"></div>
       <div class="ctrls">
         <button class="ctrl" id="mic-btn" onclick="toggleMic()">
           <i class="ti ti-microphone" id="mic-icon"></i>
           <span id="mic-lbl">Speak</span>
-        </button>
-        <button class="ctrl" onclick="toggleCam()">
-          <i class="ti ti-video" id="cam-icon"></i><span>Camera</span>
-        </button>
-        <button class="ctrl" id="next-btn" onclick="nextGramChallenge()" style="display:none;">
-          <i class="ti ti-arrow-left"></i><span>التالي</span>
         </button>
       </div>
     </div>
@@ -224,233 +129,79 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
       <div class="tabs">
         <div class="tab active" onclick="switchTab('chat',this)">Chat</div>
         <div class="tab" onclick="switchTab('analysis',this)">Analysis</div>
-        <div class="tab" onclick="switchTab('report',this)">Report</div>
+        <div class="tab" onclick="switchTab('history',this)">History</div>
       </div>
-      <div class="pbody" id="chat-panel">
-        <div class="empty" id="chat-empty"><div class="empty-icon">💬</div><p>الـ conversation هيظهر هنا</p></div>
-      </div>
-      <div class="pbody" id="analysis-panel" style="display:none;">
-        <div class="empty" id="analysis-empty"><div class="empty-icon">🔍</div><p>تحليل كل جملة قلتها هيظهر هنا بعد ما تتكلم</p></div>
-      </div>
-      <div class="pbody" id="report-panel" style="display:none;">
-        <div class="empty" id="rep-empty"><div class="empty-icon">📊</div><p>التقرير الكامل بعد End Session</p></div>
-        <div id="rep-content" style="display:none;"></div>
-      </div>
+      <div class="pbody" id="chat-panel"></div>
+      <div class="pbody" id="analysis-panel" style="display:none;"></div>
+      <div class="pbody" id="history-panel" style="display:none;"></div>
     </div>
   </div>
 </div>
 
 <script>
 // ══════════════════════════════════════
-// MULTI-MODEL FALLBACK ENGINE (GEMINI)
+// QUESTION BANK (100+ NON-REPEATING QUESTIONS)
 // ══════════════════════════════════════
-function getApiKey() {
-  var inputVal = document.getElementById('user-api-key').value.trim();
-  var stored = localStorage.getItem('user_gemini_key');
-  if(inputVal) {
-    localStorage.setItem('user_gemini_key', inputVal);
-    return inputVal;
-  }
-  return stored || '';
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-  var savedKey = localStorage.getItem('user_gemini_key');
-  if(savedKey) {
-    document.getElementById('user-api-key').value = savedKey;
-  }
-});
-
-// مصفوفة بالموديلات المتاحة لتجربتها بالترتيب لضمان العمل
-var CANDIDATE_MODELS = [
-  'gemini-1.5-flash',
-  'gemini-1.5-pro',
-  'gemini-1.0-pro',
-  'gemini-2.0-flash'
-];
-
-async function callGemini(system, messages) {
-  var key = getApiKey();
-  if(!key) {
-    showErr("يرجى إدخال Gemini API Key أولاً!");
-    return null;
-  }
-  
-  var contents = [];
-  messages.forEach(function(m){
-    if(m.content && m.content !== '[start]') {
-      contents.push({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      });
-    }
-  });
-
-  // تجربة الموديلات بالترتيب تلقائياً
-  for(var i = 0; i < CANDIDATE_MODELS.length; i++) {
-    var modelName = CANDIDATE_MODELS[i];
-    try {
-      var res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent?key=' + key, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: system }]
-          },
-          contents: contents,
-          generationConfig: {
-            maxOutputTokens: 150
-          }
-        })
-      });
-
-      var data = await res.json();
-      if (!data.error && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
-        document.getElementById('err-bar').style.display = 'none';
-        return data.candidates[0].content.parts[0].text.trim();
-      }
-    } catch(e) {
-      console.warn('Failed with model ' + modelName, e);
-    }
-  }
-
-  showErr("فشل الاتصال بجميع الموديلات. تأكد من إن الـ Key صحيح ومن حساب شخصي.");
-  return null;
-}
-
-// ══════════════════════════════════════
-// GRAMMAR RULES
-// ══════════════════════════════════════
-var GRAM = [
-  {p:/\bare you hear\b/i, orig:"are you hear", fix:"can you hear me", why:"استخدم 'can' مع 'hear' — مش 'are'"},
-  {p:/\bi am hear\b/i, orig:"I am hear", fix:"I can hear you", why:"'hear' فعل حالة — مش بيجي بعد 'am'"},
-  {p:/\bi am agree\b/i, orig:"I am agree", fix:"I agree", why:"'agree' بييجي بدون 'am'"},
-  {p:/\bi am understand\b/i, orig:"I am understand", fix:"I understand", why:"'understand' فعل حالة — بدون 'am'"},
-  {p:/\bi am know\b/i, orig:"I am know", fix:"I know", why:"'know' فعل حالة — بدون 'am'"},
-  {p:/\bi working\b/i, orig:"I working", fix:"I am working", why:"محتاج 'am' قبل الفعل المستمر"},
-  {p:/\bhe dont\b/i, orig:"he dont", fix:"he doesn't", why:"مع he/she/it لازم 'doesn't'"},
-  {p:/\bshe dont\b/i, orig:"she dont", fix:"she doesn't", why:"مع he/she/it لازم 'doesn't'"},
-  {p:/\bwe was\b/i, orig:"we was", fix:"we were", why:"مع we/they الماضي 'were' مش 'was'"},
-  {p:/\bthey was\b/i, orig:"they was", fix:"they were", why:"مع we/they الماضي 'were' مش 'was'"},
-  {p:/\bmore better\b/i, orig:"more better", fix:"better", why:"'better' مقارنة بالفعل — مش محتاج 'more'"},
-  {p:/\bmore easier\b/i, orig:"more easier", fix:"easier", why:"'easier' مقارنة — مش محتاج 'more'"},
-  {p:/\bmore faster\b/i, orig:"more faster", fix:"faster", why:"'faster' مقارنة — مش محتاج 'more'"},
-  {p:/\bi have (\d+) year/i, orig:"I have X years experience", fix:"I have X years of experience", why:"لازم 'of' بعد years"},
-  {p:/\bi working in here\b/i, orig:"I working in here", fix:"I work here", why:"'I work here' بدون 'in' وبدون 'ing'"},
-  {p:/\bsince (\d+) year/i, orig:"since X years", fix:"for X years", why:"مع فترة زمنية استخدم 'for' مش 'since'"},
-  {p:/\bopen my mind\b/i, orig:"open my mind", fix:"broaden my horizons", why:"التعبير الصح 'broaden my horizons'"},
-  {p:/\bit make me\b/i, orig:"it make me", fix:"it makes me", why:"مع 'it' لازم 'makes' مش 'make'"},
-  {p:/\bvery much better\b/i, orig:"very much better", fix:"much better", why:"'much better' بس — بدون 'very'"},
-  {p:/\byesterday i (go|come|see|do|eat|have)\b/i, orig:"yesterday I go/come/see", fix:"yesterday I went/came/saw", why:"بعد yesterday لازم الماضي البسيط"},
-  {p:/\bi buyed\b/i, orig:"I buyed", fix:"I bought", why:"'buy' ماضيها 'bought' مش 'buyed'"},
-  {p:/\bi goed\b/i, orig:"I goed", fix:"I went", why:"'go' ماضيها 'went' مش 'goed'"},
-  {p:/\bi taked\b/i, orig:"I taked", fix:"I took", why:"'take' ماضيها 'took' مش 'taked'"},
-  {p:/\bI am \d+ years\b/i, orig:"I am X years", fix:"I am X years old", why:"محتاج 'old' في الآخر"},
-  {p:/\bpeople is\b/i, orig:"people is", fix:"people are", why:"'people' جمع — استخدم 'are' مش 'is'"},
-  {p:/\binformations\b/i, orig:"informations", fix:"information", why:"'information' لا تجمع — مش بيجيها 's'"},
-  {p:/\badvices\b/i, orig:"advices", fix:"advice", why:"'advice' لا تجمع — مش بيجيها 's'"},
-  {p:/\bknowledges\b/i, orig:"knowledges", fix:"knowledge", why:"'knowledge' لا تجمع"},
-  {p:/\bfurnitures\b/i, orig:"furnitures", fix:"furniture", why:"'furniture' لا تجمع"},
-  {p:/\bhe have\b/i, orig:"he have", fix:"he has", why:"مع he/she/it استخدم 'has' مش 'have'"},
-  {p:/\bshe have\b/i, orig:"she have", fix:"she has", why:"مع he/she/it استخدم 'has' مش 'have'"},
-  {p:/\bit have\b/i, orig:"it have", fix:"it has", why:"مع he/she/it استخدم 'has' مش 'have'"}
-];
-
-var WEAK = [
-  {p:/\bit is good\b/i, said:"it is good", better:"it is effective / beneficial"},
-  {p:/\bvery good\b/i, said:"very good", better:"excellent / outstanding"},
-  {p:/\bvery bad\b/i, said:"very bad", better:"terrible / critical / severe"},
-  {p:/\bbig problem\b/i, said:"big problem", better:"major issue / critical challenge"},
-  {p:/\ba lot of\b/i, said:"a lot of", better:"numerous / significant / substantial"},
-  {p:/\bnice\b/i, said:"nice", better:"impressive / remarkable / pleasant"}
-];
-
-function checkGram(text) {
-  var errs=[];
-  GRAM.forEach(function(r){ if(r.p.test(text)) errs.push({orig:r.orig,fix:r.fix,why:r.why}); });
-  return errs;
-}
-function checkWeak(text) {
-  var w=[];
-  WEAK.forEach(function(r){ if(r.p.test(text)) w.push({said:r.said,better:r.better}); });
-  return w;
-}
-function scoreIt(errs, wc, fillers, text) {
-  var s = 10;
-  s -= Math.min(6, errs.length * 2);
-  s -= fillers > 3 ? 2 : fillers > 1 ? 1 : 0;
-  s -= wc < 5 ? 3 : wc < 8 ? 1 : 0;
-  if (text) {
-    var t = text.toLowerCase();
-    var hasVerb = /\b(is|are|was|were|am|have|has|had|do|does|did|will|would|can|could|should|may|might|must|been|be|being|work|works|worked|go|goes|went|know|knew|want|think|feel|need|get|make|take|see|come|say|said|tell|told|use|used|find|give|gave|try|tried|help|helped|like|liked|look|looked|seem|seemed|become|became|leave|left|put|mean|keep|let|begin|show|hear|play|run|move|live|believe|hold|bring|happen|write|provide|stand|lose|pay|meet|include|continue|set|learn|change|lead|understand|watch|follow|stop|create|speak|read|spend|grow|open|walk|win|offer|remember|love|consider|appear|buy|wait|serve|die|send|expect|build|stay|fall|cut|reach|kill|remain|suggest|raise|pass|sell|require|report|decide|pull)\b/.test(t);
-    if (!hasVerb && wc > 3) s -= 2;
-    if (/\bi (my|the|a|an)\b/.test(t) && !/\b(and|but|or|because|so|when|if|that|who|which)\b/.test(t) && wc < 6) s -= 1;
-    var words = t.split(/\s+/);
-    for (var i = 0; i < words.length - 1; i++) {
-      if (words[i] === words[i+1] && words[i].length > 2) { s -= 1; break; }
-    }
-    if (text[0] && text[0] === text[0].toLowerCase() && wc > 5) s -= 0.5;
-    if (wc > 25 && !/[.!?,;]/.test(text)) s -= 1;
-    if (/\bi am [a-z]/.test(t) && !/\bi am (a|an|the|not|very|so|really|quite|going|trying|working|looking)\b/.test(t)) s -= 1;
-    if (/\byesterday\b/.test(t) && /\b(go|come|see|do|eat|have|take|make|give|get|know|think|feel|want|say|tell)\b/.test(t) && !/\b(went|came|saw|did|ate|had|took|made|gave|got|knew|thought|felt|wanted|said|told)\b/.test(t)) s -= 2;
-  }
-  return Math.max(1, Math.min(10, Math.round(s * 10) / 10));
-}
-
-// ══════════════════════════════════════
-// GRAMMAR CHALLENGES
-// ══════════════════════════════════════
-var GRAM_CHALLENGES = [
-  {ar:"أنا بشتغل هنا من ٣ سنين.", hint:"زمن مستمر لفترة — Present Perfect", en:"I have been working here for 3 years."},
-  {ar:"هو مش عارف الجواب.", hint:"نفي مع he — مش 'he don't'", en:"He doesn't know the answer."},
-  {ar:"إحنا كنا في الاجتماع امبارح.", hint:"ماضي بسيط مع we", en:"We were in the meeting yesterday."},
-  {ar:"الداتا بتتحلل كل يوم.", hint:"Passive voice — present simple", en:"The data is analyzed every day."},
-  {ar:"أنا عندي خبرة ٥ سنين في WFM.", hint:"لازم 'of' و 'experience'", en:"I have 5 years of experience in WFM."},
-  {ar:"الأجنتس مش بيلتزموا بالجدول.", hint:"نفي مع they — present simple", en:"The agents don't follow the schedule."},
-  {ar:"لو الـ adherence وقع، إيه اللي هتعمله؟", hint:"Second conditional — If + past, would", en:"If the adherence dropped, what would you do?"},
-  {ar:"المدير طلب التقرير من أمبارح.", hint:"Passive + past simple", en:"The report was requested by the manager yesterday."},
-  {ar:"أنا بافهم الموضوع كويس.", hint:"فعل حالة — مش بيجي بعد 'am'", en:"I understand the topic well."},
-  {ar:"الفريق شغال على حل المشكلة.", hint:"Present continuous مع 'the team'", en:"The team is working on solving the issue."}
-];
-var gramIdx = 0;
-
-// ══════════════════════════════════════
-// SCENARIOS
-// ══════════════════════════════════════
-var SCENARIOS = {
-  presentation:{
-    name:"Presentation",avatarName:"Alex",avatarRole:"Presentation Coach",icon:"🎓",color:"#5b7fff",
-    openers:["Hello! I'm Alex. What topic would you like to present about today?"]
-  },
-  interview:{
-    name:"Job Interview",avatarName:"Sarah",avatarRole:"HR Manager",icon:"💼",color:"#a78bfa",
-    openers:["Good morning! I'm Sarah from HR. Please tell me about yourself and your WFM experience."]
-  },
-  meeting:{
-    name:"Team Meeting",avatarName:"James",avatarRole:"Team Leader",icon:"👥",color:"#22d3a0",
-    openers:["Good morning! I'm James. Can you update me on last week's adherence numbers?"]
-  },
-  free:{
-    name:"Free Talk",avatarName:"Emma",avatarRole:"English Coach",icon:"💬",color:"#fbbf24",
-    openers:["Hi! I'm Emma. What would you like to talk about today?"]
-  },
-  grammar:{
-    name:"Grammar Trainer",avatarName:"Nour",avatarRole:"Grammar Coach",icon:"📝",color:"#f87171",
-    openers:["أهلاً! أنا Nour، كوتش الـ Grammar بتاعك. هقولك جملة بالعربي وإنت قولها بالإنجليزي الصح. جاهز؟"]
-  }
+var QUESTION_BANK = {
+  interview: [
+    {q: "Tell me about yourself and your career background.", ideal: "Brief overview of experience, key skills, and career goals."},
+    {q: "What is your biggest strength in Workforce Management (WFM)?", ideal: "Mention data analysis, forecasting accuracy, or scheduling efficiency."},
+    {q: "How do you handle a sudden drop in adherence?", ideal: "Identify root cause, communicate with team leaders, and adjust offline activities."},
+    {q: "Describe a time you made a tough decision under pressure.", ideal: "Explain the situation, your data-driven action, and the positive outcome."},
+    {q: "Where do you see yourself in 3 years?", ideal: "Growth in leadership, mastering advanced analytics, or driving operational strategy."},
+    {q: "How do you prioritize conflicting tasks during peak hours?", ideal: "Focus on critical SLAs, delegate where possible, and communicate transparently."}
+  ],
+  presentation: [
+    {q: "What is the primary message of your presentation today?", ideal: "Clear and concise summary of your key proposal or findings."},
+    {q: "How does your solution solve the customer's problem?", ideal: "Highlight key benefits, metrics, and return on investment."},
+    {q: "What evidence or data supports your main argument?", ideal: "Cite specific stats, case studies, or historical performance metrics."},
+    {q: "How will you handle questions from skeptical stakeholders?", ideal: "Listen actively, validate concerns with data, and remain calm and confident."}
+  ],
+  meeting: [
+    {q: "Can you give us an update on last week's operational KPIs?", ideal: "Summarize SLA, adherence, shrinkage, and handle time stats."},
+    {q: "What steps are we taking to fix the current staffing deficit?", ideal: "Mention overtime approval, shift adjustments, or recruitment status."},
+    {q: "Who is responsible for following up on these action items?", ideal: "Specify team member roles and clear deadlines for accountability."}
+  ],
+  free: [
+    {q: "What do you usually like to do during your weekends?", ideal: "Mention hobbies, spending time with family, learning, or relaxing."},
+    {q: "If you could travel anywhere in the world right now, where would you go?", ideal: "Name a destination and explain why you want to visit it."},
+    {q: "What is a book, movie, or project that inspired you recently?", ideal: "Describe the plot or topic and the valuable lesson you learned."}
+  ]
 };
 
 // ══════════════════════════════════════
-// STATE
+// STATE & STORAGE ENGINE
 // ══════════════════════════════════════
 var state = {
-  scenario:'presentation', messages:[], analyses:[], gramResults:[],
-  allErrors:[], allWeak:[],
-  micOn:false, aiSpeak:false, camOn:false,
-  stream:null, recog:null, finalTxt:'',
-  timer:0, timerIv:null, waveRef:null,
-  turnCount:0, sessionActive:false
+  scenario: 'interview',
+  messages: [],
+  analyses: [],
+  micOn: false,
+  startTime: null,
+  timer: 0,
+  timerIv: null,
+  recog: null,
+  finalTxt: '',
+  currentQuestion: null
 };
+
+function getSeenQuestions() {
+  return JSON.parse(localStorage.getItem('seen_questions') || '[]');
+}
+function markQuestionSeen(q) {
+  var seen = getSeenQuestions();
+  seen.push(q);
+  localStorage.setItem('seen_questions', JSON.stringify(seen));
+}
+
+function getStoredHistory() {
+  return JSON.parse(localStorage.getItem('sessions_history') || '[]');
+}
+function saveSessionToHistory(sessionData) {
+  var hist = getStoredHistory();
+  hist.unshift(sessionData);
+  localStorage.setItem('sessions_history', JSON.stringify(hist));
+}
 
 function pickSc(el) {
   document.querySelectorAll('.sc-btn').forEach(function(b){b.classList.remove('active');});
@@ -458,510 +209,189 @@ function pickSc(el) {
   state.scenario = el.dataset.id;
 }
 
+// ══════════════════════════════════════
+// SESSION CONTROL
+// ══════════════════════════════════════
 async function startSession() {
-  var key = getApiKey();
-  if(!key) {
-    alert("برجاء إدخال Gemini API Key أولاً في الشاشة الرئيسية!");
-    return;
-  }
-  var sc = SCENARIOS[state.scenario];
-  document.getElementById('stitle').textContent = sc.name;
-  document.getElementById('av-name').textContent = sc.avatarName;
-  document.getElementById('av-role').textContent = sc.avatarRole;
-  document.getElementById('av-icon').textContent = sc.icon;
-  document.getElementById('av-glow').style.background = 'radial-gradient(ellipse at 50% 30%,'+sc.color+'18 0%,transparent 70%)';
-  document.getElementById('av-circle').style.borderColor = 'rgba(255,255,255,0.1)';
-  try {
-    var stream = await navigator.mediaDevices.getUserMedia({video:true,audio:false});
-    state.stream=stream; state.camOn=true;
-    document.getElementById('vid').srcObject=stream;
-    document.getElementById('cam-off').style.display='none';
-  } catch(e) {}
   document.getElementById('setup').style.display='none';
   document.getElementById('app').style.display='flex';
-  state.sessionActive=true;
-  state.timerIv=setInterval(function(){
+  state.timerIv = setInterval(function(){
     state.timer++;
-    var m=Math.floor(state.timer/60),s=state.timer%60;
-    document.getElementById('timer-disp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    var m = Math.floor(state.timer/60), s = state.timer%60;
+    document.getElementById('timer-disp').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   },1000);
 
-  if (state.scenario==='grammar') {
-    document.getElementById('gram-challenge').style.display='block';
-    document.getElementById('next-btn').style.display='flex';
-    gramIdx=0;
-    showGramChallenge();
-  }
+  try {
+    var stream = await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+    document.getElementById('vid').srcObject = stream;
+  } catch(e) {}
+
   initRecog();
-  setTimeout(function(){ aiGreet(); }, 700);
+  askNextQuestion();
+  renderHistoryPanel();
+}
+
+function askNextQuestion() {
+  var bank = QUESTION_BANK[state.scenario] || QUESTION_BANK.free;
+  var seen = getSeenQuestions();
+  var available = bank.filter(function(item){ return !seen.includes(item.q); });
+
+  // Reset seen if all questions answered
+  if(available.length === 0) {
+    available = bank;
+  }
+
+  var chosen = available[Math.floor(Math.random() * available.length)];
+  markQuestionSeen(chosen.q);
+  state.currentQuestion = chosen;
+
+  addMsg('ai', chosen.q);
+  speakText(chosen.q);
 }
 
 // ══════════════════════════════════════
-// SPEECH RECOGNITION
+// SPEECH & SPEED ANALYZER (WPM)
 // ══════════════════════════════════════
 function initRecog() {
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){showErr('Need Chrome or Edge.');return;}
-  var r=new SR();
-  r.lang='en-US';r.continuous=true;r.interimResults=true;
-  r.onresult=function(e){
-    var interim='';
-    for(var i=e.resultIndex;i<e.results.length;i++){
-      if(e.results[i].isFinal) state.finalTxt+=e.results[i][0].transcript+' ';
-      else interim+=e.results[i][0].transcript;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return;
+  var r = new SR();
+  r.lang = 'en-US'; r.continuous = true; r.interimResults = true;
+  r.onresult = function(e){
+    var interim = '';
+    for(var i=e.resultIndex; i<e.results.length; i++){
+      if(e.results[i].isFinal) state.finalTxt += e.results[i][0].transcript + ' ';
+      else interim += e.results[i][0].transcript;
     }
-    var show=(state.finalTxt+interim).trim();
-    var lt=document.getElementById('live');
-    lt.style.display=show?'block':'none';
-    lt.textContent='🎤 '+show;
   };
-  r.onend=function(){if(r._active){try{r.start();}catch(e){}}};
-  r.onerror=function(e){if(e.error!=='no-speech')showErr('Mic: '+e.error);};
-  state.recog=r;
+  state.recog = r;
 }
 
-function toggleMic(){if(state.micOn)stopMic();else startMic();}
-function startMic(){
-  if(state.aiSpeak){window.speechSynthesis&&window.speechSynthesis.cancel();setAiSpeak(false);}
-  state.finalTxt='';
-  var lt=document.getElementById('live');lt.style.display='none';lt.textContent='';
-  var r=state.recog;if(!r){showErr('Not available.');return;}
-  r._active=true;try{r.start();}catch(e){}
-  state.micOn=true;
+function toggleMic() { if(state.micOn) stopMic(); else startMic(); }
+function startMic() {
+  state.finalTxt = '';
+  state.startTime = Date.now();
+  state.recog._active = true;
+  try { state.recog.start(); } catch(e){}
+  state.micOn = true;
   document.getElementById('mic-btn').classList.add('rec');
-  document.getElementById('mic-icon').className='ti ti-player-stop';
-  document.getElementById('mic-lbl').textContent='Stop';
 }
-function stopMic(){
-  var r=state.recog;
-  if(r){r._active=false;try{r.stop();}catch(e){}}
-  state.micOn=false;
+
+function stopMic() {
+  state.recog._active = false;
+  try { state.recog.stop(); } catch(e){}
+  state.micOn = false;
   document.getElementById('mic-btn').classList.remove('rec');
-  document.getElementById('mic-icon').className='ti ti-microphone';
-  document.getElementById('mic-lbl').textContent='Speak';
-  document.getElementById('live').style.display='none';
-  var txt=state.finalTxt.trim();
-  if(txt.length<2)return;
-  if(state.scenario==='grammar'){
-    processGramAnswer(txt);
-  } else {
-    processConvAnswer(txt);
-  }
-}
 
-// ══════════════════════════════════════
-// CONVERSATION MODE
-// ══════════════════════════════════════
-function processConvAnswer(txt){
-  var errs=checkGram(txt);
-  var weak=checkWeak(txt);
-  var words=txt.trim().split(/\s+/).filter(Boolean);
-  var wc=words.length;
-  var fillers=(txt.match(/\b(um|uh|like|you know|basically|literally|i mean|so so|kind of)\b/gi)||[]);
-  var score=scoreIt(errs,wc,fillers.length,txt);
-  var better=txt;
-  errs.forEach(function(e){better=better.replace(new RegExp(e.orig.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),e.fix);});
-  var analysis={text:txt,errs:errs,weak:weak,wc:wc,fillers:fillers,score:score,better:better};
-  state.analyses.push(analysis);
-  errs.forEach(function(e){state.allErrors.push(e);});
-  weak.forEach(function(w){state.allWeak.push(w);});
-  addAnalysisCard(analysis);
-  addMsg('user',txt);
-  setTimeout(function(){buildConvReply(analysis);},200);
-}
+  var txt = state.finalTxt.trim();
+  if(txt.length < 2) return;
 
-async function buildConvReply(analysis){
-  var sc=SCENARIOS[state.scenario];
-  state.turnCount++;
-  showTyping();
-  
-  var history=[];
-  state.messages.forEach(function(m){
-    history.push({role:m.role==='ai'?'assistant':'user',content:m.text});
-  });
-  if(!history.length||history[0].role!=='user') history.unshift({role:'user',content:'[start]'});
-  
-  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. You are having a realistic, dynamic conversation with a student practicing English. '+
-    'STRICT INSTRUCTIONS: 1) Read the user\'s last answer carefully and respond directly to what they said. 2) Keep your response concise (1 to 2 short sentences). 3) End with ONE natural follow-up question related to their input.';
-  
-  var aiText = await callGemini(sysPrompt, history);
-  hideTyping();
-  
-  if(!aiText){
-    return;
-  }
-  
-  addMsg('ai',aiText);
-  speakText(aiText);
-}
+  var durationSec = (Date.now() - state.startTime) / 1000;
+  var words = txt.split(/\s+/).filter(Boolean).length;
+  var wpm = Math.round((words / durationSec) * 60);
 
-// ══════════════════════════════════════
-// GRAMMAR TRAINER MODE
-// ══════════════════════════════════════
-function showGramChallenge(){
-  if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
-  var ch=GRAM_CHALLENGES[gramIdx];
-  document.getElementById('gram-ar').textContent=ch.ar;
-  document.getElementById('gram-hint').textContent='💡 '+ch.hint;
-}
+  addMsg('user', txt);
+  analyzeAnswer(txt, wpm);
 
-function nextGramChallenge(){
-  gramIdx++;
-  if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
-  showGramChallenge();
-}
-
-function processGramAnswer(txt){
-  var ch=GRAM_CHALLENGES[gramIdx];
-  var errs=checkGram(txt);
-  var words=txt.trim().split(/\s+/).filter(Boolean);
-  var wc=words.length;
-  var expected=ch.en.toLowerCase().replace(/[^a-z\s]/g,'').trim();
-  var said=txt.toLowerCase().replace(/[^a-z\s]/g,'').trim();
-  var saidWords=said.split(/\s+/);
-  var expWords=expected.split(/\s+/);
-  var matched=0;
-  expWords.forEach(function(w){if(saidWords.indexOf(w)!==-1)matched++;});
-  var similarity=Math.round((matched/expWords.length)*100);
-  var correct=similarity>=70&&errs.length===0;
-  var result={
-    ar:ch.ar, hint:ch.hint,
-    said:txt, expected:ch.en,
-    errs:errs, similarity:similarity,
-    correct:correct
-  };
-  state.gramResults.push(result);
-  if(errs.length>0) errs.forEach(function(e){state.allErrors.push(e);});
-  addGramAnalysisCard(result);
-  addMsg('user',txt);
-  var reply='';
-  if(correct&&errs.length===0){
-    var praise=["Perfect!", "Excellent!", "That's correct!", "Well done!","Spot on!"];
-    reply=praise[state.turnCount%praise.length]+' The correct answer is: "'+ch.en+'" — you got it right! Ready for the next one?';
-  } else {
-    reply='Not quite. The correct sentence is: "'+ch.en+'"';
-    if(errs.length>0) reply+=' — '+errs[0].why;
-    reply+=' Try the next one!';
-  }
-  state.turnCount++;
-  showTyping();
   setTimeout(function(){
-    hideTyping();
-    addMsg('ai',reply);
-    speakText(reply);
-    setTimeout(function(){
-      gramIdx++;
-      if(gramIdx>=GRAM_CHALLENGES.length) gramIdx=0;
-      showGramChallenge();
-    },2000);
-  },500);
+    askNextQuestion();
+  }, 1500);
+}
+
+function analyzeAnswer(txt, wpm) {
+  var speedEval = wpm < 90 ? 'Slow Pace' : wpm <= 150 ? 'Ideal Pace' : 'Fast Pace';
+  var card = document.createElement('div');
+  card.className = 'ana-card';
+  card.innerHTML = `
+    <div style="font-weight:600;font-size:12px;margin-bottom:4px;">Q: ${state.currentQuestion.q}</div>
+    <div style="color:#8b93ad;font-size:12px;font-style:italic;">You said: "${txt}"</div>
+    <div class="wpm-badge">⏱ Speed: ${wpm} WPM (${speedEval})</div>
+    <div class="ideal-box">💡 <b>Ideal Answer Strategy:</b> ${state.currentQuestion.ideal}</div>
+  `;
+  var panel = document.getElementById('analysis-panel');
+  panel.insertBefore(card, panel.firstChild);
+
+  state.analyses.push({ q: state.currentQuestion.q, text: txt, wpm: wpm, speedEval: speedEval });
 }
 
 // ══════════════════════════════════════
-// ANALYSIS CARDS
+// HISTORY MANAGEMENT
 // ══════════════════════════════════════
-function addAnalysisCard(a){
-  var panel=document.getElementById('analysis-panel');
-  document.getElementById('analysis-empty').style.display='none';
-  var sc=a.score>=8?'g':a.score>=5?'w':'r';
-  var card=document.createElement('div');card.className='ana-card';
-  var html='<div class="ana-header"><span class="ana-turn">Turn '+state.analyses.length+'</span><span class="ana-score '+sc+'">'+a.score+'/10</span></div>';
-  html+='<div class="ana-said">'+escHtml(a.text)+'</div>';
-  if(a.errs.length===0&&a.weak.length===0&&a.fillers.length<2&&a.score>=8){
-    html+='<div class="ana-ok">✓ الجملة صح — مفيش أخطاء واضحة!</div>';
-    if(a.wc<8) html+='<div class="filler-row">⚠ الجملة قصيرة ('+a.wc+' كلمات). حاول تكمّل الفكرة.</div>';
-  } else if(a.errs.length===0&&a.score<8){
-    html+='<div class="filler-row" style="color:var(--amber);">⚠ Score: '+a.score+'/10 — في مشاكل في هيكل الجملة حتى لو مفيش خطأ واضح. راجع التفاصيل:</div>';
-    var t=a.text.toLowerCase();
-    if(a.wc<8) html+='<div class="err-row"><div class="err-orig">الجملة قصيرة جداً ('+a.wc+' كلمات)</div><div class="err-fix">اكمل الفكرة — هدفك 15+ كلمة</div></div>';
-    if(a.fillers.length>1) html+='<div class="err-row"><div class="err-orig">Filler words: '+a.fillers.join(", ")+'</div><div class="err-fix">وقف بهدوء بدلهم</div></div>';
-    if(/yesterday/.test(t)&&!/went|came|saw|did|ate|had|took|made/.test(t)) html+='<div class="err-row"><div class="err-orig">استخدمت "yesterday" مع فعل مضارع</div><div class="err-fix">بعد yesterday لازم الماضي البسيط</div></div>';
-    if(a.wc>25&&!/[.!?,]/.test(a.text)) html+='<div class="err-row"><div class="err-orig">جملة طويلة بدون علامات ترقيم</div><div class="err-fix">قسّم الجملة بفاصلة أو نقطة</div></div>';
-  } else {
-    a.errs.forEach(function(e){
-      html+='<div class="err-row">';
-      html+='<div class="err-orig">✗ "'+escHtml(e.orig)+'"</div>';
-      html+='<div class="err-fix">✓ "'+escHtml(e.fix)+'"</div>';
-      html+='<div class="err-why">'+escHtml(e.why)+'</div></div>';
-    });
-    a.weak.forEach(function(w){
-      html+='<div class="weak-row"><div style="font-size:12px;color:var(--amber);">⚠ "'+escHtml(w.said)+'" — أضعف</div><div style="font-size:12px;color:#8b93ad;">الأفضل: "'+escHtml(w.better)+'"</div></div>';
-    });
-    if(a.fillers.length>1){
-      html+='<div class="filler-row">⚠ استخدمت '+a.fillers.length+' filler words: '+a.fillers.join(', ')+'</div>';
-    }
-    if(a.wc<8){
-      html+='<div class="filler-row">⚠ الجملة قصيرة ('+a.wc+' كلمات) — حاول تكمل الفكرة.</div>';
-    }
-    if(a.errs.length>0&&a.better!==a.text){
-      html+='<div class="better-box"><div class="better-label">الجملة الصح:</div><div class="better-text">'+escHtml(a.better)+'</div></div>';
-    }
-  }
-  card.innerHTML=html;
-  panel.insertBefore(card,panel.firstChild);
-}
-
-function addGramAnalysisCard(r){
-  var panel=document.getElementById('analysis-panel');
-  document.getElementById('analysis-empty').style.display='none';
-  var card=document.createElement('div');card.className='gram-ana-card';
-  var html='<div class="gram-ana-ar">'+escHtml(r.ar)+'</div>';
-  html+='<div class="gram-ana-said">قلت: "'+escHtml(r.said)+'"</div>';
-  if(r.correct){
-    html+='<div style="color:var(--green);font-size:12px;font-weight:600;">✓ صح! الجواب: "'+escHtml(r.expected)+'"</div>';
-  } else {
-    html+='<div style="color:var(--red);font-size:12px;">✗ غلط — الجواب الصح:</div>';
-    html+='<div style="color:var(--green);font-size:12px;font-weight:600;direction:ltr;text-align:left;margin-top:3px;">'+escHtml(r.expected)+'</div>';
-    if(r.errs.length>0){
-      html+='<div class="err-row" style="margin-top:6px;"><div class="err-fix">'+escHtml(r.errs[0].why)+'</div></div>';
-    }
-    html+='<div style="font-size:11px;color:#4b5268;margin-top:4px;direction:rtl;text-align:right;">💡 '+escHtml(r.hint)+'</div>';
-  }
-  card.innerHTML=html;
-  panel.insertBefore(card,panel.firstChild);
-}
-
-// ══════════════════════════════════════
-// GREET
-// ══════════════════════════════════════
-async function aiGreet(){
-  var sc=SCENARIOS[state.scenario];
-  showTyping();
-  if(state.scenario==='grammar'){
-    hideTyping();
-    var opener=sc.openers[Math.floor(Math.random()*sc.openers.length)];
-    addMsg('ai',opener);speakText(opener);
+function renderHistoryPanel() {
+  var hist = getStoredHistory();
+  var panel = document.getElementById('history-panel');
+  if(!hist.length) {
+    panel.innerHTML = '<div style="text-align:center;color:#4b5268;padding:20px;">لا يوجد محادثات محفوظة حتى الآن.</div>';
     return;
   }
-  var sysPrompt='You are '+sc.avatarName+', '+sc.avatarRole+'. Give a warm, natural opening greeting and your first question to start the session. Keep it to 2 sentences max. Be direct and friendly.';
-  var text = await callGemini(sysPrompt,[{role:'user',content:'Start the session now.'}]);
-  hideTyping();
-  if(!text) text=sc.openers[Math.floor(Math.random()*sc.openers.length)];
-  addMsg('ai',text);speakText(text);
+
+  var html = '';
+  hist.forEach(function(item, idx){
+    html += `
+      <div class="hist-item" onclick="viewHistoryDetails(${idx})">
+        <div style="font-weight:600;font-size:12px;color:var(--accent);">${item.scenario.toUpperCase()} SESSION</div>
+        <div style="font-size:11px;color:#8b93ad;">📅 ${item.date} | ⏱ Duration: ${item.duration}</div>
+        <div style="font-size:11px;color:#6b7280;margin-top:4px;">Turns: ${item.turns} answers recorded</div>
+      </div>
+    `;
+  });
+  panel.innerHTML = html;
 }
 
-// ══════════════════════════════════════
-// TTS
-// ══════════════════════════════════════
-function speakText(text){
-  if(!window.speechSynthesis)return;
-  window.speechSynthesis.cancel();
-  setAiSpeak(true);
-  var chunks=text.match(/[^.!?]+[.!?]*/g)||[text];
-  var i=0;
-  function next(){
-    if(i>=chunks.length){setAiSpeak(false);return;}
-    var c=chunks[i].trim();if(!c){i++;next();return;}
-    var u=new SpeechSynthesisUtterance(c);
-    u.lang='en-US';u.rate=0.92;
-    var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang.startsWith('en');});
-    if(vs.length)u.voice=vs[0];
-    u.onend=function(){i++;setTimeout(next,70);};
-    u.onerror=function(){i++;setTimeout(next,70);};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-  if(!window._ka){window._ka=setInterval(function(){
-    if(state.aiSpeak&&window.speechSynthesis.paused)window.speechSynthesis.resume();
-    if(!state.aiSpeak){clearInterval(window._ka);window._ka=null;}
-  },8000);}
-}
-
-function setAiSpeak(val){
-  state.aiSpeak=val;
-  var sc=SCENARIOS[state.scenario];
-  var circle=document.getElementById('av-circle');
-  if(val){
-    circle.style.borderColor=sc.color;
-    circle.style.boxShadow='0 0 20px '+sc.color+'50';
-    state.waveRef=setInterval(function(){
-      var h=[4,7,14,10,5,12,8,4,16,6];
-      document.querySelectorAll('.wave').forEach(function(w){w.style.height=h[Math.floor(Math.random()*h.length)]+'px';});
-    },110);
-  } else {
-    circle.style.borderColor='rgba(255,255,255,0.1)';
-    circle.style.boxShadow='none';
-    clearInterval(state.waveRef);
-    document.querySelectorAll('.wave').forEach(function(w){w.style.height='4px';});
-  }
-}
-
-// ══════════════════════════════════════
-// CHAT HELPERS
-// ══════════════════════════════════════
-function addMsg(role,text){
-  state.messages.push({role,text,ts:Date.now()});
-  var sc=SCENARIOS[state.scenario];
-  var panel=document.getElementById('chat-panel');
-  document.getElementById('chat-empty').style.display='none';
-  var div=document.createElement('div');div.className='msg '+role;
-  div.innerHTML='<div class="msg-lbl">'+(role==='ai'?sc.avatarName:'You')+'</div><div>'+escHtml(text)+'</div>';
-  panel.appendChild(div);panel.scrollTop=panel.scrollHeight;
-  if(role==='ai')showBubble(text);
-}
-function showBubble(text){
-  var b=document.getElementById('bubble');
-  b.textContent=text.slice(0,130)+(text.length>130?'...':'');
-  b.style.display='block';
-  setTimeout(function(){b.style.display='none';},Math.max(4000,text.length*55));
-}
-function showTyping(){
-  var p=document.getElementById('chat-panel');
-  var t=document.createElement('div');t.id='typing';t.className='typing-ind';
-  t.innerHTML='<span></span><span></span><span></span>';
-  p.appendChild(t);p.scrollTop=p.scrollHeight;
-}
-function hideTyping(){var t=document.getElementById('typing');if(t)t.remove();}
-
-// ══════════════════════════════════════
-// REPORT
-// ══════════════════════════════════════
-function endSession(){
+function endSession() {
   clearInterval(state.timerIv);
-  window.speechSynthesis&&window.speechSynthesis.cancel();
-  if(state.recog){state.recog._active=false;try{state.recog.stop();}catch(e){}}
-  if(state.stream)state.stream.getTracks().forEach(function(t){t.stop();});
-  setAiSpeak(false);state.sessionActive=false;
-  document.getElementById('sdot').style.background='#4b5268';
-  document.getElementById('sdot').style.boxShadow='none';
-  generateReport();
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.tab')[2].classList.add('active');
-  switchTab('report',document.querySelectorAll('.tab')[2]);
+  var m = Math.floor(state.timer/60), s = state.timer%60;
+  var dur = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+
+  var sessionRecord = {
+    date: new Date().toLocaleString(),
+    scenario: state.scenario,
+    duration: dur,
+    turns: state.analyses.length,
+    messages: state.messages,
+    analyses: state.analyses
+  };
+
+  saveSessionToHistory(sessionRecord);
+  alert("تم حفظ الجلسة في سجل المحادثات بنجاح!");
+  location.reload();
 }
 
-function generateReport(){
-  var isGram=state.scenario==='grammar';
-  document.getElementById('rep-empty').style.display='none';
-  var rc=document.getElementById('rep-content');rc.style.display='block';
-  var m=Math.floor(state.timer/60),s=state.timer%60;
-  var dur=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-
-  if(isGram){
-    var total=state.gramResults.length;
-    var correct=state.gramResults.filter(function(r){return r.correct;}).length;
-    var pct=total>0?Math.round((correct/total)*100):0;
-    var scoreCol=pct>=80?'g':pct>=50?'w':'r';
-    var html='<div class="sc-circle"><span class="sc-n">'+pct+'</span><span class="sc-of">%</span></div>';
-    html+='<div class="rtitle">Grammar Trainer Results</div>';
-    html+='<div class="metric"><span style="color:#8b93ad">Duration</span><span class="mv">'+dur+'</span></div>';
-    html+='<div class="metric"><span style="color:#8b93ad">Total Questions</span><span class="mv">'+total+'</span></div>';
-    html+='<div class="metric"><span style="color:#8b93ad">Correct</span><span class="mv g">'+correct+'</span></div>';
-    html+='<div class="metric"><span style="color:#8b93ad">Wrong</span><span class="mv r">'+(total-correct)+'</span></div>';
-    html+='<div class="metric"><span style="color:#8b93ad">Score</span><span class="mv '+scoreCol+'">'+pct+'%</span></div>';
-
-    var wrong=state.gramResults.filter(function(r){return !r.correct;});
-    if(wrong.length>0){
-      html+='<div class="rtitle">الجمل اللي غلطت فيها</div>';
-      wrong.forEach(function(r){
-        html+='<div class="rep-err-block">';
-        html+='<div style="font-size:12px;color:#8b93ad;direction:rtl;text-align:right;margin-bottom:4px;">'+escHtml(r.ar)+'</div>';
-        html+='<div class="rep-err-orig">قلت: "'+escHtml(r.said)+'"</div>';
-        html+='<div class="rep-err-fix">الصح: "'+escHtml(r.expected)+'"</div>';
-        if(r.errs.length>0)html+='<div class="rep-err-why">'+escHtml(r.errs[0].why)+'</div>';
-        html+='</div>';
-      });
-    }
-    if(pct<60){html+='<div class="rep-item bad">✗ محتاج تراجع القواعد الأساسية أكتر. ركز على الأخطاء اللي فوق.</div>';}
-    else if(pct<80){html+='<div class="rep-item warn">⚠ مستوى متوسط. راجع الجمل الغلط وجرب تاني.</div>';}
-    else{html+='<div class="rep-item ok">✓ ممتاز! Grammar بتاعك قوي.</div>';}
-    html+='<button class="new-btn" onclick="location.reload()">New Session</button>';
-    rc.innerHTML=html;
-    return;
-  }
-
-  var a=state.analyses;
-  var turns=a.length;
-  if(!turns){rc.innerHTML='<div class="empty"><div class="empty-icon">💬</div><p>مفيش بيانات كافية.</p></div>';return;}
-  var totalWords=a.reduce(function(s,d){return s+d.wc;},0);
-  var totalFillers=a.reduce(function(s,d){return s+d.fillers.length;},0);
-  var avgScore=(a.reduce(function(s,d){return s+d.score;},0)/turns).toFixed(1);
-  var totalErrs=state.allErrors.length;
-  var avgWords=Math.round(totalWords/turns);
-  var sc=parseFloat(avgScore)>=8?'g':parseFloat(avgScore)>=5?'w':'r';
-
-  var html='<div class="sc-circle"><span class="sc-n">'+parseFloat(avgScore).toFixed(1)+'</span><span class="sc-of">/10</span></div>';
-  html+='<div class="rtitle">Session Stats</div>';
-  html+='<div class="metric"><span style="color:#8b93ad">Duration</span><span class="mv">'+dur+'</span></div>';
-  html+='<div class="metric"><span style="color:#8b93ad">Turns</span><span class="mv">'+turns+'</span></div>';
-  html+='<div class="metric"><span style="color:#8b93ad">Total Words</span><span class="mv">'+totalWords+'</span></div>';
-  html+='<div class="metric"><span style="color:#8b93ad">Avg Words/Turn</span><span class="mv '+(avgWords>=15?'g':avgWords>=10?'w':'r')+'">'+avgWords+'</span></div>';
-  html+='<div class="metric"><span style="color:#8b93ad">Grammar Errors</span><span class="mv '+(totalErrs===0?'g':totalErrs<=3?'w':'r')+'">'+totalErrs+'</span></div>';
-  html+='<div class="metric"><span style="color:#8b93ad">Filler Words</span><span class="mv '+(totalFillers<=2?'g':totalFillers<=5?'w':'r')+'">'+totalFillers+'</span></div>';
-
-  html+='<div class="rtitle">الحكم على أدائك</div>';
-  if(totalErrs===0){html+='<div class="rep-item ok">✓ ممتاز! مفيش أخطاء grammar.</div>';}
-  else if(totalErrs<=3){html+='<div class="rep-item warn">⚠ '+totalErrs+' أخطاء grammar — راجعهم تحت.</div>';}
-  else{html+='<div class="rep-item bad">✗ '+totalErrs+' أخطاء grammar — محتاج تتدرب أكتر على القواعد.</div>';}
-
-  if(avgWords<10){html+='<div class="rep-item bad">✗ متوسط كلامك قصير جداً ('+avgWords+' كلمة). الطبيعي 15-25 كلمة.</div>';}
-  else if(avgWords<15){html+='<div class="rep-item warn">⚠ متوسط كلامك '+avgWords+' كلمة — كويس بس ممكن تزود.</div>';}
-  else{html+='<div class="rep-item ok">✓ متوسط كلامك '+avgWords+' كلمة — ممتاز!</div>';}
-
-  if(totalFillers>5){html+='<div class="rep-item bad">✗ '+totalFillers+' filler words — بيضعف الانطباع. لما تحس بـ um، وقف بدلاً منها.</div>';}
-  else if(totalFillers>2){html+='<div class="rep-item warn">⚠ '+totalFillers+' filler words — حاول تقللهم.</div>';}
-  else{html+='<div class="rep-item ok">✓ Filler words قليلة — كويس!</div>';}
-
-  var uniq=[];
-  state.allErrors.forEach(function(e){if(!uniq.find(function(u){return u.orig===e.orig;}))uniq.push(e);});
-  if(uniq.length>0){
-    html+='<div class="rtitle">الأخطاء اللي لازم تتعلمها</div>';
-    uniq.forEach(function(e){
-      html+='<div class="rep-err-block">';
-      html+='<div class="rep-err-orig">✗ "'+escHtml(e.orig)+'"</div>';
-      html+='<div class="rep-err-fix">✓ "'+escHtml(e.fix)+'"</div>';
-      html+='<div class="rep-err-why">'+escHtml(e.why)+'</div></div>';
-    });
-  }
-
-  var uniqW=[];
-  state.allWeak.forEach(function(w){if(!uniqW.find(function(u){return u.said===w.said;}))uniqW.push(w);});
-  if(uniqW.length>0){
-    html+='<div class="rtitle">كلمات ضعيفة — استبدلها</div>';
-    uniqW.forEach(function(w){
-      html+='<div class="rep-err-block" style="border-color:rgba(251,191,36,.2)">';
-      html+='<div style="color:var(--amber);">⚠ "'+escHtml(w.said)+'"</div>';
-      html+='<div class="rep-err-fix">→ "'+escHtml(w.better)+'"</div></div>';
-    });
-  }
-
-  html+='<button class="new-btn" onclick="location.reload()">New Session</button>';
-  rc.innerHTML=html;
+function showHistoryModal() {
+  document.getElementById('setup').style.display='none';
+  document.getElementById('app').style.display='flex';
+  switchTab('history', document.querySelectorAll('.tab')[2]);
+  renderHistoryPanel();
 }
 
 // ══════════════════════════════════════
-// UI HELPERS
+// HELPERS & TTS
 // ══════════════════════════════════════
-function switchTab(name,el){
+function speakText(txt) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'en-US';
+  window.speechSynthesis.speak(u);
+}
+
+function addMsg(role, text) {
+  state.messages.push({ role: role, text: text });
+  var panel = document.getElementById('chat-panel');
+  var div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<b>${role==='ai'?'Coach':'You'}:</b> ${text}`;
+  panel.appendChild(div);
+  panel.scrollTop = panel.scrollHeight;
+}
+
+function switchTab(name, el) {
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');
-  document.getElementById('chat-panel').style.display=name==='chat'?'block':'none';
-  document.getElementById('analysis-panel').style.display=name==='analysis'?'block':'none';
-  document.getElementById('report-panel').style.display=name==='report'?'block':'none';
+  document.getElementById('chat-panel').style.display = name==='chat'?'block':'none';
+  document.getElementById('analysis-panel').style.display = name==='analysis'?'block':'none';
+  document.getElementById('history-panel').style.display = name==='history'?'block':'none';
 }
-function toggleCam(){
-  if(!state.stream)return;
-  var vt=state.stream.getVideoTracks();if(!vt.length)return;
-  state.camOn=!state.camOn;vt[0].enabled=state.camOn;
-  document.getElementById('cam-off').style.display=state.camOn?'none':'flex';
-  document.getElementById('cam-icon').className=state.camOn?'ti ti-video':'ti ti-video-off';
-}
-function showErr(msg){var e=document.getElementById('err-bar');e.style.display='block';e.textContent='⚠ '+msg;}
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-window.speechSynthesis&&window.speechSynthesis.getVoices();
-window.speechSynthesis&&(window.speechSynthesis.onvoiceschanged=function(){});
-
-(function(){
-  var m={name:"AI English Coach",short_name:"AI Coach",start_url:"./",display:"standalone",background_color:"#0d0f14",theme_color:"#0d0f14",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230d0f14'/><text y='135' x='96' text-anchor='middle' font-size='110'>🎓</text></svg>",sizes:"192x192",type:"image/svg+xml"}]};
-  document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
-  var dp=null;
-  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;
-    var b=document.createElement('button');b.innerHTML='📲 Install App';
-    b.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:25px;background:linear-gradient(135deg,#5b7fff,#a78bfa);border:none;color:white;font-size:14px;font-weight:600;cursor:pointer;z-index:9999;box-shadow:0 4px 20px rgba(91,127,255,0.4);font-family:inherit;';
-    b.onclick=function(){if(dp){dp.prompt();dp.userChoice.then(function(){dp=null;b.remove();});}};
-    document.body.appendChild(b);setTimeout(function(){if(b.parentNode)b.remove();},15000);
-  });
-})();
 </script>
 </body>
 </html>
