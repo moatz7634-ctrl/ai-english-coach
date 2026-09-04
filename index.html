@@ -18,11 +18,10 @@
 html{scroll-behavior:smooth;}
 body{background:var(--surface);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
-/* CANVAS BACKGROUND */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.7;}
 #particles{position:fixed;inset:0;z-index:1;pointer-events:none;}
 
-/* SETUP SCREEN */
+/* SETUP */
 #setup{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;perspective:1200px;}
 .setup-card{position:relative;background:linear-gradient(145deg,rgba(19,20,30,0.95),rgba(10,11,16,0.98));border:1px solid var(--glass-border);border-radius:28px;padding:40px;width:560px;max-width:100%;box-shadow:0 0 0 1px rgba(99,102,241,0.1),0 25px 80px rgba(0,0,0,0.6),0 0 120px rgba(99,102,241,0.08);backdrop-filter:blur(40px);transform-style:preserve-3d;animation:cardFloat 6s ease-in-out infinite;}
 @keyframes cardFloat{0%,100%{transform:translateY(0) rotateX(0deg);}50%{transform:translateY(-8px) rotateX(1deg);}}
@@ -40,11 +39,13 @@ body{background:var(--surface);color:var(--text);min-height:100vh;overflow-x:hid
 .subtitle{color:var(--text2);font-size:13.5px;line-height:1.7;margin-bottom:28px;animation:fadeUp 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0;transform:translateY(16px);}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
 
-.key-wrap{position:relative;margin-bottom:24px;animation:fadeUp 0.8s 0.35s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0;transform:translateY(16px);}
-.key-input{width:100%;padding:14px 18px 14px 46px;border-radius:14px;background:var(--surface3);border:1px solid var(--glass-border);color:var(--text);font-size:13.5px;outline:none;transition:all 0.3s ease;position:relative;z-index:1;}
+.key-wrap{position:relative;margin-bottom:12px;animation:fadeUp 0.8s 0.35s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0;transform:translateY(16px);}
+.key-input{width:100%;padding:14px 18px 14px 46px;border-radius:14px;background:var(--surface3);border:1px solid var(--glass-border);color:var(--text);font-size:13.5px;outline:none;transition:all 0.3s ease;}
 .key-input:focus{border-color:rgba(99,102,241,0.5);box-shadow:0 0 0 3px rgba(99,102,241,0.1),0 0 30px rgba(99,102,241,0.1);}
-.key-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:18px;z-index:2;transition:color 0.3s;}
+.key-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:18px;z-index:2;transition:color 0.3s;pointer-events:none;}
 .key-input:focus ~ .key-icon{color:var(--accent);}
+.key-note{font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:20px;text-align:center;}
+.key-note b{color:var(--green);}
 
 .sc-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:24px;}
 .sc-card{position:relative;display:flex;align-items:center;gap:16px;padding:16px;border-radius:16px;cursor:pointer;background:var(--surface2);border:1px solid var(--glass-border);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);transform-style:preserve-3d;overflow:hidden;animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0;transform:translateY(20px);}
@@ -73,7 +74,7 @@ body{background:var(--surface);color:var(--text);min-height:100vh;overflow-x:hid
 .hist-link{width:100%;padding:12px;border-radius:12px;background:transparent;border:1px solid var(--glass-border);color:var(--text2);font-size:13px;cursor:pointer;margin-top:12px;transition:all 0.3s ease;animation:fadeUp 0.8s 1s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0;transform:translateY(16px);}
 .hist-link:hover{background:rgba(255,255,255,0.03);color:var(--text);border-color:rgba(99,102,241,0.2);}
 
-/* APP STAGE */
+/* APP */
 #app{display:none;flex-direction:column;height:100vh;position:relative;z-index:10;animation:appReveal 0.8s cubic-bezier(0.16,1,0.3,1) forwards;}
 @keyframes appReveal{from{opacity:0;transform:scale(0.98) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
 
@@ -82,9 +83,11 @@ body{background:var(--surface);color:var(--text);min-height:100vh;overflow-x:hid
 .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:statusPulse 2s ease-in-out infinite;}
 @keyframes statusPulse{0%,100%{opacity:1;box-shadow:0 0 12px var(--green);}50%{opacity:0.7;box-shadow:0 0 20px var(--green),0 0 40px rgba(34,211,160,0.2);}}
 .session-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.3px;}
-.timer-wrap{display:flex;align-items:center;gap:14px;}
+.timer-wrap{display:flex;align-items:center;gap:10px;}
 .timer{font-family:'Space Grotesk',monospace;font-size:14px;color:var(--text2);font-variant-numeric:tabular-nums;letter-spacing:1px;}
-.end-btn{padding:8px 18px;border-radius:10px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:var(--red);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.3s ease;position:relative;overflow:hidden;}
+.back-btn{padding:8px 16px;border-radius:10px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);color:var(--accent);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.3s ease;display:flex;align-items:center;gap:4px;}
+.back-btn:hover{background:rgba(99,102,241,0.2);box-shadow:0 0 20px rgba(99,102,241,0.2);transform:translateY(-1px);}
+.end-btn{padding:8px 16px;border-radius:10px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:var(--red);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.3s ease;display:flex;align-items:center;gap:4px;}
 .end-btn:hover{background:rgba(248,113,113,0.2);box-shadow:0 0 20px rgba(248,113,113,0.2);transform:translateY(-1px);}
 
 .main-stage{display:grid;grid-template-columns:1fr 380px;flex:1;overflow:hidden;}
@@ -120,6 +123,8 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .live-bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--accent),var(--accent2));animation:livePulse 1.5s ease-in-out infinite;}
 @keyframes livePulse{0%,100%{opacity:0.6;}50%{opacity:1;box-shadow:0 0 10px var(--accent);}}
 
+.loop-notice{text-align:center;padding:8px 14px;font-size:11px;color:var(--amber);background:rgba(251,191,36,0.06);border-radius:10px;margin:0 16px 8px;display:none;border:1px solid rgba(251,191,36,0.15);animation:fadeUp 0.4s ease;}
+
 .ctrls{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px;flex-shrink:0;}
 .mic-btn{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 28px;border-radius:16px;border:1px solid var(--glass-border);background:var(--surface3);color:var(--text2);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);overflow:hidden;}
 .mic-btn:hover{border-color:rgba(99,102,241,0.4);color:var(--text);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.3);}
@@ -135,7 +140,8 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .tab.active::after{content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:tabGlow 2s ease-in-out infinite;}
 @keyframes tabGlow{0%,100%{box-shadow:0 0 10px var(--accent);}50%{box-shadow:0 0 20px var(--accent),0 0 40px rgba(99,102,241,0.3);}}
-.panel-body{flex:1;overflow-y:auto;padding:16px;scroll-behavior:smooth;}
+.panel-body{flex:1;overflow-y:auto;padding:16px;scroll-behavior:smooth;display:none;}
+.panel-body.active{display:block;}
 .panel-body::-webkit-scrollbar{width:4px;}
 .panel-body::-webkit-scrollbar-track{background:transparent;}
 .panel-body::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:4px;}
@@ -158,8 +164,13 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 .ana-q{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;margin-bottom:8px;color:var(--text);}
 .ana-ans{color:var(--text2);font-size:12px;font-style:italic;margin-bottom:10px;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border-left:2px solid var(--accent2);}
 .wpm-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:5px 12px;border-radius:20px;background:rgba(99,102,241,0.15);color:var(--accent);font-weight:700;margin-bottom:10px;border:1px solid rgba(99,102,241,0.2);}
+.score-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:5px 12px;border-radius:20px;font-weight:700;margin-bottom:10px;margin-right:8px;}
+.score-high{background:rgba(34,211,160,0.15);color:var(--green);border:1px solid rgba(34,211,160,0.2);}
+.score-mid{background:rgba(251,191,36,0.15);color:var(--amber);border:1px solid rgba(251,191,36,0.2);}
+.score-low{background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
 .ideal-box{background:linear-gradient(135deg,rgba(34,211,160,0.06),rgba(34,211,160,0.02));border-left:3px solid var(--green);padding:12px;border-radius:10px;font-size:11.5px;color:var(--text2);line-height:1.7;position:relative;}
 .ideal-box::before{content:'💡';margin-right:6px;}
+.feedback-box{background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.02));border-left:3px solid var(--accent);padding:12px;border-radius:10px;font-size:11.5px;color:var(--text2);line-height:1.7;margin-top:8px;}
 
 .hist-card{background:linear-gradient(135deg,rgba(19,20,30,0.9),rgba(26,27,38,0.8));border:1px solid var(--glass-border);border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;animation:cardSlide 0.5s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0;transform:translateX(-20px);}
 .hist-card:hover{border-color:rgba(99,102,241,0.3);transform:translateX(-4px) scale(1.01);box-shadow:0 10px 40px rgba(0,0,0,0.3),0 0 20px rgba(99,102,241,0.1);}
@@ -214,8 +225,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 
     <div class="key-wrap">
       <i class="ti ti-key key-icon"></i>
-      <input type="password" id="user-api-key" class="key-input" placeholder="ادخل Gemini API Key هنا..." />
+      <input type="password" id="user-api-key" class="key-input" placeholder="Gemini API Key (اختياري — للتقييم المتقدم)" />
     </div>
+    <div class="key-note"><b>✓</b> التقييم المحلي يشتغل بدون API. الـ API بس للتقييم المتقدم.</div>
 
     <div class="sc-grid" id="sc-list">
       <div class="sc-card active" data-id="interview" onclick="pickSc(this)">
@@ -243,7 +255,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
     <button class="start-btn" onclick="startSession()">
       <i class="ti ti-player-play" style="margin-right:6px;"></i> ابدأ الـ Session
     </button>
-    <button class="hist-link" onclick="openArchiveModal()">
+    <button class="hist-link" onclick="openArchiveFromSetup()">
       <i class="ti ti-archive" style="margin-right:6px;"></i> أرشيف المحادثات والتحليلات السابقة
     </button>
   </div>
@@ -256,9 +268,12 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
       <span class="session-title" id="stitle">Session</span>
     </div>
     <div class="timer-wrap">
+      <button class="back-btn" id="back-btn" onclick="backToSetup()">
+        <i class="ti ti-arrow-left"></i> Back
+      </button>
       <span class="timer" id="timer-disp">00:00</span>
       <button class="end-btn" id="end-btn" onclick="endSession()">
-        <i class="ti ti-x" style="margin-right:4px;"></i> End Session
+        <i class="ti ti-x"></i> End
       </button>
     </div>
   </div>
@@ -283,6 +298,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
       </div>
 
       <div class="live-bar" id="live"></div>
+      <div class="loop-notice" id="loop-notice">♻️ All questions completed! Restarting from the beginning...</div>
       <div class="err-bar" id="err-bar"></div>
 
       <div class="ctrls">
@@ -299,9 +315,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
         <div class="tab" onclick="switchTab('analysis',this)">Analysis</div>
         <div class="tab" onclick="switchTab('history',this)">History</div>
       </div>
-      <div class="panel-body" id="chat-panel"></div>
-      <div class="panel-body" id="analysis-panel" style="display:none;"></div>
-      <div class="panel-body" id="history-panel" style="display:none;"></div>
+      <div class="panel-body active" id="chat-panel"></div>
+      <div class="panel-body" id="analysis-panel"></div>
+      <div class="panel-body" id="history-panel"></div>
     </div>
   </div>
 </div>
@@ -322,7 +338,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 </div>
 
 <script>
+// ════════════════════════════════════════════════════════
 // CANVAS MORPHING BLOB BACKGROUND
+// ════════════════════════════════════════════════════════
 (function(){
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
@@ -365,7 +383,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   draw();
 })();
 
+// ════════════════════════════════════════════════════════
 // FLOATING PARTICLES
+// ════════════════════════════════════════════════════════
 (function(){
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
@@ -398,7 +418,9 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   draw();
 })();
 
+// ════════════════════════════════════════════════════════
 // 3D TILT EFFECT
+// ════════════════════════════════════════════════════════
 (function(){
   const card = document.getElementById('setup-card');
   if(!card) return;
@@ -414,40 +436,87 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   });
 })();
 
-// QUESTION BANK
+// ════════════════════════════════════════════════════════
+// QUESTION BANK — EXPANDED (20+ questions per scenario)
+// ════════════════════════════════════════════════════════
 var QUESTION_BANK = {
   interview: [
     {q:"Tell me about yourself and your professional experience.",ideal:"Provide a brief summary of your background, key achievements, and career focus."},
     {q:"What are your core strengths in your field?",ideal:"Mention skill sets in scheduling, real-time monitoring, or capacity forecasting."},
     {q:"How do you handle a sudden drop in performance metrics?",ideal:"Analyze root causes, notify team leads, and reallocate tasks immediately."},
     {q:"Describe a complex problem you solved under pressure.",ideal:"Explain the situation, your data-backed action plan, and the successful output."},
-    {q:"Where do you see yourself professionally in three years?",ideal:"Talk about leadership aspirations, mastering strategic skills, or driving team efficiency."}
+    {q:"Where do you see yourself professionally in three years?",ideal:"Talk about leadership aspirations, mastering strategic skills, or driving team efficiency."},
+    {q:"Why do you want to work for our company?",ideal:"Research the company values and align them with your career goals and skills."},
+    {q:"What is your greatest professional achievement?",ideal:"Use the STAR method: Situation, Task, Action, Result with measurable outcomes."},
+    {q:"How do you prioritize your work when facing multiple deadlines?",ideal:"Discuss time management tools, Eisenhower matrix, or urgent vs important framework."},
+    {q:"Tell me about a time you had a conflict with a coworker.",ideal:"Focus on resolution, empathy, and maintaining professional relationships."},
+    {q:"What are your salary expectations?",ideal:"Give a researched range based on market data and your experience level."},
+    {q:"How do you stay updated with industry trends?",ideal:"Mention podcasts, courses, certifications, or professional communities you follow."},
+    {q:"Describe your ideal work environment.",ideal:"Be honest but flexible — mention collaboration, autonomy, or structured processes."}
   ],
   presentation: [
     {q:"What is the core takeaway of your presentation today?",ideal:"Summarize your main objective clearly in one concise sentence."},
     {q:"How does your proposal address current operational bottlenecks?",ideal:"Highlight key advantages, ROI metrics, and process efficiencies."},
-    {q:"What key metrics support your business recommendation?",ideal:"Cite factual data, performance charts, or comparative benchmark numbers."}
+    {q:"What key metrics support your business recommendation?",ideal:"Cite factual data, performance charts, or comparative benchmark numbers."},
+    {q:"Walk us through your slide deck structure.",ideal:"Explain the logical flow: problem, analysis, solution, implementation, and results."},
+    {q:"What is the timeline for implementing your proposal?",ideal:"Break down phases with specific milestones and responsible teams."},
+    {q:"How will you measure the success of this initiative?",ideal:"Define KPIs, success criteria, and review cadence upfront."},
+    {q:"What risks have you identified and how will you mitigate them?",ideal:"Acknowledge risks honestly and present contingency plans for each."},
+    {q:"Why should leadership approve this budget?",ideal:"Connect the budget to expected ROI, cost savings, or strategic value."}
   ],
   meeting: [
     {q:"Could you walk us through last week's KPI achievements?",ideal:"Break down SLA figures, adherence percentages, and handle times."},
-    {q:"What immediate action steps will solve current staffing gaps?",ideal:"Propose shift adjustments, overtime approvals, or schedule optimizing."}
+    {q:"What immediate action steps will solve current staffing gaps?",ideal:"Propose shift adjustments, overtime approvals, or schedule optimizing."},
+    {q:"Can you summarize the action items from our last meeting?",ideal:"List each item, owner, deadline, and current status clearly."},
+    {q:"What blockers are preventing the team from hitting targets?",ideal:"Identify root causes, impact, and proposed solutions for each blocker."},
+    {q:"How do we align our quarterly goals with company strategy?",ideal:"Map team OKRs to company objectives and show measurable connections."},
+    {q:"Who needs to be looped in on this decision?",ideal:"Name stakeholders, their roles, and why their input matters."},
+    {q:"What is the escalation path for urgent issues?",ideal:"Define tiers: team lead, manager, director with response timeframes."},
+    {q:"How do we improve cross-team collaboration?",ideal:"Suggest regular syncs, shared dashboards, or unified communication channels."}
   ],
   grammar: [
     {q:"Say this in English: 'أنا أعمل هنا منذ ثلاث سنوات'",ideal:"I have been working here for 3 years."},
     {q:"Say this in English: 'هو لا يعلم الإجابة الصحيحة'",ideal:"He doesn't know the correct answer."},
-    {q:"Say this in English: 'كنا في الاجتماع أمس'",ideal:"We were in the meeting yesterday."}
+    {q:"Say this in English: 'كنا في الاجتماع أمس'",ideal:"We were in the meeting yesterday."},
+    {q:"Say this in English: 'سأذهب إلى المكتب غداً'",ideal:"I will go to the office tomorrow."},
+    {q:"Say this in English: 'لو كنت أعرف، كنت سأخبرك'",ideal:"If I had known, I would have told you."},
+    {q:"Say this in English: 'هذا هو أفضل فيلم شاهدته'",ideal:"This is the best movie I have ever watched."},
+    {q:"Say this in English: 'يجب أن ننهي المشروع قبل الموعد النهائي'",ideal:"We must finish the project before the deadline."},
+    {q:"Say this in English: 'لا أستطيع الانتظار حتى أراك'",ideal:"I can't wait to see you."},
+    {q:"Say this in English: 'هل يمكنك مساعدتي بهذا؟'",ideal:"Could you help me with this?"},
+    {q:"Say this in English: 'لقد فقدت مفاتيحي'",ideal:"I have lost my keys."},
+    {q:"Say this in English: 'هي أكثر شخص مجتهف أعرفه'",ideal:"She is the most hardworking person I know."},
+    {q:"Say this in English: 'نحن نخطط للسفر العام المقبل'",ideal:"We are planning to travel next year."}
   ],
   free: [
     {q:"What hobbies or activities do you enjoy in your personal time?",ideal:"Share interests like reading, travel, or personal skill growth."},
-    {q:"If you could visit any place in the world right now, where would it be?",ideal:"Specify a city/country and detail what attracts you to it."}
+    {q:"If you could visit any place in the world right now, where would it be?",ideal:"Specify a city/country and detail what attracts you to it."},
+    {q:"What is your favorite book or movie and why?",ideal:"Name the title, author/director, and explain its personal impact on you."},
+    {q:"Describe your perfect weekend.",ideal:"Include activities, people, locations, and why each element matters to you."},
+    {q:"What skill would you like to learn this year?",ideal:"Name the skill, your motivation, and your planned learning approach."},
+    {q:"How do you usually spend your mornings?",ideal:"Describe your routine with specific times and habits."},
+    {q:"What kind of music do you listen to?",ideal:"Mention genres, favorite artists, and when you usually listen."},
+    {q:"Tell me about your favorite childhood memory.",ideal:"Set the scene, describe the emotions, and explain why it stays with you."},
+    {q:"What is one thing on your bucket list?",ideal:"Describe the experience and what steps you are taking toward it."},
+    {q:"How do you relax after a stressful day?",ideal:"Share specific activities and why they help you decompress."}
   ]
 };
 
+// ════════════════════════════════════════════════════════
 // STATE
+// ════════════════════════════════════════════════════════
 var state = {
-  scenario: 'interview', messages: [], analyses: [],
-  micOn: false, startTime: null, timer: 0, timerIv: null,
-  recog: null, finalTxt: '', currentQuestion: null
+  scenario: 'interview',
+  messages: [],
+  analyses: [],
+  micOn: false,
+  startTime: null,
+  timer: 0,
+  timerIv: null,
+  recog: null,
+  finalTxt: '',
+  currentQuestion: null,
+  isViewOnly: false
 };
 
 function getApiKey(){
@@ -462,11 +531,15 @@ window.addEventListener('DOMContentLoaded', function(){
   if(savedKey) document.getElementById('user-api-key').value = savedKey;
 });
 
-function getSeenQuestions(){ return JSON.parse(localStorage.getItem('seen_q_bank') || '[]'); }
+// Per-scenario seen questions (FIXED: was global before)
+function getSeenKey(){ return 'seen_q_' + state.scenario; }
+function getSeenQuestions(){ return JSON.parse(localStorage.getItem(getSeenKey()) || '[]'); }
 function markQuestionSeen(q){
-  var list = getSeenQuestions(); list.push(q);
-  localStorage.setItem('seen_q_bank', JSON.stringify(list));
+  var list = getSeenQuestions();
+  if(!list.includes(q)){ list.push(q); localStorage.setItem(getSeenKey(), JSON.stringify(list)); }
 }
+function clearSeenQuestions(){ localStorage.removeItem(getSeenKey()); }
+
 function getStoredHistory(){ return JSON.parse(localStorage.getItem('sessions_history_pro') || '[]'); }
 function saveSessionToHistory(sessionData){
   var hist = getStoredHistory(); hist.unshift(sessionData);
@@ -478,10 +551,47 @@ function pickSc(el){
   el.classList.add('active'); state.scenario = el.dataset.id;
 }
 
-// GEMINI API
+// ════════════════════════════════════════════════════════
+// LOCAL EVALUATION ENGINE (No API needed!)
+// ════════════════════════════════════════════════════════
+function evaluateAnswerLocal(userText, question, ideal){
+  var userWords = userText.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter(function(w){ return w.length > 2; });
+  var idealWords = ideal.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter(function(w){ return w.length > 2; });
+
+  var overlap = 0;
+  var uniqueIdeal = [];
+  idealWords.forEach(function(w){ if(!uniqueIdeal.includes(w)) uniqueIdeal.push(w); });
+
+  uniqueIdeal.forEach(function(iw){
+    userWords.forEach(function(uw){ if(uw === iw || (uw.length > 4 && iw.length > 4 && (uw.indexOf(iw) === 0 || iw.indexOf(uw) === 0))) overlap++; });
+  });
+
+  var contentScore = Math.min(10, Math.round((overlap / Math.max(1, uniqueIdeal.length)) * 10));
+  var lengthScore = userText.length > 20 ? (userText.length > 100 ? 3 : 2) : 1;
+  var totalScore = Math.min(10, contentScore + lengthScore);
+
+  var feedback = '';
+  if(totalScore >= 8) feedback = 'Excellent! Your answer covers the key points effectively with strong vocabulary.';
+  else if(totalScore >= 6) feedback = 'Good job! You covered most key points. Try to include more specific vocabulary from the ideal answer.';
+  else if(totalScore >= 4) feedback = 'Fair attempt. Try to expand your answer with more details and relevant keywords.';
+  else feedback = 'Keep practicing! Focus on addressing the core elements of the question with complete sentences.';
+
+  var missing = [];
+  uniqueIdeal.forEach(function(w){ 
+    var found = false;
+    userWords.forEach(function(uw){ if(uw === w || (uw.length > 4 && w.length > 4 && (uw.indexOf(w) === 0 || w.indexOf(uw) === 0))) found = true; });
+    if(!found && w.length > 4 && !['would','should','could','about','their','there','where','which','while','before','after','under','over','between','through','during','without','within','against','among','around','because','although','however','therefore','furthermore','moreover','nevertheless','meanwhile','otherwise','instead','besides','additionally','consequently','accordingly','subsequently','previously','eventually','currently','recently','frequently','usually','always','sometimes','often','rarely','never','already','almost','quite','rather','pretty','really','very','too','so','just','only','even','also','still','yet','already','almost','enough','quite','rather','pretty','really','very','too','so','just','only','even','also','still','yet','indeed','certainly','definitely','probably','possibly','perhaps','maybe','likely','unlikely','obviously','clearly','apparently','presumably','supposedly','arguably','notably','especially','particularly','specifically','mainly','mostly','largely','partly','slightly','somewhat','somehow','anyway','anyhow','meanwhile','otherwise','instead','besides','furthermore','moreover','therefore','thus','hence','consequently','accordingly','subsequently','previously','eventually','currently','recently','frequently','usually','always','sometimes','often','rarely','never'].includes(w)) missing.push(w);
+  });
+
+  return { score: totalScore, feedback: feedback, missing: missing.slice(0, 5) };
+}
+
+// ════════════════════════════════════════════════════════
+// GEMINI API (Optional — for advanced evaluation)
+// ════════════════════════════════════════════════════════
 async function callGemini(system, messages){
   var key = getApiKey();
-  if(!key){ showErr("برجاء إدخال Gemini API Key أولاً!"); return null; }
+  if(!key) return null;
   var contents = [];
   messages.forEach(function(m){
     if(m.content && m.content !== '[start]'){
@@ -495,7 +605,7 @@ async function callGemini(system, messages){
       body: JSON.stringify({
         system_instruction: { parts: [{ text: system }] },
         contents: contents,
-        generationConfig: { maxOutputTokens: 150 }
+        generationConfig: { maxOutputTokens: 200 }
       })
     });
     var data = await res.json();
@@ -507,19 +617,32 @@ async function callGemini(system, messages){
   return null;
 }
 
+// ════════════════════════════════════════════════════════
 // SESSION CONTROL
+// ════════════════════════════════════════════════════════
 async function startSession(){
+  state.isViewOnly = false;
+  state.messages = [];
+  state.analyses = [];
+  state.timer = 0;
+  document.getElementById('chat-panel').innerHTML = '';
+  document.getElementById('analysis-panel').innerHTML = '';
+  document.getElementById('end-btn').style.display = 'flex';
+  document.getElementById('back-btn').style.display = 'flex';
   document.getElementById('setup').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
+
   state.timerIv = setInterval(function(){
     state.timer++;
     var m = Math.floor(state.timer/60), s = state.timer%60;
     document.getElementById('timer-disp').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   },1000);
+
   try{
     var stream = await navigator.mediaDevices.getUserMedia({video:true,audio:false});
     document.getElementById('vid').srcObject = stream;
   } catch(e){}
+
   initRecog();
   askNextQuestion();
   renderHistoryTab();
@@ -529,7 +652,16 @@ function askNextQuestion(){
   var bank = QUESTION_BANK[state.scenario] || QUESTION_BANK.free;
   var seen = getSeenQuestions();
   var available = bank.filter(function(item){ return !seen.includes(item.q); });
-  if(available.length === 0) available = bank;
+
+  // FIXED: If all questions seen, clear and restart
+  if(available.length === 0){
+    clearSeenQuestions();
+    available = bank;
+    var notice = document.getElementById('loop-notice');
+    notice.style.display = 'block';
+    setTimeout(function(){ notice.style.display = 'none'; }, 4000);
+  }
+
   var chosen = available[Math.floor(Math.random() * available.length)];
   markQuestionSeen(chosen.q);
   state.currentQuestion = chosen;
@@ -553,11 +685,17 @@ function initRecog(){
     lt.style.display = show ? 'block' : 'none';
     lt.textContent = '🎤 ' + show;
   };
+  r.onerror = function(e){
+    if(e.error === 'no-speech') return;
+    console.warn('Speech error:', e.error);
+  };
   state.recog = r;
 }
 
 function toggleMic(){ if(state.micOn) stopMic(); else startMic(); }
+
 function startMic(){
+  if(state.isViewOnly) return;
   state.finalTxt = '';
   state.startTime = Date.now();
   state.recog._active = true;
@@ -567,7 +705,9 @@ function startMic(){
   document.getElementById('mic-lbl').textContent = 'Listening...';
   document.getElementById('wave-bar').style.display = 'flex';
 }
+
 function stopMic(){
+  if(!state.micOn) return;
   state.recog._active = false;
   try{ state.recog.stop(); } catch(e){}
   state.micOn = false;
@@ -575,32 +715,57 @@ function stopMic(){
   document.getElementById('mic-lbl').textContent = 'Speak';
   document.getElementById('live').style.display = 'none';
   document.getElementById('wave-bar').style.display = 'none';
+
   var txt = state.finalTxt.trim();
   if(txt.length < 2) return;
+
   var durationSec = Math.max(1, (Date.now() - state.startTime) / 1000);
   var words = txt.split(/\s+/).filter(Boolean).length;
   var wpm = Math.round((words / durationSec) * 60);
+
   addMsg('user', txt);
   analyzeAnswer(txt, wpm);
-  setTimeout(function(){ askNextQuestion(); }, 1200);
+
+  setTimeout(function(){ askNextQuestion(); }, 1800);
 }
 
 function analyzeAnswer(txt, wpm){
   var speedEval = wpm < 90 ? 'Slow Pace' : wpm <= 150 ? 'Ideal Pace' : 'Fast Pace';
+  var evalResult = evaluateAnswerLocal(txt, state.currentQuestion.q, state.currentQuestion.ideal);
+
+  var scoreClass = evalResult.score >= 7 ? 'score-high' : evalResult.score >= 4 ? 'score-mid' : 'score-low';
+
   var card = document.createElement('div');
   card.className = 'ana-card';
   card.innerHTML = `
     <div class="ana-q">Q: ${state.currentQuestion.q}</div>
     <div class="ana-ans">You said: "${txt}"</div>
-    <div class="wpm-badge">⏱ Speed: ${wpm} WPM (${speedEval})</div>
-    <div class="ideal-box"><b>Ideal Strategy:</b> ${state.currentQuestion.ideal}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+      <div class="wpm-badge">⏱ ${wpm} WPM (${speedEval})</div>
+      <div class="score-badge ${scoreClass}">⭐ Score: ${evalResult.score}/10</div>
+    </div>
+    <div class="feedback-box"><b>📝 Feedback:</b> ${evalResult.feedback}</div>
+    <div class="ideal-box"><b>Ideal Answer:</b> ${state.currentQuestion.ideal}</div>
+    ${evalResult.missing.length ? `<div style="font-size:11px;color:var(--text3);margin-top:8px;"><b>💡 Keywords to include:</b> ${evalResult.missing.join(', ')}</div>` : ''}
   `;
   var panel = document.getElementById('analysis-panel');
   panel.insertBefore(card, panel.firstChild);
-  state.analyses.push({ q: state.currentQuestion.q, text: txt, wpm: wpm, speedEval: speedEval, ideal: state.currentQuestion.ideal });
+
+  state.analyses.push({
+    q: state.currentQuestion.q,
+    text: txt,
+    wpm: wpm,
+    speedEval: speedEval,
+    score: evalResult.score,
+    feedback: evalResult.feedback,
+    ideal: state.currentQuestion.ideal,
+    missing: evalResult.missing
+  });
 }
 
-// HISTORY
+// ════════════════════════════════════════════════════════
+// HISTORY & ARCHIVE
+// ════════════════════════════════════════════════════════
 function renderHistoryTab(){
   var hist = getStoredHistory();
   var panel = document.getElementById('history-panel');
@@ -614,7 +779,7 @@ function renderHistoryTab(){
       <div class="hist-card" onclick="viewHistoryDetails(${idx})">
         <div class="hist-scenario">${item.scenario.toUpperCase()} SESSION</div>
         <div class="hist-meta"><span>📅 ${item.date}</span><span>⏱ ${item.duration}</span></div>
-        <div class="hist-meta">Recorded Turns: ${item.turns}</div>
+        <div class="hist-meta">Turns: ${item.turns} | Avg Score: ${item.avgScore || 'N/A'}</div>
       </div>
     `;
   });
@@ -627,51 +792,90 @@ function viewHistoryDetails(idx){
   if(!item) return;
   document.getElementById('modal-title').textContent = item.scenario.toUpperCase() + ' SESSION DETAILS';
   var body = document.getElementById('modal-body');
-  var html = `<div style="font-size:12px;color:var(--text2);margin-bottom:16px;"><b>Date:</b> ${item.date} | <b>Duration:</b> ${item.duration}</div>`;
-  html += '<h4 style="font-size:13px;margin-bottom:10px;color:var(--accent);font-family:'Space Grotesk',sans-serif;">Chat Transcripts & Analysis:</h4>';
+  var html = `<div style="font-size:12px;color:var(--text2);margin-bottom:16px;"><b>Date:</b> ${item.date} | <b>Duration:</b> ${item.duration} | <b>Avg Score:</b> ${item.avgScore || 'N/A'}</div>`;
+  html += '<h4 style="font-size:13px;margin-bottom:10px;color:var(--accent);font-family:'Space Grotesk',sans-serif;">Transcripts & Analysis:</h4>';
   if(item.analyses && item.analyses.length){
     item.analyses.forEach(function(a){
+      var sClass = a.score >= 7 ? 'score-high' : a.score >= 4 ? 'score-mid' : 'score-low';
       html += `
         <div class="ana-card">
           <div style="font-weight:600;font-size:12px;color:#fff;font-family:'Space Grotesk',sans-serif;">Q: ${a.q}</div>
           <div style="color:var(--text2);font-size:12px;margin-top:4px;"><b>Answer:</b> "${a.text}"</div>
-          <div class="wpm-badge">⏱ ${a.wpm} WPM (${a.speedEval})</div>
-          <div class="ideal-box"><b>Ideal Strategy:</b> ${a.ideal}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+            <div class="wpm-badge">⏱ ${a.wpm} WPM (${a.speedEval})</div>
+            <div class="score-badge ${sClass}">⭐ ${a.score}/10</div>
+          </div>
+          <div class="feedback-box"><b>Feedback:</b> ${a.feedback}</div>
+          <div class="ideal-box"><b>Ideal:</b> ${a.ideal}</div>
         </div>
       `;
     });
   } else {
-    html += '<div style="font-size:12px;color:var(--text3);">لا توجد تفاصيل إضافية لهذا السيشن.</div>';
+    html += '<div style="font-size:12px;color:var(--text3);">لا توجد تفاصيل إضافية.</div>';
   }
   body.innerHTML = html;
   document.getElementById('hist-modal').style.display = 'flex';
 }
 
 function closeArchiveModal(){ document.getElementById('hist-modal').style.display = 'none'; }
-function openArchiveModal(){
+
+function openArchiveFromSetup(){
+  state.isViewOnly = true;
   document.getElementById('setup').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   document.getElementById('end-btn').style.display = 'none';
+  document.getElementById('back-btn').style.display = 'flex';
+  document.getElementById('chat-panel').innerHTML = '<div class="empty-state"><i class="ti ti-history"></i>View your past sessions in the History tab.</div>';
   switchTab('history', document.querySelectorAll('.tab')[2]);
   renderHistoryTab();
+}
+
+function backToSetup(){
+  // Stop everything
+  if(state.timerIv) clearInterval(state.timerIv);
+  if(state.recog) try{ state.recog.stop(); } catch(e){}
+  state.micOn = false;
+
+  // Stop camera
+  var vid = document.getElementById('vid');
+  if(vid.srcObject){
+    vid.srcObject.getTracks().forEach(function(t){ t.stop(); });
+    vid.srcObject = null;
+  }
+
+  // Reset UI
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('setup').style.display = 'flex';
+  document.getElementById('timer-disp').textContent = '00:00';
+  document.getElementById('live').style.display = 'none';
+  document.getElementById('err-bar').style.display = 'none';
+  document.getElementById('loop-notice').style.display = 'none';
+  document.getElementById('mic-btn').classList.remove('rec');
+  document.getElementById('mic-lbl').textContent = 'Speak';
+  document.getElementById('wave-bar').style.display = 'none';
 }
 
 function endSession(){
   clearInterval(state.timerIv);
   var m = Math.floor(state.timer/60), s = Math.floor(state.timer%60);
   var dur = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+
   if(state.analyses.length > 0){
+    var totalScore = state.analyses.reduce(function(sum, a){ return sum + (a.score || 0); }, 0);
+    var avgScore = (totalScore / state.analyses.length).toFixed(1);
     var sessionRecord = {
       date: new Date().toLocaleString(),
       scenario: state.scenario,
       duration: dur,
       turns: state.analyses.length,
+      avgScore: avgScore,
       analyses: state.analyses
     };
     saveSessionToHistory(sessionRecord);
   }
-  showToast("تم حفظ الجلسة في أرشيف المحادثات بنجاح! ✨");
-  setTimeout(function(){ location.reload(); }, 1800);
+
+  showToast("تم حفظ الجلسة بنجاح! ✨");
+  setTimeout(function(){ backToSetup(); }, 1500);
 }
 
 function showToast(txt){
@@ -681,39 +885,66 @@ function showToast(txt){
   setTimeout(function(){ t.classList.remove('show'); }, 3000);
 }
 
-// TTS
+// ════════════════════════════════════════════════════════
+// TTS & CHAT
+// ════════════════════════════════════════════════════════
 function speakText(txt){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(txt);
   u.lang = 'en-US';
+  u.onstart = function(){ document.getElementById('wave-bar').style.display = 'flex'; };
+  u.onend = function(){ document.getElementById('wave-bar').style.display = 'none'; };
   window.speechSynthesis.speak(u);
 }
 
-// CHAT
 function addMsg(role, text){
   state.messages.push({ role: role, text: text });
   var panel = document.getElementById('chat-panel');
   var div = document.createElement('div');
   div.className = 'msg ' + role;
   var name = role === 'ai' ? 'Alex' : 'You';
+  var icon = role === 'ai' ? 'ti-robot' : 'ti-user';
   var color = role === 'ai' ? 'var(--accent)' : 'var(--accent2)';
-  div.innerHTML = `<div class="msg-name" style="color:${color};"><i class="ti ti-${role==='ai'?'robot':'user'}"></i> ${name}</div>${text}`;
+  div.innerHTML = `<div class="msg-name" style="color:${color};"><i class="ti ${icon}"></i> ${name}</div><span class="msg-text"></span>`;
   panel.appendChild(div);
   panel.scrollTop = panel.scrollHeight;
+
+  // Typing effect for AI
+  if(role === 'ai'){
+    typeText(div.querySelector('.msg-text'), text, 0);
+  } else {
+    div.querySelector('.msg-text').textContent = text;
+  }
 }
 
+function typeText(el, text, i){
+  if(i < text.length){
+    el.textContent = text.substring(0, i + 1);
+    el.innerHTML += '<span class="typing-cursor"></span>';
+    setTimeout(function(){ typeText(el, text, i + 1); }, 25);
+  } else {
+    el.textContent = text;
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// TABS — FIXED!
+// ════════════════════════════════════════════════════════
 function switchTab(name, el){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
   el.classList.add('active');
-  document.getElementById('chat-panel').style.display = name==='chat'?'block':'none';
-  document.getElementById('analysis-panel').style.display = name==='analysis'?'block':'none';
-  document.getElementById('history-panel').style.display = name==='history'?'block':'none';
+
+  document.querySelectorAll('.panel-body').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById(name + '-panel').classList.add('active');
+
+  if(name === 'history') renderHistoryTab();
 }
 
 function showErr(msg){
   var e = document.getElementById('err-bar');
   e.style.display = 'block'; e.textContent = '⚠ ' + msg;
+  setTimeout(function(){ e.style.display = 'none'; }, 5000);
 }
 </script>
 </body>
