@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI English Coach Pro — Ultra Edition</title>
+<title>AI English Coach Pro</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -338,9 +338,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════
 // CANVAS MORPHING BLOB BACKGROUND
-// ════════════════════════════════════════════════════════
 (function(){
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
@@ -357,23 +355,23 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   function draw(){
     time += 0.008;
     ctx.fillStyle = '#0a0b10'; ctx.fillRect(0,0,w,h);
-    blobs.forEach(b => {
+    blobs.forEach(function(b){
       b.x += b.vx; b.y += b.vy;
       if(b.x < -0.2 || b.x > 1.2) b.vx *= -1;
       if(b.y < -0.2 || b.y > 1.2) b.vy *= -1;
-      const px = b.x * w, py = b.y * h, pr = b.r * Math.min(w,h);
-      const gradient = ctx.createRadialGradient(px, py, 0, px, py, pr);
+      var px = b.x * w, py = b.y * h, pr = b.r * Math.min(w,h);
+      var gradient = ctx.createRadialGradient(px, py, 0, px, py, pr);
       gradient.addColorStop(0, b.c);
       gradient.addColorStop(0.5, b.c.replace(/[\d.]+\)$/, '0.05)'));
       gradient.addColorStop(1, 'transparent');
       ctx.fillStyle = gradient; ctx.beginPath();
-      const points = 8;
-      for(let i = 0; i <= points; i++){
-        const angle = (i / points) * Math.PI * 2;
-        const morph = Math.sin(angle * 3 + time + b.phase) * 0.15 + 1;
-        const r = pr * morph;
-        const x = px + Math.cos(angle) * r;
-        const y = py + Math.sin(angle) * r;
+      var points = 8;
+      for(var i = 0; i <= points; i++){
+        var angle = (i / points) * Math.PI * 2;
+        var morph = Math.sin(angle * 3 + time + b.phase) * 0.15 + 1;
+        var r = pr * morph;
+        var x = px + Math.cos(angle) * r;
+        var y = py + Math.sin(angle) * r;
         if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
       ctx.closePath(); ctx.fill();
@@ -383,17 +381,15 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   draw();
 })();
 
-// ════════════════════════════════════════════════════════
 // FLOATING PARTICLES
-// ════════════════════════════════════════════════════════
 (function(){
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  let w, h;
+  var canvas = document.getElementById('particles');
+  var ctx = canvas.getContext('2d');
+  var w, h;
   function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
   resize(); window.addEventListener('resize', resize);
-  const particles = [];
-  for(let i = 0; i < 60; i++){
+  var particles = [];
+  for(var i = 0; i < 60; i++){
     particles.push({
       x: Math.random() * w, y: Math.random() * h,
       r: Math.random() * 2 + 0.5,
@@ -405,40 +401,36 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
   }
   function draw(){
     ctx.clearRect(0,0,w,h);
-    particles.forEach(p => {
+    particles.forEach(function(p){
       p.x += p.vx; p.y += p.vy; p.pulse += 0.02;
       if(p.x < 0) p.x = w; if(p.x > w) p.x = 0;
       if(p.y < 0) p.y = h; if(p.y > h) p.y = 0;
-      const alpha = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
+      var alpha = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(165,180,252,${alpha})`; ctx.fill();
+      ctx.fillStyle = 'rgba(165,180,252,' + alpha + ')'; ctx.fill();
     });
     requestAnimationFrame(draw);
   }
   draw();
 })();
 
-// ════════════════════════════════════════════════════════
 // 3D TILT EFFECT
-// ════════════════════════════════════════════════════════
 (function(){
-  const card = document.getElementById('setup-card');
+  var card = document.getElementById('setup-card');
   if(!card) return;
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left, y = e.clientY - rect.top;
-    const cx = rect.width / 2, cy = rect.height / 2;
-    const dx = (x - cx) / cx, dy = (y - cy) / cy;
-    card.style.transform = `perspective(1200px) rotateY(${dx * 3}deg) rotateX(${-dy * 3}deg) translateY(-4px)`;
+  card.addEventListener('mousemove', function(e){
+    var rect = card.getBoundingClientRect();
+    var x = e.clientX - rect.left, y = e.clientY - rect.top;
+    var cx = rect.width / 2, cy = rect.height / 2;
+    var dx = (x - cx) / cx, dy = (y - cy) / cy;
+    card.style.transform = 'perspective(1200px) rotateY(' + (dx * 3) + 'deg) rotateX(' + (-dy * 3) + 'deg) translateY(-4px)';
   });
-  card.addEventListener('mouseleave', () => {
+  card.addEventListener('mouseleave', function(){
     card.style.transform = 'perspective(1200px) rotateY(0) rotateX(0) translateY(0)';
   });
 })();
 
-// ════════════════════════════════════════════════════════
-// QUESTION BANK — EXPANDED (20+ questions per scenario)
-// ════════════════════════════════════════════════════════
+// QUESTION BANK
 var QUESTION_BANK = {
   interview: [
     {q:"Tell me about yourself and your professional experience.",ideal:"Provide a brief summary of your background, key achievements, and career focus."},
@@ -485,7 +477,7 @@ var QUESTION_BANK = {
     {q:"Say this in English: 'لا أستطيع الانتظار حتى أراك'",ideal:"I can't wait to see you."},
     {q:"Say this in English: 'هل يمكنك مساعدتي بهذا؟'",ideal:"Could you help me with this?"},
     {q:"Say this in English: 'لقد فقدت مفاتيحي'",ideal:"I have lost my keys."},
-    {q:"Say this in English: 'هي أكثر شخص مجتهف أعرفه'",ideal:"She is the most hardworking person I know."},
+    {q:"Say this in English: 'هي أكثر شخص مجتهد أعرفه'",ideal:"She is the most hardworking person I know."},
     {q:"Say this in English: 'نحن نخطط للسفر العام المقبل'",ideal:"We are planning to travel next year."}
   ],
   free: [
@@ -502,9 +494,7 @@ var QUESTION_BANK = {
   ]
 };
 
-// ════════════════════════════════════════════════════════
 // STATE
-// ════════════════════════════════════════════════════════
 var state = {
   scenario: 'interview',
   messages: [],
@@ -531,12 +521,11 @@ window.addEventListener('DOMContentLoaded', function(){
   if(savedKey) document.getElementById('user-api-key').value = savedKey;
 });
 
-// Per-scenario seen questions (FIXED: was global before)
 function getSeenKey(){ return 'seen_q_' + state.scenario; }
 function getSeenQuestions(){ return JSON.parse(localStorage.getItem(getSeenKey()) || '[]'); }
 function markQuestionSeen(q){
   var list = getSeenQuestions();
-  if(!list.includes(q)){ list.push(q); localStorage.setItem(getSeenKey(), JSON.stringify(list)); }
+  if(list.indexOf(q) === -1){ list.push(q); localStorage.setItem(getSeenKey(), JSON.stringify(list)); }
 }
 function clearSeenQuestions(){ localStorage.removeItem(getSeenKey()); }
 
@@ -551,44 +540,35 @@ function pickSc(el){
   el.classList.add('active'); state.scenario = el.dataset.id;
 }
 
-// ════════════════════════════════════════════════════════
-// LOCAL EVALUATION ENGINE (No API needed!)
-// ════════════════════════════════════════════════════════
+// LOCAL EVALUATION ENGINE
 function evaluateAnswerLocal(userText, question, ideal){
   var userWords = userText.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter(function(w){ return w.length > 2; });
   var idealWords = ideal.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter(function(w){ return w.length > 2; });
-
   var overlap = 0;
   var uniqueIdeal = [];
-  idealWords.forEach(function(w){ if(!uniqueIdeal.includes(w)) uniqueIdeal.push(w); });
-
+  idealWords.forEach(function(w){ if(uniqueIdeal.indexOf(w) === -1) uniqueIdeal.push(w); });
   uniqueIdeal.forEach(function(iw){
     userWords.forEach(function(uw){ if(uw === iw || (uw.length > 4 && iw.length > 4 && (uw.indexOf(iw) === 0 || iw.indexOf(uw) === 0))) overlap++; });
   });
-
   var contentScore = Math.min(10, Math.round((overlap / Math.max(1, uniqueIdeal.length)) * 10));
   var lengthScore = userText.length > 20 ? (userText.length > 100 ? 3 : 2) : 1;
   var totalScore = Math.min(10, contentScore + lengthScore);
-
   var feedback = '';
   if(totalScore >= 8) feedback = 'Excellent! Your answer covers the key points effectively with strong vocabulary.';
   else if(totalScore >= 6) feedback = 'Good job! You covered most key points. Try to include more specific vocabulary from the ideal answer.';
   else if(totalScore >= 4) feedback = 'Fair attempt. Try to expand your answer with more details and relevant keywords.';
   else feedback = 'Keep practicing! Focus on addressing the core elements of the question with complete sentences.';
-
   var missing = [];
+  var commonWords = ['would','should','could','about','their','there','where','which','while','before','after','under','over','between','through','during','without','within','against','among','around','because','although','however','therefore','furthermore','moreover','nevertheless','meanwhile','otherwise','instead','besides','additionally','consequently','accordingly','subsequently','previously','eventually','currently','recently','frequently','usually','always','sometimes','often','rarely','never','already','almost','enough','quite','rather','pretty','really','very','too','so','just','only','even','also','still','yet','indeed','certainly','definitely','probably','possibly','perhaps','maybe','likely','unlikely','obviously','clearly','apparently','presumably','supposedly','arguably','notably','especially','particularly','specifically','mainly','mostly','largely','partly','slightly','somewhat','somehow','anyway','anyhow'];
   uniqueIdeal.forEach(function(w){ 
     var found = false;
     userWords.forEach(function(uw){ if(uw === w || (uw.length > 4 && w.length > 4 && (uw.indexOf(w) === 0 || w.indexOf(uw) === 0))) found = true; });
-    if(!found && w.length > 4 && !['would','should','could','about','their','there','where','which','while','before','after','under','over','between','through','during','without','within','against','among','around','because','although','however','therefore','furthermore','moreover','nevertheless','meanwhile','otherwise','instead','besides','additionally','consequently','accordingly','subsequently','previously','eventually','currently','recently','frequently','usually','always','sometimes','often','rarely','never','already','almost','quite','rather','pretty','really','very','too','so','just','only','even','also','still','yet','already','almost','enough','quite','rather','pretty','really','very','too','so','just','only','even','also','still','yet','indeed','certainly','definitely','probably','possibly','perhaps','maybe','likely','unlikely','obviously','clearly','apparently','presumably','supposedly','arguably','notably','especially','particularly','specifically','mainly','mostly','largely','partly','slightly','somewhat','somehow','anyway','anyhow','meanwhile','otherwise','instead','besides','furthermore','moreover','therefore','thus','hence','consequently','accordingly','subsequently','previously','eventually','currently','recently','frequently','usually','always','sometimes','often','rarely','never'].includes(w)) missing.push(w);
+    if(!found && w.length > 4 && commonWords.indexOf(w) === -1) missing.push(w);
   });
-
   return { score: totalScore, feedback: feedback, missing: missing.slice(0, 5) };
 }
 
-// ════════════════════════════════════════════════════════
-// GEMINI API (Optional — for advanced evaluation)
-// ════════════════════════════════════════════════════════
+// GEMINI API (Optional)
 async function callGemini(system, messages){
   var key = getApiKey();
   if(!key) return null;
@@ -617,9 +597,7 @@ async function callGemini(system, messages){
   return null;
 }
 
-// ════════════════════════════════════════════════════════
 // SESSION CONTROL
-// ════════════════════════════════════════════════════════
 async function startSession(){
   state.isViewOnly = false;
   state.messages = [];
@@ -651,9 +629,8 @@ async function startSession(){
 function askNextQuestion(){
   var bank = QUESTION_BANK[state.scenario] || QUESTION_BANK.free;
   var seen = getSeenQuestions();
-  var available = bank.filter(function(item){ return !seen.includes(item.q); });
+  var available = bank.filter(function(item){ return seen.indexOf(item.q) === -1; });
 
-  // FIXED: If all questions seen, clear and restart
   if(available.length === 0){
     clearSeenQuestions();
     available = bank;
@@ -732,22 +709,21 @@ function stopMic(){
 function analyzeAnswer(txt, wpm){
   var speedEval = wpm < 90 ? 'Slow Pace' : wpm <= 150 ? 'Ideal Pace' : 'Fast Pace';
   var evalResult = evaluateAnswerLocal(txt, state.currentQuestion.q, state.currentQuestion.ideal);
-
   var scoreClass = evalResult.score >= 7 ? 'score-high' : evalResult.score >= 4 ? 'score-mid' : 'score-low';
 
   var card = document.createElement('div');
   card.className = 'ana-card';
-  card.innerHTML = `
-    <div class="ana-q">Q: ${state.currentQuestion.q}</div>
-    <div class="ana-ans">You said: "${txt}"</div>
-    <div style="display:flex;flex-wrap:wrap;gap:4px;">
-      <div class="wpm-badge">⏱ ${wpm} WPM (${speedEval})</div>
-      <div class="score-badge ${scoreClass}">⭐ Score: ${evalResult.score}/10</div>
-    </div>
-    <div class="feedback-box"><b>📝 Feedback:</b> ${evalResult.feedback}</div>
-    <div class="ideal-box"><b>Ideal Answer:</b> ${state.currentQuestion.ideal}</div>
-    ${evalResult.missing.length ? `<div style="font-size:11px;color:var(--text3);margin-top:8px;"><b>💡 Keywords to include:</b> ${evalResult.missing.join(', ')}</div>` : ''}
-  `;
+  card.innerHTML = 
+    '<div class="ana-q">Q: ' + state.currentQuestion.q + '</div>' +
+    '<div class="ana-ans">You said: "' + txt + '"</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:4px;">' +
+      '<div class="wpm-badge">⏱ ' + wpm + ' WPM (' + speedEval + ')</div>' +
+      '<div class="score-badge ' + scoreClass + '">⭐ Score: ' + evalResult.score + '/10</div>' +
+    '</div>' +
+    '<div class="feedback-box"><b>📝 Feedback:</b> ' + evalResult.feedback + '</div>' +
+    '<div class="ideal-box"><b>Ideal Answer:</b> ' + state.currentQuestion.ideal + '</div>' +
+    (evalResult.missing.length ? '<div style="font-size:11px;color:var(--text3);margin-top:8px;"><b>💡 Keywords to include:</b> ' + evalResult.missing.join(', ') + '</div>' : '');
+
   var panel = document.getElementById('analysis-panel');
   panel.insertBefore(card, panel.firstChild);
 
@@ -763,9 +739,7 @@ function analyzeAnswer(txt, wpm){
   });
 }
 
-// ════════════════════════════════════════════════════════
-// HISTORY & ARCHIVE
-// ════════════════════════════════════════════════════════
+// HISTORY
 function renderHistoryTab(){
   var hist = getStoredHistory();
   var panel = document.getElementById('history-panel');
@@ -775,13 +749,12 @@ function renderHistoryTab(){
   }
   var html = '';
   hist.forEach(function(item, idx){
-    html += `
-      <div class="hist-card" onclick="viewHistoryDetails(${idx})">
-        <div class="hist-scenario">${item.scenario.toUpperCase()} SESSION</div>
-        <div class="hist-meta"><span>📅 ${item.date}</span><span>⏱ ${item.duration}</span></div>
-        <div class="hist-meta">Turns: ${item.turns} | Avg Score: ${item.avgScore || 'N/A'}</div>
-      </div>
-    `;
+    html += 
+      '<div class="hist-card" onclick="viewHistoryDetails(' + idx + ')">' +
+        '<div class="hist-scenario">' + item.scenario.toUpperCase() + ' SESSION</div>' +
+        '<div class="hist-meta"><span>📅 ' + item.date + '</span><span>⏱ ' + item.duration + '</span></div>' +
+        '<div class="hist-meta">Turns: ' + item.turns + ' | Avg Score: ' + (item.avgScore || 'N/A') + '</div>' +
+      '</div>';
   });
   panel.innerHTML = html;
 }
@@ -792,23 +765,22 @@ function viewHistoryDetails(idx){
   if(!item) return;
   document.getElementById('modal-title').textContent = item.scenario.toUpperCase() + ' SESSION DETAILS';
   var body = document.getElementById('modal-body');
-  var html = `<div style="font-size:12px;color:var(--text2);margin-bottom:16px;"><b>Date:</b> ${item.date} | <b>Duration:</b> ${item.duration} | <b>Avg Score:</b> ${item.avgScore || 'N/A'}</div>`;
-  html += '<h4 style="font-size:13px;margin-bottom:10px;color:var(--accent);font-family:'Space Grotesk',sans-serif;">Transcripts & Analysis:</h4>';
+  var html = '<div style="font-size:12px;color:var(--text2);margin-bottom:16px;"><b>Date:</b> ' + item.date + ' | <b>Duration:</b> ' + item.duration + ' | <b>Avg Score:</b> ' + (item.avgScore || 'N/A') + '</div>';
+  html += '<h4 style="font-size:13px;margin-bottom:10px;color:var(--accent);font-family:\'Space Grotesk\',sans-serif;">Transcripts & Analysis:</h4>';
   if(item.analyses && item.analyses.length){
     item.analyses.forEach(function(a){
       var sClass = a.score >= 7 ? 'score-high' : a.score >= 4 ? 'score-mid' : 'score-low';
-      html += `
-        <div class="ana-card">
-          <div style="font-weight:600;font-size:12px;color:#fff;font-family:'Space Grotesk',sans-serif;">Q: ${a.q}</div>
-          <div style="color:var(--text2);font-size:12px;margin-top:4px;"><b>Answer:</b> "${a.text}"</div>
-          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
-            <div class="wpm-badge">⏱ ${a.wpm} WPM (${a.speedEval})</div>
-            <div class="score-badge ${sClass}">⭐ ${a.score}/10</div>
-          </div>
-          <div class="feedback-box"><b>Feedback:</b> ${a.feedback}</div>
-          <div class="ideal-box"><b>Ideal:</b> ${a.ideal}</div>
-        </div>
-      `;
+      html += 
+        '<div class="ana-card">' +
+          '<div style="font-weight:600;font-size:12px;color:#fff;font-family:\'Space Grotesk\',sans-serif;">Q: ' + a.q + '</div>' +
+          '<div style="color:var(--text2);font-size:12px;margin-top:4px;"><b>Answer:</b> "' + a.text + '"</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">' +
+            '<div class="wpm-badge">⏱ ' + a.wpm + ' WPM (' + a.speedEval + ')</div>' +
+            '<div class="score-badge ' + sClass + '">⭐ ' + a.score + '/10</div>' +
+          '</div>' +
+          '<div class="feedback-box"><b>Feedback:</b> ' + a.feedback + '</div>' +
+          '<div class="ideal-box"><b>Ideal:</b> ' + a.ideal + '</div>' +
+        '</div>';
     });
   } else {
     html += '<div style="font-size:12px;color:var(--text3);">لا توجد تفاصيل إضافية.</div>';
@@ -831,19 +803,16 @@ function openArchiveFromSetup(){
 }
 
 function backToSetup(){
-  // Stop everything
   if(state.timerIv) clearInterval(state.timerIv);
   if(state.recog) try{ state.recog.stop(); } catch(e){}
   state.micOn = false;
 
-  // Stop camera
   var vid = document.getElementById('vid');
   if(vid.srcObject){
     vid.srcObject.getTracks().forEach(function(t){ t.stop(); });
     vid.srcObject = null;
   }
 
-  // Reset UI
   document.getElementById('app').style.display = 'none';
   document.getElementById('setup').style.display = 'flex';
   document.getElementById('timer-disp').textContent = '00:00';
@@ -885,9 +854,7 @@ function showToast(txt){
   setTimeout(function(){ t.classList.remove('show'); }, 3000);
 }
 
-// ════════════════════════════════════════════════════════
 // TTS & CHAT
-// ════════════════════════════════════════════════════════
 function speakText(txt){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -906,11 +873,10 @@ function addMsg(role, text){
   var name = role === 'ai' ? 'Alex' : 'You';
   var icon = role === 'ai' ? 'ti-robot' : 'ti-user';
   var color = role === 'ai' ? 'var(--accent)' : 'var(--accent2)';
-  div.innerHTML = `<div class="msg-name" style="color:${color};"><i class="ti ${icon}"></i> ${name}</div><span class="msg-text"></span>`;
+  div.innerHTML = '<div class="msg-name" style="color:' + color + ';"><i class="ti ' + icon + '"></i> ' + name + '</div><span class="msg-text"></span>';
   panel.appendChild(div);
   panel.scrollTop = panel.scrollHeight;
 
-  // Typing effect for AI
   if(role === 'ai'){
     typeText(div.querySelector('.msg-text'), text, 0);
   } else {
@@ -928,9 +894,7 @@ function typeText(el, text, i){
   }
 }
 
-// ════════════════════════════════════════════════════════
-// TABS — FIXED!
-// ════════════════════════════════════════════════════════
+// TABS
 function switchTab(name, el){
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
   el.classList.add('active');
